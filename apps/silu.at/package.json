@@ -1,0 +1,16 @@
+{
+  "name": "silu.at",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev"
+  },
+  "dependencies": {
+    "astro": "^3.4.0"
+  },
+  "author": {
+    "name": "siluat",
+    "email": "siluat@gmail.com"
+  },
+  "license": "MIT"
+}

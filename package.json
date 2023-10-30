@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  }
+}
