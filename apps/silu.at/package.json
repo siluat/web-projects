@@ -3,10 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "prepare": "panda codegen",
     "dev": "astro dev"
   },
   "dependencies": {
     "astro": "^3.4.0"
+  },
+  "devDependencies": {
+    "@pandacss/astro": "^0.17.3",
+    "@pandacss/dev": "^0.17.3"
   },
   "author": {
     "name": "siluat",
