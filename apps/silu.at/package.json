@@ -7,11 +7,11 @@
     "dev": "astro dev"
   },
   "dependencies": {
-    "astro": "^3.4.0"
+    "astro": "^3.6.5"
   },
   "devDependencies": {
-    "@pandacss/astro": "^0.17.3",
-    "@pandacss/dev": "^0.17.3"
+    "@pandacss/astro": "^0.17.5",
+    "@pandacss/dev": "^0.17.5"
   },
   "author": {
     "name": "siluat",
