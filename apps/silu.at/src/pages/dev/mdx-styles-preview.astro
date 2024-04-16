@@ -1,0 +1,12 @@
+---
+import { build404Response } from '@/astro-utils/response'
+import { isProd } from '@/astro-utils/runtime-context'
+import { getEntry } from 'astro:content'
+
+if (isProd) return build404Response()
+
+const mdxSample = await getEntry('dev', 'mdx-sample')
+const { Content } = await mdxSample.render()
+---
+
+<Content />
