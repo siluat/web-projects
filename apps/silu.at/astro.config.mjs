@@ -4,5 +4,8 @@ import pandacss from '@pandacss/astro'
 
 // https://astro.build/config
 export default defineConfig({
+  markdown: {
+    smartypants: false,
+  },
   integrations: [mdx(), pandacss()],
 })
