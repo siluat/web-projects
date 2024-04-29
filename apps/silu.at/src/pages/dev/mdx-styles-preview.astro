@@ -1,7 +1,9 @@
 ---
+import { getEntry } from 'astro:content'
 import { build404Response } from '@/astro-utils/response'
 import { isProd } from '@/astro-utils/runtime-context'
-import { getEntry } from 'astro:content'
+import TwoColumnsBlock from '@/components/two-columns-block.astro'
+import { themeRootClassName } from '@/panda-config/custom-utils'
 
 if (isProd) return build404Response()
 
@@ -9,4 +11,11 @@ const mdxSample = await getEntry('dev', 'mdx-sample')
 const { Content } = await mdxSample.render()
 ---
 
-<Content />
+<TwoColumnsBlock>
+  <div slot="left-column" data-theme="light" class={`${themeRootClassName}`}>
+    <Content />
+  </div>
+  <div slot="right-column" data-theme="dark" class={`${themeRootClassName}`}>
+    <Content />
+  </div>
+</TwoColumnsBlock>
