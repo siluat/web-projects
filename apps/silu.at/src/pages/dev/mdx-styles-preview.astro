@@ -4,6 +4,7 @@ import { build404Response } from '@/astro-utils/response'
 import { isProd } from '@/astro-utils/runtime-context'
 import TwoColumnsBlock from '@/components/two-columns-block.astro'
 import { themeRootClassName } from '@/panda-config/custom-utils'
+import PlainPageLayout from '@/layouts/plain-page-layout.astro'
 
 if (isProd) return build404Response()
 
@@ -11,11 +12,13 @@ const mdxSample = await getEntry('dev', 'mdx-sample')
 const { Content } = await mdxSample.render()
 ---
 
-<TwoColumnsBlock>
-  <div slot="left-column" data-theme="light" class={`${themeRootClassName}`}>
-    <Content />
-  </div>
-  <div slot="right-column" data-theme="dark" class={`${themeRootClassName}`}>
-    <Content />
-  </div>
-</TwoColumnsBlock>
+<PlainPageLayout>
+  <TwoColumnsBlock>
+    <div slot="left-column" data-theme="light" class={`${themeRootClassName}`}>
+      <Content />
+    </div>
+    <div slot="right-column" data-theme="dark" class={`${themeRootClassName}`}>
+      <Content />
+    </div>
+  </TwoColumnsBlock>
+</PlainPageLayout>
