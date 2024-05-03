@@ -3,7 +3,6 @@ import { getEntry } from 'astro:content'
 import { build404Response } from '@/astro-utils/response'
 import { isProd } from '@/astro-utils/runtime-context'
 import TwoColumnsBlock from '@/components/two-columns-block.astro'
-import { themeRootClassName } from '@/panda-config/custom-utils'
 import PlainPageLayout from '@/layouts/plain-page-layout.astro'
 
 if (isProd) return build404Response()
@@ -14,10 +13,10 @@ const { Content } = await mdxSample.render()
 
 <PlainPageLayout>
   <TwoColumnsBlock>
-    <div slot="left-column" data-theme="light" class={`${themeRootClassName}`}>
+    <div slot="left-column" data-theme="light">
       <Content />
     </div>
-    <div slot="right-column" data-theme="dark" class={`${themeRootClassName}`}>
+    <div slot="right-column" data-theme="dark">
       <Content />
     </div>
   </TwoColumnsBlock>
