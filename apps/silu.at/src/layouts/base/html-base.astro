@@ -11,3 +11,9 @@ import '@/panda-config/panda-css-layers.css'
     <slot />
   </body>
 </html>
+
+<script>
+  import { applyTheme, detectTheme } from '@/features/theme-management'
+
+  await applyTheme(document.documentElement, await detectTheme())
+</script>

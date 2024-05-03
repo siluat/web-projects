@@ -2,9 +2,11 @@
   "name": "silu.at",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "prepare": "panda codegen",
-    "dev": "astro dev"
+    "dev": "astro dev",
+    "test": "vitest --coverage"
   },
   "dependencies": {
     "@astrojs/mdx": "^2.3.1",
@@ -12,7 +14,10 @@
   },
   "devDependencies": {
     "@pandacss/astro": "^0.25.0",
-    "@pandacss/dev": "^0.38.0"
+    "@pandacss/dev": "^0.38.0",
+    "@vitest/coverage-v8": "^1.5.3",
+    "happy-dom": "^14.7.1",
+    "vitest": "^1.5.3"
   },
   "author": {
     "name": "siluat",

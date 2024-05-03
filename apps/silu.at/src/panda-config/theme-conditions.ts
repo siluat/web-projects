@@ -1,4 +1,9 @@
-export const themeConditions = {
-  light: '[data-theme=light] &',
-  dark: '[data-theme=dark] &',
-}
+import { ALLOWED_THEMES } from '@/features/theme-management'
+
+export const themeConditions = ALLOWED_THEMES.reduce(
+  (acc, theme) => ({
+    ...acc,
+    [theme]: `[data-theme=${theme}] &`,
+  }),
+  {} as Record<string, string>,
+)

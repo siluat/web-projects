@@ -9,3 +9,6 @@ styled-system
  
 # Astro
 .astro
+
+# Vitest
+coverage
