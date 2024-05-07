@@ -14,7 +14,7 @@ import '@/panda-config/panda-css-layers.css'
 </html>
 
 <script>
-  import { applyTheme, detectTheme } from '@/features/theme-management'
+  import { initTheme } from '@/features/theme-management'
 
-  await applyTheme(document.documentElement, await detectTheme())
+  await initTheme({ rootElement: document.documentElement })
 </script>
