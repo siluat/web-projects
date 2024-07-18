@@ -9,16 +9,15 @@
     "test": "vitest --coverage"
   },
   "dependencies": {
-    "@astrojs/mdx": "^2.3.1",
+    "@astrojs/mdx": "^3.1.2",
     "@fontsource-variable/noto-sans-kr": "^5.0.6",
-    "astro": "^4.7.0"
+    "astro": "^4.11.6"
   },
   "devDependencies": {
-    "@pandacss/astro": "^0.25.0",
-    "@pandacss/dev": "^0.38.0",
-    "@vitest/coverage-v8": "^1.5.3",
-    "happy-dom": "^14.7.1",
-    "vitest": "^1.5.3"
+    "@pandacss/dev": "^0.42.0",
+    "@vitest/coverage-v8": "^2.0.3",
+    "happy-dom": "^14.12.3",
+    "vitest": "^2.0.3"
   },
   "author": {
     "name": "siluat",
