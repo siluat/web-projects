@@ -1,0 +1,12 @@
+{
+  "name": "dotori-note",
+  "description": "이것저것 기록하고 관리하기 위한 노트",
+  "homepage": "https://dotori.blog",
+  "scripts": {
+    "dev": "astro dev"
+  },
+  "dependencies": {
+    "astro": "^4.12.2"
+  },
+  "type": "module"
+}
