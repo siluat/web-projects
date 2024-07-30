@@ -17,6 +17,10 @@ importers:
       astro:
         specifier: ^4.12.2
         version: 4.12.2(lightningcss@1.25.1)(typescript@5.5.4)
+    devDependencies:
+      '@pandacss/dev':
+        specifier: ^0.44.0
+        version: 0.44.0(typescript@5.5.4)
 
   apps/silu.at:
     dependencies:
