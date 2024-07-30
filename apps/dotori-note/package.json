@@ -3,10 +3,13 @@
   "description": "이것저것 기록하고 관리하기 위한 노트",
   "homepage": "https://dotori.blog",
   "scripts": {
+    "prepare": "panda codegen",
     "dev": "astro dev"
   },
   "dependencies": {
     "astro": "^4.12.2"
   },
-  "type": "module"
+  "devDependencies": {
+    "@pandacss/dev": "^0.44.0"
+  }
 }
