@@ -4,7 +4,8 @@
   "homepage": "https://dotori.blog",
   "scripts": {
     "prepare": "panda codegen",
-    "dev": "astro dev"
+    "dev": "astro dev",
+    "build": "astro build"
   },
   "dependencies": {
     "astro": "^4.12.2"
