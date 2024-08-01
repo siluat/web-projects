@@ -1,18 +1,8 @@
 ---
-import GlobalStyles from '~/components/GlobalStyles.astro'
-
+import DefaultLayout from '~/layouts/DefaultLayout.astro'
 import { css } from '~/styled-system/css'
 ---
 
-<!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>도토리 노트</title>
-    <GlobalStyles />
-  </head>
-  <body>
-    <p class={css({ color: 'brown' })}>도토리 노트</p>
-  </body>
-</html>
+<DefaultLayout>
+  <p class={css({ color: 'brown' })}>도토리 노트</p>
+</DefaultLayout>
