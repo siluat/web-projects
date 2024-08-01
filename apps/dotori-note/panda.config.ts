@@ -1,20 +1,18 @@
 import { defineConfig } from '@pandacss/dev'
+import { colors } from '~/panda/tokens'
 
 export default defineConfig({
-  // Whether to use css reset
   preflight: true,
-
-  // Where to look for your css declarations
-  include: ['./src/**/*.{ts,tsx,astro}'],
-
-  // Files to exclude
-  exclude: [],
-
-  // Useful for theme customization
-  theme: {
-    extend: {},
-  },
-
-  // The output directory for your css system
+  minify: true,
+  hash: true,
   outdir: './src/styled-system',
+  include: ['./src/**/*.{ts,tsx,astro}'],
+  exclude: [],
+  theme: {
+    extend: {
+      tokens: {
+        colors,
+      },
+    },
+  },
 })
