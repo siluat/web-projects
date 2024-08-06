@@ -1,6 +1,9 @@
 import { defineTokens } from '@pandacss/dev'
 import { gray, grayDark } from '@radix-ui/colors'
 
+/**
+ * @reference https://panda-css.com/docs/theming/tokens#colors
+ */
 export const colors = defineTokens.colors({
   gray1: { value: gray.gray1 },
   gray2: { value: gray.gray2 },
