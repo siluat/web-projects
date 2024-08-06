@@ -1,6 +1,8 @@
 ---
+import Header from '~/components/Header.astro'
 import InitPandaCss from '~/components/InitPandaCss.astro'
 import InitTheme from '~/components/InitTheme.astro'
+import { vstack } from '~/styled-system/patterns'
 ---
 
 <!doctype html>
@@ -12,7 +14,10 @@ import InitTheme from '~/components/InitTheme.astro'
     <InitPandaCss />
     <InitTheme />
   </head>
-  <body>
-    <slot />
+  <body class={vstack()}>
+    <Header />
+    <main class={vstack({ justifyContent: 'center' })}>
+      <slot />
+    </main>
   </body>
 </html>
