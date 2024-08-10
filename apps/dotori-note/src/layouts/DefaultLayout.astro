@@ -15,9 +15,9 @@ import { vstack } from '~/styled-system/patterns'
     <InitPandaCss />
     <InitTheme />
   </head>
-  <body class={vstack()}>
+  <body class={vstack({ gap: 0 })}>
     <Header />
-    <main class={vstack({ justifyContent: 'center' })}>
+    <main class={vstack({ w: '100%', alignItems: 'flex-start' })}>
       <slot />
     </main>
   </body>
