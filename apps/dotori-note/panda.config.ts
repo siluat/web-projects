@@ -1,7 +1,7 @@
 import { defineConfig } from '@pandacss/dev'
-import { globalCss } from '~/panda/globalStyles'
-import { themeConditions } from '~/panda/theme'
-import { colors } from '~/panda/tokens'
+import { colors } from '~/panda/color-tokens'
+import { globalCss } from '~/panda/global-styles'
+import { themeConditions } from '~/panda/theme-utils'
 
 export default defineConfig({
   preflight: true,
