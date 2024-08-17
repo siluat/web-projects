@@ -1,6 +1,7 @@
 import { defineConfig } from '@pandacss/dev'
 import { colors } from '~/panda/color-tokens'
 import { globalCss } from '~/panda/global-styles'
+import { textStyles } from '~/panda/text-styles'
 import { themeConditions } from '~/panda/theme-utils'
 
 export default defineConfig({
@@ -21,6 +22,7 @@ export default defineConfig({
       tokens: {
         colors,
       },
+      textStyles,
     },
   },
 })
