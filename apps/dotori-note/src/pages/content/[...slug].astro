@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content'
-import DefaultLayout from '~/layouts/DefaultLayout.astro'
+import ContentLayout from '~/layouts/ContentLayout.astro'
 
 export async function getStaticPaths() {
   const entries = await getCollection('dotori')
@@ -14,9 +14,6 @@ const { entry } = Astro.props
 const { Content } = await entry.render()
 ---
 
-<DefaultLayout>
-  <article>
-    <h1>{entry.data.title}</h1>
-    <Content />
-  </article>
-</DefaultLayout>
+<ContentLayout title={entry.data.title}>
+  <Content />
+</ContentLayout>
