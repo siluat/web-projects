@@ -58,6 +58,9 @@ export const globalCss = defineGlobalStyles({
   ul: {
     listStyle: 'disc',
   },
+  ol: {
+    listStyle: 'decimal',
+  },
   li: {
     mt: '0.5rem',
     mb: '0.5rem',
