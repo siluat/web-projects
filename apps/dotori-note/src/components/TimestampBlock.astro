@@ -1,0 +1,35 @@
+---
+import { css } from '~/styled-system/css'
+import { flex } from '~/styled-system/patterns'
+
+interface Props {
+  recordDate: string
+}
+
+const { recordDate } = Astro.props
+---
+
+<div class={flex({ direction: 'column' })}>
+  <span
+    class={flex({
+      alignSelf: 'flex-end',
+      gap: '0.5rem',
+      textStyle: 'xs',
+      color: 'gray11',
+      _dark: { color: 'grayDark11' },
+    })}
+  >
+    <time
+      class={css({ display: 'block' })}
+      datetime={new Date(recordDate).toISOString()}
+      >{
+        new Date(recordDate).toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
+        })
+      }</time
+    >
+  </span>
+  <slot />
+</div>
