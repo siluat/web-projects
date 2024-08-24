@@ -49,6 +49,7 @@ export const globalCss = defineGlobalStyles({
   },
   p: {
     mb: '1rem',
+    textStyle: 'base',
   },
   'ul, ol': {
     mb: '1rem',
@@ -60,5 +61,16 @@ export const globalCss = defineGlobalStyles({
   li: {
     mt: '0.5rem',
     mb: '0.5rem',
+  },
+  blockquote: {
+    mt: '1rem',
+    mb: '1rem',
+    pt: '0.5rem',
+    pl: '1rem',
+    borderLeft: '4px solid',
+    borderColor: 'gray6',
+    _dark: {
+      borderColor: 'grayDark8',
+    },
   },
 })
