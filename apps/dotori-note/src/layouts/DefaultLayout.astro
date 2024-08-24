@@ -17,7 +17,13 @@ import { vstack } from '~/styled-system/patterns'
   </head>
   <body class={vstack({ gap: 0 })}>
     <Header />
-    <main class={vstack({ w: '100%', alignItems: 'flex-start' })}>
+    <main
+      class={vstack({
+        w: '100%',
+        maxWidth: 'breakpoint-md',
+        alignItems: 'flex-start',
+      })}
+    >
       <slot />
     </main>
   </body>
