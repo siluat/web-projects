@@ -5,7 +5,8 @@
   "scripts": {
     "prepare": "panda codegen",
     "dev": "astro dev",
-    "build": "astro build"
+    "build": "astro build",
+    "preview": "astro build && astro preview"
   },
   "dependencies": {
     "@astrojs/mdx": "^3.1.3",
