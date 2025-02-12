@@ -1,5 +1,5 @@
-import { defineGlobalStyles } from '@pandacss/dev'
-import { themeAttributes } from './theme-utils'
+import { defineGlobalStyles } from '@pandacss/dev';
+import { themeAttributes } from './theme-utils';
 
 export const globalCss = defineGlobalStyles({
   body: {
@@ -76,4 +76,4 @@ export const globalCss = defineGlobalStyles({
       borderColor: 'grayDark8',
     },
   },
-})
+});

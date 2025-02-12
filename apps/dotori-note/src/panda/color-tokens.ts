@@ -1,5 +1,5 @@
-import { defineTokens } from '@pandacss/dev'
-import { gray, grayDark } from '@radix-ui/colors'
+import { defineTokens } from '@pandacss/dev';
+import { gray, grayDark } from '@radix-ui/colors';
 
 /**
  * @reference https://panda-css.com/docs/theming/tokens#colors
@@ -30,4 +30,4 @@ export const colors = defineTokens.colors({
   grayDark10: { value: grayDark.gray10 },
   grayDark11: { value: grayDark.gray11 },
   grayDark12: { value: grayDark.gray12 },
-})
+});
