@@ -4,6 +4,6 @@ export enum Theme {
 }
 
 export function getThemeByPreferColorScheme(): Theme {
-  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-  return isDarkMode ? Theme.Dark : Theme.Light
+  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return isDarkMode ? Theme.Dark : Theme.Light;
 }

@@ -1,8 +1,8 @@
-import { defineCollection, z } from 'astro:content'
+import { defineCollection, z } from 'astro:content';
 
 const contentScheme = z.object({
   title: z.string(),
-})
+});
 
 export const collections = {
   /**
@@ -12,4 +12,4 @@ export const collections = {
     type: 'content',
     schema: contentScheme,
   }),
-}
+};

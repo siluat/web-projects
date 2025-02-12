@@ -1,4 +1,4 @@
-import { defineTextStyles } from '@pandacss/dev'
+import { defineTextStyles } from '@pandacss/dev';
 
 export const textStyles = defineTextStyles({
   /**
@@ -61,4 +61,4 @@ export const textStyles = defineTextStyles({
       lineHeight: '2.5rem',
     },
   },
-})
+});
