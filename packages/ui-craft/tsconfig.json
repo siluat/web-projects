@@ -1,0 +1,4 @@
+{
+  "extends": "@siluat/typescript-config/react-library.json",
+  "exclude": ["node_modules"]
+}
