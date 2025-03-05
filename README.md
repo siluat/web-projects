@@ -8,4 +8,4 @@ Collection of my personal web projects.
 
 ## Libraries
 
-- [ui-craft](./packages/ui-craft/): Practice creating animated UI components.
+- [ui-craft](./packages/ui-craft/): My personal UI animation crafting practice.
