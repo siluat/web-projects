@@ -12,3 +12,6 @@ styled-system
 
 # Vitest
 coverage
+
+# Next.js
+.next
