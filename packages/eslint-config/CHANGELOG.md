@@ -1,5 +1,11 @@
 # @siluat/eslint-config
 
+## 1.0.1
+
+### Patch Changes
+
+- [#7](https://github.com/siluat/web-projects/pull/7) [`349fb74`](https://github.com/siluat/web-projects/commit/349fb74bf1aac82f48bfd8d628b9e8d33be51c32) Thanks [@siluat](https://github.com/siluat)! - Bumped plugins version.
+
 ## 1.0.0
 
 ### Major Changes
