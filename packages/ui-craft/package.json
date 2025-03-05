@@ -1,8 +1,27 @@
 {
-  "name": "ui-craft",
+  "name": "@siluat/ui-craft",
   "version": "0.0.0",
-  "description": "Practice creating animated UI components.",
-  "scripts": {},
+  "description": "My personal UI animation crafting practice",
+  "scripts": {
+    "lint": "eslint ."
+  },
   "keywords": [],
-  "private": true
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./react/*.tsx"
+  },
+  "devDependencies": {
+    "@siluat/eslint-config": "workspace:*",
+    "@siluat/typescript-config": "workspace:*",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.3"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
 }
