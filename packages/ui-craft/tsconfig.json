@@ -1,4 +1,7 @@
 {
   "extends": "@siluat/typescript-config/react-library.json",
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "types": ["vitest/globals"]
+  }
 }
