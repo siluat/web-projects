@@ -1,5 +1,9 @@
 import './foo.css';
 
 export function Foo() {
-  return <button className="foo">Foo</button>;
+  return (
+    <button className="foo" type="button">
+      Foo
+    </button>
+  );
 }
