@@ -1,13 +1,13 @@
 ---
-import { getCollection } from 'astro:content'
-import { css } from '~/styled-system/css'
-import { flex } from '~/styled-system/patterns'
-import { getNormalizedContent } from '~/utils/content-collection'
+import { getCollection } from 'astro:content';
+import { css } from '~/styled-system/css';
+import { flex } from '~/styled-system/patterns';
+import { getNormalizedContent } from '~/utils/content-collection';
 
-const entries = await getCollection('dotori')
+const entries = await getCollection('dotori');
 const contents = (await Promise.all(entries.map(getNormalizedContent))).sort(
-  (a, b) => b.lastModified.valueOf() - a.lastModified.valueOf()
-)
+  (a, b) => b.lastModified.valueOf() - a.lastModified.valueOf(),
+);
 ---
 
 <ul class={css({ listStyle: 'none', pl: 0 })}>
