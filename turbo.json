@@ -1,8 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
-    "lint": {
-      "dependsOn": ["^lint"]
+    "//#format-and-lint": {},
+    "//#format-and-lint:fix": {
+      "cache": false
     },
     "dev": {
       "cache": false,
