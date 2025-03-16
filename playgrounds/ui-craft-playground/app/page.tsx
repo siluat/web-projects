@@ -1,9 +1,10 @@
-import { Foo } from '@siluat/ui-craft/foo';
+import { FfxivJobIconTransformUsingGooeyEffect } from '@siluat/ui-craft/react/ffxiv-job-icon-transform-using-gooey-effect';
 
 export default function Page() {
   return (
     <main className="flex flex-col items-center justify-center h-screen">
-      <Foo />
+      <span>FFXIV Job Icon Transform Using Gooey Effect</span>
+      <FfxivJobIconTransformUsingGooeyEffect />
     </main>
   );
 }
