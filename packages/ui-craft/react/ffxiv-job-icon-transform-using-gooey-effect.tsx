@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import './ffxiv-job-icon-transform-using-gooey-effect.css';
 
+const ANIMATION_INTERVAL = 500; // ms
+
 /**
  * Job icons from Final Fantasy XIV Online cycle with a smooth transition effect using the Gooey effect.
  */
@@ -15,10 +17,9 @@ export function FfxivJobIconTransformUsingGooeyEffect() {
   // Switch to the next icon using requestAnimationFrame
   useEffect(() => {
     let animationFrameId: number;
-    const animationInterval = 500;
 
     const animate = (timestamp: number) => {
-      if (timestamp - lastTransitTime >= animationInterval) {
+      if (timestamp - lastTransitTime >= ANIMATION_INTERVAL) {
         transit();
         setLastTransitTime(timestamp);
       }
