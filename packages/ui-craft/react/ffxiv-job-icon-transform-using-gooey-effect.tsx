@@ -58,11 +58,18 @@ export function FfxivJobIconTransformUsingGooeyEffect() {
  *
  * @param numberOfElement Number of elements to switch between
  * @returns Object containing transit function and class names array
+ * @throws Error if numberOfElement is less than or equal to 1
  */
 export function useGooeyEffectClassName(numberOfElement: number): {
   transit: () => void;
   classNames: ('showing' | 'hiding' | 'hidden')[];
 } {
+  if (numberOfElement <= 1) {
+    throw new Error(
+      'useGooeyEffectClassName: numberOfElement must be greater than 1',
+    );
+  }
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [previousIndex, setPreviousIndex] = useState(-1); // -1 means there's no previous element in initial state
 
