@@ -11,13 +11,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-separator": "^1.1.2",
+    "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-tooltip": "^1.1.8",
     "@siluat/ui-craft": "workspace:*",
     "@tailwindcss/postcss": "^4.0.14",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.483.0",
     "next": "^15.2.3",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^4.0.14"
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss": "^4.0.14",
+    "tw-animate-css": "^1.2.4"
   },
   "devDependencies": {
     "@siluat/typescript-config": "workspace:*",
