@@ -1,7 +1,7 @@
 {
   "name": "ui-craft-playground",
   "description": "Playground for UI Craft",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
