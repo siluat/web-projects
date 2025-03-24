@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import './ffxiv-job-icon-transform-using-gooey-effect.css';
+import * as styles from './ffxiv-job-icon-transform-using-gooey-effect.module.css';
 
 const ANIMATION_INTERVAL = 500; // ms
 
@@ -35,12 +35,12 @@ export function FfxivJobIconTransformUsingGooeyEffect() {
   }, [transit, lastTransitTime]);
 
   return (
-    <div className="contrast-filter">
-      <div className="icon-container">
+    <div className={styles.contrastFilter}>
+      <div className={styles.iconContainer}>
         {Array.from(Object.entries(ffxivJobIconData.paths)).map(
           ([key, path], index) => (
             <JobIconSvg
-              className={`icon ${classNames[index]}`}
+              className={`${styles.icon} ${classNames[index]}`}
               key={key}
               path={path}
               aria-label={`${key} job icon`}
@@ -62,7 +62,11 @@ export function FfxivJobIconTransformUsingGooeyEffect() {
  */
 export function useGooeyEffectClassName(numberOfElement: number): {
   transit: () => void;
-  classNames: ('showing' | 'hiding' | 'hidden')[];
+  classNames: (
+    | typeof styles.showing
+    | typeof styles.hiding
+    | typeof styles.hidden
+  )[];
 } {
   if (numberOfElement <= 1) {
     throw new Error(
@@ -82,9 +86,9 @@ export function useGooeyEffectClassName(numberOfElement: number): {
   // Calculate class names for each element
   const classNames = useMemo(() => {
     return Array.from({ length: numberOfElement }, (_, index) => {
-      if (index === currentIndex) return 'showing';
-      if (index === previousIndex) return 'hiding';
-      return 'hidden';
+      if (index === currentIndex) return styles.showing;
+      if (index === previousIndex) return styles.hiding;
+      return styles.hidden;
     });
   }, [currentIndex, previousIndex, numberOfElement]);
 

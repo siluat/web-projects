@@ -1,9 +1,9 @@
-.contrast-filter {
+.contrastFilter {
   filter: contrast(200) blur(0.2px);
   background-color: white;
 }
 
-.icon-container {
+.iconContainer {
   position: relative;
   width: 120px;
   height: 120px;
