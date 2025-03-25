@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import * as styles from './ffxiv-job-icon-transform-using-gooey-effect.module.css';
+import styles from './ffxiv-job-icon-transform-using-gooey-effect.module.css';
 
 const ANIMATION_INTERVAL = 500; // ms
 
