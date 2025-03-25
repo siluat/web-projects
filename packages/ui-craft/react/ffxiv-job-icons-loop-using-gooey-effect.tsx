@@ -1,14 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import styles from './ffxiv-job-icon-transform-using-gooey-effect.module.css';
+import styles from './ffxiv-job-icons-loop-using-gooey-effect.module.css';
 
 const ANIMATION_INTERVAL = 500; // ms
 
 /**
  * Job icons from Final Fantasy XIV Online cycle with a smooth transition effect using the Gooey effect.
  */
-export function FfxivJobIconTransformUsingGooeyEffect() {
+export function FfxivJobIconsLoopUsingGooeyEffect() {
   const [lastTransitTime, setLastTransitTime] = useState(0);
   const { classNames, transit } = useGooeyEffectClassName(
     Object.keys(ffxivJobIconData.paths).length,
