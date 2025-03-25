@@ -5,6 +5,9 @@
     "//#format-and-lint:fix": {
       "cache": false
     },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
