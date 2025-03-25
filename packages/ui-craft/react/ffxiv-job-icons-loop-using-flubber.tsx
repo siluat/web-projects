@@ -18,9 +18,7 @@ export function FfxivJobIconsLoopUsingFlubber() {
 
 function useSvgPathMorphing(pathList: string[]) {
   if (pathList.length < 2) {
-    throw new Error(
-      'useSvgPathMorphing: pathList length must be greater than 2',
-    );
+    throw new Error('useSvgPathMorphing: pathList length must be at least 2');
   }
 
   const [[from, to], increment] = useIncrementingTuple(pathList.length);
