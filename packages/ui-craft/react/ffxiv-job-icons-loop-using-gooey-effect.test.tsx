@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { useGooeyEffectClassName } from './ffxiv-job-icon-transform-using-gooey-effect.js';
+import { useGooeyEffectClassName } from './ffxiv-job-icons-loop-using-gooey-effect.js';
 
 describe('useGooeyEffectClassName', () => {
   it('should return the correct initial class names', () => {
