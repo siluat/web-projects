@@ -16,7 +16,7 @@ export default async function Page({
         <h1 className="w-full text-center">{craft.name}</h1>
       </header>
       <div className="flex flex-1 items-center justify-center">
-        {craft.component}
+        {craft.render()}
       </div>
     </div>
   );
