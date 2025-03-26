@@ -14,6 +14,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>UI Craft Playground</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body>
         <CraftListSidebarProvider>
