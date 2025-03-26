@@ -11,9 +11,11 @@ import {
   SidebarTrigger,
 } from '@/shadcn-components/ui/sidebar';
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { craftMetaMap } from '../data/craftMeta';
 
 export function CraftListSidebar() {
+  const craftEntries = useMemo(() => Array.from(craftMetaMap.entries()), []);
   return (
     <Sidebar>
       <SidebarContent>
@@ -21,7 +23,7 @@ export function CraftListSidebar() {
           <SidebarGroupLabel>ui-crafts</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {Array.from(craftMetaMap.entries()).map(([id, craft]) => (
+              {craftEntries.map(([id, craft]) => (
                 <SidebarMenuItem key={id}>
                   <SidebarMenuButton asChild>
                     <Link href={`/craft/${id}`}>
