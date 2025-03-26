@@ -1,9 +1,7 @@
-import { FfxivJobIconsLoopUsingFlubber } from '@siluat/ui-craft/react/ffxiv-job-icons-loop-using-flubber';
 export default function Page() {
   return (
-    <main className="flex flex-col items-center justify-center h-screen">
-      <span>FFXIV Job Icons Loop using Flubber</span>
-      <FfxivJobIconsLoopUsingFlubber />
-    </main>
+    <div className="flex items-center justify-center w-full h-full">
+      <span>Select a component from the sidebar</span>
+    </div>
   );
 }
