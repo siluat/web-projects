@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "flubber": "^0.4.2",
-    "framer-motion": "^12.5.0"
+    "framer-motion": "^12.5.0",
+    "react-use": "^17.6.0"
   }
 }
