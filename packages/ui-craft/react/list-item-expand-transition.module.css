@@ -1,0 +1,115 @@
+.listWrapper {
+  position: relative;
+  height: 100%;
+}
+
+.item {
+  width: 320px;
+  overflow: hidden;
+  margin: auto 0;
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  background-color: #262626;
+  color: #e5e5e5;
+  border-bottom: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+}
+
+.activeItem {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  cursor: default;
+}
+
+.itemHeader {
+  height: 60px;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.headerDescription {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.itemName {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(179, 140, 255);
+}
+
+.itemHeaderLevelWrapper {
+  display: flex;
+  align-items: flex-start;
+  font-size: 12px;
+  gap: 20px;
+}
+
+.itemHeaderLevelLabel {
+  color: #bbb4a4;
+}
+
+.itemHeaderLevel {
+  color: #e5e5e5;
+}
+
+.itemDetail {
+  width: 100%;
+}
+
+.itemDetailLevel {
+  padding: 10px;
+  font-size: 14px;
+  background-color: #1b1b1b;
+}
+
+.baseParameterWrapper {
+  padding: 6px;
+}
+
+.baseParameterHeader {
+  font-size: 11px;
+  padding: 2px;
+  color: #808080;
+  border-bottom: 1px solid #3d3d3d;
+}
+
+.baseParameterList {
+  display: flex;
+  flex-direction: row;
+  font-size: 13px;
+  gap: 20px;
+  padding: 10px;
+}
+
+.baseParameterLabel {
+  color: #bbb4a4;
+}
+
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
