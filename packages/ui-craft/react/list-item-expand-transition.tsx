@@ -1,23 +1,14 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
-import { useClickAway } from 'react-use';
+import { useRef, useState } from 'react';
+import { useClickAway, useKey } from 'react-use';
 import styles from './list-item-expand-transition.module.css';
 
 export function ListItemExpandTransition() {
   const [activeItem, setActiveItem] = useState<Item | null>(null);
 
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setActiveItem(null);
-      }
-    }
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, []);
+  useKey('Escape', () => setActiveItem(null));
 
   return (
     <div className={styles.listWrapper}>
