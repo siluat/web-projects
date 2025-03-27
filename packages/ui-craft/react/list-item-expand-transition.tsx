@@ -34,6 +34,9 @@ function Item({
       whileTap={{ scale: 0.98 }}
       onClick={() => setActiveItem(item)}
       className={styles.item}
+      tabIndex={0}
+      aria-label={`${item.name} 상세정보 보기`}
+      onKeyDown={(e) => e.key === 'Enter' && setActiveItem(item)}
     >
       <motion.div
         layoutId={`item-header-${item.id}`}
