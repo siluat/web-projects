@@ -5,6 +5,7 @@ import { flex } from '~/styled-system/patterns';
 import { getNormalizedContent } from '~/utils/content-collection';
 
 const entries = await getCollection('dotori');
+
 const contents = (await Promise.all(entries.map(getNormalizedContent))).sort(
   (a, b) => b.lastModified.valueOf() - a.lastModified.valueOf(),
 );
