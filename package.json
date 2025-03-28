@@ -12,6 +12,7 @@
   "scripts": {
     "prepare": "lefthook install",
     "dev": "turbo dev",
+    "dev:dotori-note": "turbo --filter dotori-note dev",
     "dev:ui-craft": "turbo --filter ui-craft-playground dev",
     "changeset": "changeset",
     "format-and-lint": "biome check .",
