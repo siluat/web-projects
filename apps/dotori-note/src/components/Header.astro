@@ -1,28 +1,10 @@
 ---
 import { Nut } from 'lucide-react';
-import { css } from '~/styled-system/css';
-import { hstack } from '~/styled-system/patterns';
 ---
 
 <header
-  class={hstack({
-    width: '100%',
-    height: '4rem',
-    padding: '0 1rem',
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    _light: {
-      color: 'gray11',
-      bgColor: 'gray2',
-      borderColor: 'gray6',
-    },
-    _dark: {
-      color: 'grayDark11',
-      bgColor: 'grayDark2',
-      borderColor: 'grayDark6',
-    },
-  })}
+  class="flex items-center h-16 px-4 gap-2.5 border-b border-solid text-zinc-500 bg-zinc-50 border-zinc-300 dark:text-zinc-400 dark:bg-zinc-900 dark:border-zinc-700"
 >
   <Nut size="24" />
-  <a class={css({ fontWeight: 'bold' })} href="/">도토리 노트</a>
+  <a class="font-bold text" href="/">도토리 노트</a>
 </header>

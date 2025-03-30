@@ -15,12 +15,12 @@
     - 주요 프론트엔드 프레임워크/라이브러리(e.g. React) 기반의 컴포넌트를 재사용할 수 있다. (참고: https://docs.astro.build/en/guides/framework-components/)
     - 콘텐츠 관리를 위해 내가 필요로 하는 기능들을 충분히 제공하고 있다. (e.g. [Multiple collections](https://docs.astro.build/en/guides/content-collections/#organizing-with-multiple-collections), [Defining custom slugs](https://docs.astro.build/en/guides/content-collections/#defining-custom-slugs))
 - CSS & 스타일링
-  - 의존: Panda CSS
-  - 선택 이유:
-    - 제공하는 기능이 많아, 웬만한 것은 그냥 그대로 의존하면 돼서 편리하다.
-    - 공식 문서도 잘되어 있다.
-- 컬러 팔레트
-  - 의존: [Radix Colors](https://www.radix-ui.com/colors)
-  - 선택 이유:
-    - 다크 모드를 위한 팔레트를 함께 제공하고 있어, 개발자인 내가 UI 디자인적 요소를 고민하는 비용을 줄여준다.
-    - 라이트 / 다크 모드간 색상의 이름이 동일한 목적의 색상이라면 동일한 번호로 구성되어 있어, 코드로 제어하기 편리할 것으로 기대된다.
+  - ~~의존: Panda CSS~~
+  - ~~선택 이유:~~
+    - ~~제공하는 기능이 많아, 웬만한 것은 그냥 그대로 의존하면 돼서 편리하다.~~
+    - ~~공식 문서도 잘되어 있다.~~
+  - 의존: tailwindcss
+  - 전환 이유
+    - 다른 스타일링 방식에 비해 tailwindcss에 대한 숙련도가 낮다. 숙련도를 높이기 위해 의도적으로 더 사용할 곳을 만드려고 한다.
+    - 최초에는 UI를 한땀한땀 직접 구성하고 싶은 의도로 시작했지만, 그보다는 콘텐츠에 더 집중하기 위해 shadcn/ui를 적극 활용하기로 결정했다. shadcn/ui를 사용하기에는 tailwindcss가 더 최적이다.
+    - 전환을 결정한 시점에 이미 작성된 CSS 코드가 많지 않아서 전환 비용이 크지 않다.

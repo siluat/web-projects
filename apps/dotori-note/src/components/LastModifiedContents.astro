@@ -1,7 +1,5 @@
 ---
 import { getCollection } from 'astro:content';
-import { css } from '~/styled-system/css';
-import { flex } from '~/styled-system/patterns';
 import { getNormalizedContent } from '~/utils/content-collection';
 
 const entries = await getCollection('dotori');
@@ -11,20 +9,13 @@ const contents = (await Promise.all(entries.map(getNormalizedContent))).sort(
 );
 ---
 
-<ul class={css({ listStyle: 'none', pl: 0 })}>
+<ul class="pl-0">
   {
     contents.map((c) => (
-      <li class={css({})}>
-        <a class={flex({ direction: 'column' })} href={`/content/${c.slug}`}>
+      <li class="my-2">
+        <a class="flex flex-col" href={`/content/${c.slug}`}>
           {c.title}
-          <time
-            class={css({
-              textStyle: 'xs',
-              color: 'gray11',
-              _dark: { color: 'grayDark11' },
-            })}
-            datetime={c.lastModified.toISOString()}
-          >
+          <time class="text-xs text-zinc-500 dark:text-zinc-400" datetime={c.lastModified.toISOString()}>
             {c.lastModified.toLocaleDateString('ko-KR')}
           </time>
         </a>

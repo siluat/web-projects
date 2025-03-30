@@ -2,9 +2,7 @@
 import '@fontsource-variable/noto-sans-kr';
 import GoogleTag from '~/components/GoogleTag.astro';
 import Header from '~/components/Header.astro';
-import InitPandaCss from '~/components/InitPandaCss.astro';
-import InitTheme from '~/components/InitTheme.astro';
-import { vstack } from '~/styled-system/patterns';
+import '~/styles/global.css';
 ---
 
 <!doctype html>
@@ -13,19 +11,11 @@ import { vstack } from '~/styled-system/patterns';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>도토리 노트</title>
-    <InitPandaCss />
-    <InitTheme />
     <GoogleTag />
   </head>
-  <body class={vstack({ gap: 0 })}>
+  <body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 break-keep font-noto-sans-kr">
     <Header />
-    <main
-      class={vstack({
-        w: '100%',
-        maxWidth: 'breakpoint-md',
-        alignItems: 'flex-start',
-      })}
-    >
+    <main class="mx-auto max-w-screen-md">
       <slot />
     </main>
   </body>
