@@ -1,5 +1,4 @@
 ---
-import { css } from '~/styled-system/css';
 import DefaultLayout from './DefaultLayout.astro';
 
 interface Props {
@@ -10,7 +9,7 @@ const { title } = Astro.props;
 ---
 
 <DefaultLayout>
-  <article class={css({ direction: 'column', w: '100%', p: '2.5rem 1.5rem' })}>
+  <article class="prose prose-zinc dark:prose-invert max-w-none px-6 py-12">
     <h1>{title}</h1>
     <slot />
   </article>

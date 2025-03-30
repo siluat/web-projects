@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+@theme {
+  --font-noto-sans-kr: 'Noto Sans KR Variable', 'sans-serif';
+}

@@ -1,21 +1,11 @@
 ---
 import LastModifiedContents from '~/components/LastModifiedContents.astro';
 import DefaultLayout from '~/layouts/DefaultLayout.astro';
-import { css } from '~/styled-system/css';
 ---
 
 <DefaultLayout>
-  <section class={css({ m: '1rem' })}>
-    <h1
-      class={css({
-        textStyle: 'xs',
-        mb: '0.5rem',
-        color: 'gray11',
-        _dark: { color: 'grayDark11' },
-      })}
-    >
-      최근 변경
-    </h1>
+  <section class="m-4">
+    <h1 class="text-xs mb-1 font-bold text-zinc-500 dark:text-zinc-400">최근 변경</h1>
     <LastModifiedContents />
   </section>
 </DefaultLayout>
