@@ -3,7 +3,6 @@
   "description": "이것저것 기록하고 관리하기 위한 노트",
   "homepage": "https://dotori.blog",
   "scripts": {
-    "prepare": "panda codegen",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro build && astro preview"
@@ -14,14 +13,16 @@
     "@astrojs/react": "^4.2.1",
     "@fontsource-variable/noto-sans-kr": "^5.2.5",
     "@radix-ui/colors": "^3.0.0",
+    "@tailwindcss/vite": "^4.0.17",
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
     "astro": "^5.5.3",
     "lucide-react": "^0.483.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.17"
   },
   "devDependencies": {
-    "@pandacss/dev": "^0.53.2"
+    "@tailwindcss/typography": "^0.5.16"
   }
 }
