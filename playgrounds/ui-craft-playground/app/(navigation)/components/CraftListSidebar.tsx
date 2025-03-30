@@ -9,7 +9,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
-} from '@/shadcn-components/ui/sidebar';
+} from '@siluat/shadcn-ui/components/sidebar';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { craftMetaMap } from '../data/craftMeta';

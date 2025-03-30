@@ -16,6 +16,7 @@
     "@radix-ui/react-separator": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.8",
+    "@siluat/shadcn-ui": "workspace:*",
     "@siluat/ui-craft": "workspace:*",
     "@tailwindcss/postcss": "^4.0.14",
     "class-variance-authority": "^0.7.1",

@@ -1,9 +1,9 @@
+import '@siluat/shadcn-ui/globals.css';
 import {
   CraftListSidebar,
   CraftListSidebarProvider,
   CraftListSidebarTrigger,
 } from './(navigation)/components/CraftListSidebar';
-import './globals.css';
 
 export default function RootLayout({
   children,
