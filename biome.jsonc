@@ -11,7 +11,8 @@
       "**/.next/**", // Next.js generated files
       "**/.turbo/**", // Turborepo generated files
       "**/dist/**", // General build output
-      "**/styled-system/**" // Panda CSS generated files
+      "**/styled-system/**", // Panda CSS generated files
+      "packages/shadcn-ui/**" // shadcn/ui generated files
     ],
     "ignoreUnknown": false
   },
