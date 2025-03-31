@@ -39,7 +39,7 @@ function useSvgPathMorphing(pathList: string[]) {
   useLayoutEffect(() => {
     const animation = animate<number>(0, 1, {
       duration: 0.2,
-      delay: 0.3,
+      delay: 0.2,
       ease: 'easeIn',
       onUpdate: (progress) => {
         setCurrentPath(interpolater(progress));
