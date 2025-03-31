@@ -1,8 +1,10 @@
 'use client';
 
-import { interpolate } from 'flubber';
 import { animate } from 'framer-motion';
 import { useCallback, useLayoutEffect, useMemo, useState } from 'react';
+
+const flubber = await import('flubber');
+const { interpolate } = flubber.default || flubber;
 
 export function FfxivJobIconsLoopUsingFlubber() {
   const path = useSvgPathMorphing(ffxivJobIconPaths);
