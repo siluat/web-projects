@@ -1,14 +1,14 @@
 import type { CollectionEntry } from 'astro:content';
 
-interface Content {
+interface Note {
   slug: string;
   title: string;
   lastModified: Date;
 }
 
-export async function getNormalizedContent(
-  entry: CollectionEntry<'dotori'>,
-): Promise<Content> {
+export async function getNormalizedNote(
+  entry: CollectionEntry<'note'>,
+): Promise<Note> {
   const { remarkPluginFrontmatter } = await entry.render();
   const lastModified = remarkPluginFrontmatter.lastModified
     ? new Date(remarkPluginFrontmatter.lastModified)
