@@ -7,7 +7,7 @@ interface Props {
 const { caption } = Astro.props;
 --- 
 
-<div class="bg-white text-black flex flex-col items-center justify-center h-[200px]">
+<div class="bg-white text-black flex flex-col items-center justify-center min-h-[200px]">
   <div class="flex items-center justify-center gap-4"><slot /></div>
   {caption && <p class="text-sm text-zinc-500">{caption}</p>}
 </div>
