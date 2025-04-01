@@ -2,8 +2,10 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { useClickAway, useKey } from 'react-use';
 import styles from './list-item-expand-transition.module.css';
+
+const reactUse = await import('react-use');
+const { useClickAway, useKey } = reactUse.default || reactUse;
 
 export function ListItemExpandTransition() {
   const [activeItem, setActiveItem] = useState<Item | null>(null);
