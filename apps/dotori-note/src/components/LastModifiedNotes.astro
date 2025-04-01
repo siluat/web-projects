@@ -9,13 +9,13 @@ const contents = (await Promise.all(entries.map(getNormalizedNote))).sort(
 );
 ---
 
-<ul class="pl-0">
+<ul class="pl-0 flex flex-col">
   {
     contents.map((c) => (
       <li class="my-2">
         <a class="flex flex-col" href={`/note/${c.slug}`}>
           {c.title}
-          <time class="text-xs text-zinc-500 dark:text-zinc-400" datetime={c.lastModified.toISOString()}>
+          <time class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" datetime={c.lastModified.toISOString()}>
             {c.lastModified.toLocaleDateString('ko-KR')}
           </time>
         </a>
