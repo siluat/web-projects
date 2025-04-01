@@ -1,6 +1,7 @@
 .listWrapper {
   position: relative;
   height: 400px;
+  background-color: #262626;
 }
 
 .item {
