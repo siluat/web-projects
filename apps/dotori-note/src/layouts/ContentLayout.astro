@@ -1,0 +1,38 @@
+---
+import '@fontsource-variable/noto-sans-kr';
+import GoogleTag from '~/components/GoogleTag.astro';
+import Header from '~/components/Header.astro';
+import '~/styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{`${title} - 도토리 노트`}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={`${title} - 도토리 노트`} />
+    <meta property="og:description" content={description} />
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content={`${title} - 도토리 노트`} />
+    <meta property="twitter:description" content={description} />
+    <GoogleTag />
+  </head>
+  <body class="bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 break-keep font-noto-sans-kr">
+    <Header />
+    <main class="mx-auto max-w-screen-md">
+      <article class="prose prose-zinc dark:prose-invert max-w-none px-6 py-12">
+        <h1>{title}</h1>
+        <slot />
+      </article>
+    </main>
+  </body>
+</html>
