@@ -12,6 +12,7 @@ import {
 } from '@siluat/shadcn-ui/components/dropdown-menu';
 import {
   CircleHelp,
+  Menu,
   MonitorCog,
   Moon,
   SquareBottomDashedScissors,
@@ -28,7 +29,7 @@ export function GlobalMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="cursor-pointer">
-          메뉴
+          <Menu className="w-4 h-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
