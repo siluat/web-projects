@@ -14,6 +14,7 @@
     "@codesandbox/sandpack-react": "^2.20.0",
     "@fontsource-variable/noto-sans-kr": "^5.2.5",
     "@radix-ui/colors": "^3.0.0",
+    "@siluat/shadcn-ui": "workspace:*",
     "@siluat/ui-craft": "workspace:*",
     "@tailwindcss/vite": "^4.0.17",
     "@types/react": "^19.0.11",
