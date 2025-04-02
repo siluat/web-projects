@@ -4,7 +4,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@siluat/shadcn-ui/*": ["../../packages/shadcn-ui/src/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"
