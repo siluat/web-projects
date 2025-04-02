@@ -1,10 +1,14 @@
 ---
 import { Nut } from 'lucide-react';
+import { GlobalMenu } from './GlobalMenu.tsx';
 ---
 
 <header
-  class="flex items-center h-16 px-4 gap-2.5 border-b border-solid text-zinc-500 bg-zinc-100 border-zinc-300 dark:text-zinc-400 dark:bg-zinc-800 dark:border-zinc-700"
+  class="flex items-center justify-between h-16 px-4 gap-2.5 border-b border-solid text-zinc-500 bg-zinc-100 border-zinc-300 dark:text-zinc-400 dark:bg-zinc-800 dark:border-zinc-700"
 >
-  <Nut size="24" />
-  <a class="font-bold text" href="/">도토리 노트</a>
+  <div class="flex items-center gap-2">
+    <Nut size="24" />
+    <a class="font-bold text" href="/">도토리 노트</a>
+  </div>
+  <GlobalMenu client:load/>
 </header>
