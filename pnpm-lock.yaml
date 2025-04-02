@@ -44,6 +44,9 @@ importers:
       '@radix-ui/colors':
         specifier: ^3.0.0
         version: 3.0.0
+      '@siluat/shadcn-ui':
+        specifier: workspace:*
+        version: link:../../packages/shadcn-ui
       '@siluat/ui-craft':
         specifier: workspace:*
         version: link:../../packages/ui-craft

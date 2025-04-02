@@ -1,9 +1,12 @@
 ---
 import GoogleTag from '@/components/GoogleTag.astro';
 import Header from '@/components/Header.astro';
+import InitColorScheme from '@/components/InitColorScheme.astro';
 import '@/styles/global.css';
 import '@fontsource-variable/noto-sans-kr';
 ---
+
+
 
 <!doctype html>
 <html lang="ko">
@@ -14,6 +17,7 @@ import '@fontsource-variable/noto-sans-kr';
     <meta property="og:title" content="도토리 노트" />
     <meta property="twitter:card" content="summary" />
     <meta property="twitter:title" content="도토리 노트" />
+    <InitColorScheme />
     <GoogleTag />
   </head>
   <body class="bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 break-keep font-noto-sans-kr">
