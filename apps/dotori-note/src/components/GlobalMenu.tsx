@@ -28,7 +28,7 @@ export function GlobalMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="cursor-pointer">
+        <Button variant="outline" className="cursor-pointer dark:bg-zinc-900">
           <Menu className="w-4 h-4" />
         </Button>
       </DropdownMenuTrigger>
