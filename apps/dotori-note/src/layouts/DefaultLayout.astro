@@ -4,6 +4,13 @@ import Header from '@/components/Header.astro';
 import InitColorScheme from '@/components/InitColorScheme.astro';
 import '@/styles/global.css';
 import '@fontsource-variable/noto-sans-kr';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title = '도토리 노트', description } = Astro.props;
 ---
 
 <!doctype html>
@@ -11,10 +18,13 @@ import '@fontsource-variable/noto-sans-kr';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>도토리 노트</title>
-    <meta property="og:title" content="도토리 노트" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="twitter:card" content="summary" />
-    <meta property="twitter:title" content="도토리 노트" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
     <InitColorScheme />
     <GoogleTag />
   </head>
