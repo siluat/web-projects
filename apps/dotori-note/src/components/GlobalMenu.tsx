@@ -19,16 +19,26 @@ import {
   Squirrel,
   Sun,
 } from 'lucide-react';
+import { useState } from 'react';
 
 export function GlobalMenu() {
+  const [open, setOpen] = useState(false);
+
   const preventDefault = (event: Event) => {
     event.preventDefault();
   };
 
   return (
-    <DropdownMenu>
+    /**
+     * @note iOS Safari v18.3.2 및 특정 인 앱 브라우저에서 트리거가 정상 동작하지 않아 open을 직접 제어 (Astro에서만 발생하는 문제일 수도 있음)
+     */
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="cursor-pointer dark:bg-zinc-900">
+        <Button
+          variant="outline"
+          className="cursor-pointer dark:bg-zinc-900"
+          onClick={() => setOpen(!open)}
+        >
           <Menu className="w-4 h-4" />
         </Button>
       </DropdownMenuTrigger>
