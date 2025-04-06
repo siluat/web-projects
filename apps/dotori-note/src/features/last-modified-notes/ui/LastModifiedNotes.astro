@@ -1,6 +1,6 @@
 ---
+import { getNormalizedNote } from '@/entities/note/model/get-normalized-note';
 import { getCollection } from 'astro:content';
-import { getNormalizedNote } from '@/utils/note-collection';
 
 const entries = await getCollection('note');
 
