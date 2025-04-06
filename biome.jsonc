@@ -12,7 +12,8 @@
       "**/.turbo/**", // Turborepo generated files
       "**/dist/**", // General build output
       "**/styled-system/**", // Panda CSS generated files
-      "packages/shadcn-ui/**" // shadcn/ui generated files
+      "packages/shadcn-ui/**", // shadcn/ui generated files
+      "**/test-results/**" // Playwright test results
     ],
     "ignoreUnknown": false
   },
