@@ -2,6 +2,27 @@
 
 이것저것 기록하고 관리하기 위한 노트
 
+## 프로젝트 구조
+
+Astro 프로젝트 기본 구조와 FSD(Feature-Sliced Design) 구조를 조합하여 다음과 같은 레이어 규칙을 따른다.
+
+| 레이어 | 컨벤션 | 부가 설명 |
+| --- | --- | --- |
+| `src/app` | FSD | |
+| `src/pages` | Astro | |
+| `src/content` | Astro | MDX 형식의 콘텐츠 파일 관리 |
+| `src/widgets` | FSD | |
+| `src/features` | FSD | |
+| `src/entities` | FSD | |
+| `src/shared` | FSD | |
+
+- FSD 레이어 규칙과 동일하게 모든 레이어는 하위 레이어만을 참조할 수 있다.
+
+### 참고
+
+- [Astro 프로젝트 구조](https://docs.astro.build/en/basics/project-structure/)
+- [Feature-Sliced Design](https://feature-sliced.github.io/documentation/docs/get-started/overview#concepts)
+
 ## 기술/패키지 의존성
 
 - 콘텐츠 관리
