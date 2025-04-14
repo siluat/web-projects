@@ -6,7 +6,7 @@ test.describe('Initialize Theme', () => {
   }) => {
     await page.emulateMedia({ colorScheme: 'dark' });
     await page.goto('/');
-    await expect(page.locator('html')).toHaveClass(/dark/);
+    await expect(page.locator('html')).toHaveClass('dark');
   });
 
   test('should initialize with light theme when system prefers light mode', async ({
@@ -14,7 +14,7 @@ test.describe('Initialize Theme', () => {
   }) => {
     await page.emulateMedia({ colorScheme: 'light' });
     await page.goto('/');
-    await expect(page.locator('html')).not.toHaveClass(/dark/);
+    await expect(page.locator('html')).not.toHaveClass('dark');
   });
 
   test('should update to dark theme when system color scheme changes to dark', async ({
@@ -22,10 +22,10 @@ test.describe('Initialize Theme', () => {
   }) => {
     await page.emulateMedia({ colorScheme: 'light' });
     await page.goto('/');
-    await expect(page.locator('html')).not.toHaveClass(/dark/);
+    await expect(page.locator('html')).not.toHaveClass('dark');
 
     await page.emulateMedia({ colorScheme: 'dark' });
-    await expect(page.locator('html')).toHaveClass(/dark/);
+    await expect(page.locator('html')).toHaveClass('dark');
   });
 
   test('should update to light theme when system color scheme changes to light', async ({
@@ -33,19 +33,20 @@ test.describe('Initialize Theme', () => {
   }) => {
     await page.emulateMedia({ colorScheme: 'dark' });
     await page.goto('/');
-    await expect(page.locator('html')).toHaveClass(/dark/);
+    await expect(page.locator('html')).toHaveClass('dark');
 
     await page.emulateMedia({ colorScheme: 'light' });
-    await expect(page.locator('html')).not.toHaveClass(/dark/);
+    await expect(page.locator('html')).not.toHaveClass('dark');
   });
-});
 
-test.describe('Theme Setting', () => {
-  test('should update to dark theme when theme setting is dark', async ({
+  test('if theme setting stored, should not change theme when prefers-color-scheme is changed', async ({
     page,
   }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('theme', 'dark');
+    });
     await page.goto('/');
-    const globalMenu = page.getByRole('button', { name: 'Global Menu' });
-    await expect(globalMenu).toBeVisible();
+    await page.emulateMedia({ colorScheme: 'light' });
+    await expect(page.locator('html')).toHaveClass('dark');
   });
 });
