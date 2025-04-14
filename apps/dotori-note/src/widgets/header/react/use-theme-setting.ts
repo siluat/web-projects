@@ -14,7 +14,7 @@ const THEME_STORAGE_KEY = 'theme';
  * Requires the `dark` variant to be defined in global CSS
  * @see https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually
  */
-function toogleDarkMode(isDark: boolean) {
+function toggleDarkMode(isDark: boolean) {
   document.documentElement.classList.toggle('dark', isDark);
 }
 
@@ -33,14 +33,14 @@ export function useThemeSetting() {
     } else {
       setThemeSetting(ThemeSetting.Auto);
     }
-  });
+  }, []);
 
   const switchThemeSetting = (themeSetting: ThemeSetting) => {
     if (themeSetting === ThemeSetting.Auto) {
-      toogleDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+      toggleDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
       localStorage.removeItem(THEME_STORAGE_KEY);
     } else {
-      toogleDarkMode(themeSetting === ThemeSetting.Dark);
+      toggleDarkMode(themeSetting === ThemeSetting.Dark);
       localStorage.setItem(THEME_STORAGE_KEY, themeSetting);
     }
     setThemeSetting(themeSetting);
