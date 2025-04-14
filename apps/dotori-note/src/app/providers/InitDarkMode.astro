@@ -1,0 +1,11 @@
+<script>
+  function toggleDarkMode(isDark: boolean) {
+    document.documentElement.classList.toggle('dark', isDark);
+  }
+
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+  toggleDarkMode(mediaQuery.matches);
+
+  mediaQuery.addEventListener('change', (event) => toggleDarkMode(event.matches));
+</script>
