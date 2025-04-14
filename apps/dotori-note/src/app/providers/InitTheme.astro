@@ -1,11 +1,38 @@
 <script is:inline>
+  // asdsd
+
+  const THEMES = ['light', 'dark'];
+  const THEME_STORAGE_KEY = 'theme';
+  const MEDIA_QUERY = window.matchMedia('(prefers-color-scheme: dark)');
+
+  /**
+   * Requires the `dark` variant to be defined in global CSS
+   * @see https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually
+   */
   function toggleDarkMode(isDark) {
     document.documentElement.classList.toggle('dark', isDark);
   }
 
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  function getStoredThemeSetting() {
+    const value = localStorage.getItem(THEME_STORAGE_KEY);
+    return typeof value === 'string' && THEMES.includes(value) ? value : undefined;
+  }
+  
+  const storedThemeSetting = getStoredThemeSetting();
 
-  toggleDarkMode(mediaQuery.matches);
+  if (storedThemeSetting) {
+    // use stored theme setting
+    toggleDarkMode(storedThemeSetting === 'dark');
+  } else {
+    // use system theme setting
+    toggleDarkMode(MEDIA_QUERY.matches);
+  }
 
-  mediaQuery.addEventListener('change', (event) => toggleDarkMode(event.matches));
+  MEDIA_QUERY.addEventListener('change', (event) => {
+    if (getStoredThemeSetting()) {
+      return;
+    }
+
+    toggleDarkMode(event.matches);
+  });
 </script>

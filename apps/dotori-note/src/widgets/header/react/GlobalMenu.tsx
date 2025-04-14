@@ -22,13 +22,12 @@ import {
   Sun,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useThemeSetting } from './use-theme-setting';
 
 export function GlobalMenu() {
   const [open, setOpen] = useState(false);
-
-  const preventDefault = (event: Event) => {
-    event.preventDefault();
-  };
+  const { currentThemeSetting, switchThemeSetting, ThemeSetting } =
+    useThemeSetting();
 
   return (
     /**
@@ -37,6 +36,7 @@ export function GlobalMenu() {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button
+          aria-label="Global Menu"
           variant="outline"
           className="cursor-pointer dark:bg-zinc-900"
           onClick={() => setOpen(!open)}
@@ -77,27 +77,28 @@ export function GlobalMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup value="auto">
+        <DropdownMenuRadioGroup value={currentThemeSetting}>
           <DropdownMenuLabel className="text-zinc-400 dark:text-zinc-500 flex items-center gap-2">
             테마 설정
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuRadioItem value="auto" onSelect={preventDefault}>
+          <DropdownMenuRadioItem
+            value={ThemeSetting.Auto}
+            onSelect={() => switchThemeSetting(ThemeSetting.Auto)}
+          >
             <MonitorCog className="w-4 h-4" />
             자동
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
-            value="light"
-            onSelect={preventDefault}
-            disabled
+            value={ThemeSetting.Light}
+            onSelect={() => switchThemeSetting(ThemeSetting.Light)}
           >
             <Sun className="w-4 h-4" />
             라이트
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
-            value="dark"
-            onSelect={preventDefault}
-            disabled
+            value={ThemeSetting.Dark}
+            onSelect={() => switchThemeSetting(ThemeSetting.Dark)}
           >
             <Moon className="w-4 h-4" />
             다크

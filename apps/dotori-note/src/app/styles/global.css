@@ -4,3 +4,5 @@
 @theme {
   --font-noto-sans-kr: 'Noto Sans KR Variable', 'sans-serif';
 }
+
+@custom-variant dark (&:is(.dark *));
