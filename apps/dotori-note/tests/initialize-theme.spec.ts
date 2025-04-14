@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Theme Tests', () => {
+test.describe('Initialize Theme', () => {
   test('should initialize with dark theme when system prefers dark mode', async ({
     page,
   }) => {
@@ -37,5 +37,15 @@ test.describe('Theme Tests', () => {
 
     await page.emulateMedia({ colorScheme: 'light' });
     await expect(page.locator('html')).not.toHaveClass(/dark/);
+  });
+});
+
+test.describe('Theme Setting', () => {
+  test('should update to dark theme when theme setting is dark', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const globalMenu = page.getByRole('button', { name: 'Global Menu' });
+    await expect(globalMenu).toBeVisible();
   });
 });
