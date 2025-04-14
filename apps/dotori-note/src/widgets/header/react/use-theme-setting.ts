@@ -15,7 +15,13 @@ const THEME_STORAGE_KEY = 'theme';
  * @see https://tailwindcss.com/docs/dark-mode#toggling-dark-mode-manually
  */
 function toggleDarkMode(isDark: boolean) {
-  document.documentElement.classList.toggle('dark', isDark);
+  if (!document.startViewTransition) {
+    document.documentElement.classList.toggle('dark', isDark);
+  } else {
+    document.startViewTransition(() => {
+      document.documentElement.classList.toggle('dark', isDark);
+    });
+  }
 }
 
 export function useThemeSetting() {
