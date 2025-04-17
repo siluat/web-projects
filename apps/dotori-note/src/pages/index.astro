@@ -1,6 +1,7 @@
 ---
 import DefaultLayout from '@/app/layouts/DefaultLayout.astro';
 import LastModifiedNotes from '@/features/last-modified-notes/ui/LastModifiedNotes.astro';
+import RandomQuote from '@/widgets/random-quote/ui/RandomQuote.astro';
 ---
 
 <DefaultLayout title="도토리 노트">
@@ -8,4 +9,5 @@ import LastModifiedNotes from '@/features/last-modified-notes/ui/LastModifiedNot
     <h1 class="text-xs mb-1 font-bold text-zinc-500 dark:text-zinc-400">최근 변경된 노트</h1>
     <LastModifiedNotes />
   </section>
+  <RandomQuote className="m-4" />
 </DefaultLayout>
