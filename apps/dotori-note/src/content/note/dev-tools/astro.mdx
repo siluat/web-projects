@@ -1,0 +1,57 @@
+---
+title: Astro
+category: dev-tools
+slug: 99410091-e57a-49cd-a14a-9d76b4fc572a
+lastModified: 2025-04-17
+---
+
+import TimestampBlock from '@/entities/note/ui/TimestampBlock.astro';
+
+<TimestampBlock recordDate="2025-04-17">
+
+## 개요
+
+웹 프레임워크 중 하나인 [Astro](https://astro.build) 사용 경험을 정리하는 노트
+
+> What is Astro?  
+> Astro is a JavaScript web framework optimized for building fast, content-driven websites.  
+> https://astro.build
+
+## 사용 계기 및 선택 이유
+
+개인 블로그인 도토리 노트를 만들 때 다음과 같은 이유로 선택했다.
+
+- **기능 측면: [Content collections](https://docs.astro.build/en/guides/content-collections/)**
+  
+  Astro는 MDX 파일이나 JSON 파일 기반으로 정적 페이지를 생성하고 관리하는데 유용한 API를 기본으로 제공한다.
+  Next.js 같은 더 범용적인 프레임워크에 비해 콘텐츠 관리를 위한 API를 기본 제공하는 점이 목적 달성에 더 유용할 것이라 기대되었다.
+
+- **성능 측면: [Islands architecture](https://docs.astro.build/en/concepts/islands/)**
+
+  예전 블로그에는 [Gatsby](https://www.gatsbyjs.com)를 사용했었는데 매우 작고 사소한 블로그인데도 성능이 높지 않았다. (라이트 하우스 기준)
+  Astro는 'Islands architecture'를 통해 성능상의 강점을 내세운다. 
+  요즘(2025년) 프론트엔드 프레임워크들은 대부분은 각자만의 성능 강점을 내세우고 있는데, 
+  Astro의 'Islands architecture'도 세부 구현을 자세히 뜯어보지는 않았지만 충분한 성능상의 이점이 있을 것으로 기대되었다.
+
+- **생산성 측면: 기본 지원 컴포넌트는 Astro라는 컴포넌트지만, React 컴포넌트도 사용 가능**
+  
+  Astro는 Astro components라는 자체적인 규격의 컴포넌트를 사용한다. 하지만 React 컴포넌트도 Astro 컴포넌트에서 쉽게 재사용할 수 있다.
+  기존 블로그에서 만들었던 React 컴포넌트와 웬만한 것은 이미 다 있는 React 커뮤니티의 오픈 소스들을 재사용할 수 있다는 것에 Astro 컴포넌트 사용에 대한 부담감이 들지 않았다. (~~하지만...~~)
+
+## 사용하면서 느낀 점
+
+- **React 컴포넌트 사용의 함정(?)**
+
+  이건 내가 멍청했다. Astro 컴포넌트에서 React 컴포넌트를 쉽게 재사용할 수 있는 것은 맞다. 다만 몇 가지 제약이 생긴다.
+
+  - React Context를 통한 상태 공유에 Astro 컴포넌트는 접근할 수 없다. 쉽게 풀 수 있는 문제도 어렵게 풀게 만든다.
+  - React Hook을 Astro 컴포넌트에서 재사용할 수 없다. React 컴포넌트용 코드 따로, Astro 컴포넌트용 코드 따로 작성해야 하는 경우가 생긴다.
+
+  쉽게 딸깍으로 끝내려고 이미 완성된 React 컴포넌트 재사용했다가 정작 위 문제로 시간을 소비하는 일이 생긴다.
+
+- **AI 에이전트 활용 시의 단점**
+
+  React 컴포넌트가 아닌 Astro 컴포넌트라는 옵션이 하나 더 있는 것만으로도 AI 에이전트로 작업할 때 프롬프트를 더 작성하거나 요청을 한두 번 더 해야 하는 일이 생긴다.
+  `Cursor Rule`을 잘 설정하면 될 것 같지만, 손이 가는 일을 하나 더 만든다는 것이 단점이라는 생각이 든다. 요새는 정말 도구를 선택할 때 'AI가 잘 다루는가'도 꽤 고려하게 된다.
+
+</TimestampBlock>
