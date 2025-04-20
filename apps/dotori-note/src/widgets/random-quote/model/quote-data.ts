@@ -1,6 +1,7 @@
-import type { Quote } from './random-quote-types';
+import type { NonEmptyArray } from '../../../shared/model/utility-types';
+import type { Quote } from './quote-types';
 
-export const quotes: Quote[] = [
+export const quotes: NonEmptyArray<Quote> = [
   {
     source: 'Linus Torvalds',
     original: 'Talk is cheap. Show me the code.',

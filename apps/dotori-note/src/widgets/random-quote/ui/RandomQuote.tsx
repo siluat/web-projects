@@ -1,8 +1,9 @@
-import { getRandomQuote } from '../model/get-random-quote';
+import { pickRandomQuote } from '../lib/pick-random-quote';
+import { quotes } from '../model/quote-data';
 import { CloseQuote } from './CloseQuote';
 import { OpenQuote } from './OpenQuote';
 
-const quote = getRandomQuote();
+const quote = pickRandomQuote(quotes);
 
 export function RandomQuote({ className }: React.ComponentProps<'figure'>) {
   return (
