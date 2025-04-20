@@ -9,10 +9,10 @@ export function RandomQuote({ className }: React.ComponentProps<'figure'>) {
     <>
       {quote ? (
         <figure
-          className={`${className} relative overflow-hidden z-0 bg-zinc-100 dark:bg-zinc-800 rounded-lg`}
+          className={`${className} relative overflow-hidden bg-zinc-100 dark:bg-zinc-800 rounded-lg`}
         >
           <OpenQuote className="absolute -top-2 left-0 text-zinc-200 dark:text-zinc-600" />
-          <blockquote className="z-1 p-8 w-full text-center text-zinc-400 dark:text-zinc-400 text-sm">
+          <blockquote className="p-8 w-full text-center text-zinc-400 dark:text-zinc-400 text-sm">
             {quote.original && <p className="original">{quote.original}</p>}
             {quote.translated && (
               <p className="translated">{quote.translated}</p>
