@@ -1,7 +1,7 @@
 ---
 import DefaultLayout from '@/app/layouts/DefaultLayout.astro';
 import LastModifiedNotes from '@/features/last-modified-notes/ui/LastModifiedNotes.astro';
-import RandomQuote from '@/widgets/random-quote/ui/RandomQuote.astro';
+import { RandomQuote } from '@/widgets/random-quote/ui/RandomQuote';
 ---
 
 <DefaultLayout title="도토리 노트">
@@ -10,6 +10,6 @@ import RandomQuote from '@/widgets/random-quote/ui/RandomQuote.astro';
     <LastModifiedNotes />
   </section>
   <section class="m-4">
-    <RandomQuote />
+    <RandomQuote client:only="react" />
   </section>
 </DefaultLayout>

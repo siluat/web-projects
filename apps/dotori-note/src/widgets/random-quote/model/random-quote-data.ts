@@ -1,4 +1,4 @@
-import type { Quote } from '../model/random-quote-types';
+import type { Quote } from './random-quote-types';
 
 export const quotes: Quote[] = [
   {
