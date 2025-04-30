@@ -9,9 +9,9 @@
     "test": "playwright test"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.2.1",
+    "@astrojs/mdx": "^4.2.5",
     "@astrojs/partytown": "^2.1.4",
-    "@astrojs/react": "^4.2.1",
+    "@astrojs/react": "^4.2.6",
     "@codesandbox/sandpack-react": "^2.20.0",
     "@fontsource-variable/noto-sans-kr": "^5.2.5",
     "@radix-ui/colors": "^3.0.0",
@@ -20,11 +20,11 @@
     "@tailwindcss/vite": "^4.0.17",
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
-    "astro": "^5.5.3",
+    "astro": "^5.7.9",
     "lucide-react": "^0.483.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sharp": "^0.33.5",
+    "sharp": "^0.34.1",
     "tailwindcss": "^4.0.17"
   },
   "devDependencies": {
