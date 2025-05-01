@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
   "tasks": {
     "//#format-and-lint": {},
     "//#format-and-lint:fix": {
