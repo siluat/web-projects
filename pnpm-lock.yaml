@@ -53,12 +53,6 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.0.17
         version: 4.0.17(vite@6.3.4(@types/node@20.17.28)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1))
-      '@types/react':
-        specifier: ^19.0.11
-        version: 19.0.11
-      '@types/react-dom':
-        specifier: ^19.0.4
-        version: 19.0.4(@types/react@19.0.11)
       astro:
         specifier: ^5.7.9
         version: 5.7.9(@types/node@20.17.28)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.1)(typescript@5.8.2)(yaml@2.7.1)
@@ -87,8 +81,12 @@ importers:
       '@types/node':
         specifier: ^20
         version: 20.17.28
-
-  apps/noumenon: {}
+      '@types/react':
+        specifier: ^19.0.11
+        version: 19.0.11
+      '@types/react-dom':
+        specifier: ^19.0.4
+        version: 19.0.4(@types/react@19.0.11)
 
   packages/shadcn-ui:
     dependencies:
