@@ -4,6 +4,7 @@ import InitTheme from '@/app/providers/InitTheme.astro';
 import '@/app/styles/global.css';
 import Header from '@/widgets/header/Header.astro';
 import '@fontsource-variable/noto-sans-kr';
+import Favicon from '@/app/providers/Favicon.astro';
 
 interface Props {
   title: string;
@@ -25,6 +26,7 @@ const { title, description } = Astro.props;
     <meta property="twitter:card" content="summary" />
     <meta property="twitter:title" content={`${title} - 도토리 노트`} />
     <meta property="twitter:description" content={description} />
+    <Favicon />
     <GoogleTagProvider />
     <InitTheme />
   </head>
