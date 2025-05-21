@@ -1,22 +1,18 @@
 ---
-import { getNormalizedNote } from '@/entities/note/model/get-normalized-note';
 import { getCollection } from 'astro:content';
 
-const entries = await getCollection('note');
-
-const notes = (await Promise.all(entries.map(getNormalizedNote))).sort(
-  (a, b) => b.lastModified.valueOf() - a.lastModified.valueOf(),
-);
+const notes = await getCollection('notes');
+const lastModifiedNotes = notes.sort((a, b) => b.data.lastModified.valueOf() - a.data.lastModified.valueOf());
 ---
 
 <ul class="pl-0 flex flex-col">
   {
-    notes.map((n) => (
+    lastModifiedNotes.map((note) => (
       <li class="my-2">
-        <a class="flex flex-col" href={`/note/${n.slug}`}>
-          {n.title}
-          <time class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" datetime={n.lastModified.toISOString()}>
-            {n.lastModified.toLocaleDateString('ko-KR')}
+        <a class="flex flex-col" href={`/note/${note.id}`}>
+          {note.data.title}
+          <time class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" datetime={note.data.lastModified.toISOString()}>
+            {note.data.lastModified.toLocaleDateString('ko-KR')}
           </time>
         </a>
       </li>
