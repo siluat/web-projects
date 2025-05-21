@@ -8,9 +8,9 @@ Astro 프로젝트 기본 구조와 FSD(Feature-Sliced Design) 구조를 조합�
 
 | 레이어 | 컨벤션 | 부가 설명 |
 | --- | --- | --- |
+| `notes` | Astro | MDX 형식의 콘텐츠 파일 관리 |
 | `src/app` | FSD | |
 | `src/pages` | Astro | |
-| `src/content` | Astro | MDX 형식의 콘텐츠 파일 관리 |
 | `src/widgets` | FSD | |
 | `src/features` | FSD | |
 | `src/entities` | FSD | |
