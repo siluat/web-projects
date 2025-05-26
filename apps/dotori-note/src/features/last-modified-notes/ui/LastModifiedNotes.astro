@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { Badge } from '@siluat/shadcn-ui/components/badge';
 
 const notes = await getCollection('notes');
 const lastModifiedNotes = notes.sort((a, b) => b.data.lastModified.valueOf() - a.data.lastModified.valueOf());
@@ -8,12 +9,18 @@ const lastModifiedNotes = notes.sort((a, b) => b.data.lastModified.valueOf() - a
 <ul class="pl-0 flex flex-col">
   {
     lastModifiedNotes.map((note) => (
-      <li class="my-2">
-        <a class="flex flex-col" href={`/note/${note.id}`}>
-          {note.data.title}
-          <time class="text-xs text-zinc-500 dark:text-zinc-400 mt-1" datetime={note.data.lastModified.toISOString()}>
-            {note.data.lastModified.toLocaleDateString('ko-KR')}
-          </time>
+      <li class="my-3">
+        <a class="flex flex-col gap-2" href={`/note/${note.id}`}>
+          <span class="text-xl font-bold">
+            {note.data.title}
+          </span>
+          <div class="flex gap-1.5">
+            {note.data.tags.map((tag) => (
+              <Badge className="rounded-full text-xs font-light text-zinc-500 dark:text-zinc-400" variant="secondary">
+                {tag}
+              </Badge>
+            ))}
+          </div>
         </a>
       </li>
     ))
