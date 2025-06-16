@@ -12,9 +12,12 @@
   "scripts": {
     "prepare": "lefthook install",
     "dev": "turbo dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
     "changeset": "changeset",
     "format-and-lint": "biome check .",
-    "format-and-lint:fix": "biome check . --write"
+    "format-and-lint:fix": "biome check . --write",
+    "static-check": "turbo run check-types && turbo run format-and-lint"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
