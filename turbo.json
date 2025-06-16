@@ -13,7 +13,15 @@
       "cache": false,
       "persistent": true
     },
-    "test": {},
-    "test:e2e": {}
+    "build": {
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "test:e2e": {
+      "dependsOn": ["^build"]
+    }
   }
 }
