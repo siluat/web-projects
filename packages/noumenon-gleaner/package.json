@@ -1,0 +1,16 @@
+{
+  "name": "noumenon-gleaner",
+  "version": "0.0.0",
+  "description": "Data Extraction Tool for Noumenon Project",
+  "bin": {
+    "noumenon-gleaner": "bin/noumenon-gleaner.js"
+  },
+  "scripts": {
+    "build": "cargo build --release --locked && pnpm shx mkdir -p bin && pnpm exec shx cp target/release/noumenon-gleaner bin/ && node scripts/create-launcher.js",
+    "clean": "cargo clean && pnpm shx rm -rf bin"
+  },
+  "packageManager": "pnpm@10.8.1",
+  "devDependencies": {
+    "shx": "^0.4.0"
+  }
+}
