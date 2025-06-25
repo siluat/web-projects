@@ -38,7 +38,7 @@
     - CLI 파라미터로 입력 파일 경로를 지정
     - CLI 파라미터로 출력 파일 경로를 지정
     - CLI 파라미터로 스키마 파일 생성 또는 데이터 파일 생성을 선택
-    - 기능은 Rust로 구현하고, NPM 패키지 형태로 제공. ([napi-rs](https://napi.rs/) 사용)
+    - Rust로 구현하고, NPM 패키지 형태로 제공
 - `noumenon-raw-data`
   - 역할: raw-data 소스
   - 특징:
