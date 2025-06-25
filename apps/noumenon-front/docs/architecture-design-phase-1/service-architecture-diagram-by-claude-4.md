@@ -9,7 +9,7 @@ graph TB
     Librarian[noumenon-librarian<br/>🔄 Data Pipeline Orchestrator<br/>• raw-data 다운로드/변경 감지<br/>• Gleaner 실행<br/>• 파일 배치<br/>• 스키마 패키지 관리<br/>• 데이터 동기화]
 
     %% Data Extraction Tool
-    Gleaner[noumenon-gleaner<br/>⚒️ Data Extraction Tool<br/>• CSV → JSON/TS 변환<br/>• CLI 인터페이스<br/>• Rust + napi-rs]
+    Gleaner[noumenon-gleaner<br/>⚒️ Data Extraction Tool<br/>• CSV → JSON/TS 변환<br/>• CLI 인터페이스<br/>• Rust + NPM 패키지]
 
     %% Schema Package
     Schema[noumenon-data-schema<br/>📦 Data Schema Package<br/>TypeScript 스키마<br/><small>librarian이 생성한 파일들</small>]

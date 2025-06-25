@@ -38,7 +38,7 @@
     - Takes input file path as CLI command parameter
     - Takes output file path as CLI command parameter
     - Allows selection of schema file generation or data file generation via CLI command parameter
-    - Implemented in Rust and provided as NPM package (using [napi-rs](https://napi.rs/))
+    - Implemented in Rust and provided as NPM package
 - `noumenon-raw-data`
   - Role: Raw-data Source
   - Characteristics:
