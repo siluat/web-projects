@@ -88,6 +88,8 @@ importers:
         specifier: ^19.0.4
         version: 19.0.4(@types/react@19.0.11)
 
+  packages/noumenon-gleaner: {}
+
   packages/shadcn-ui:
     dependencies:
       '@radix-ui/react-dialog':
@@ -208,6 +210,12 @@ importers:
       vitest:
         specifier: ^3.0.9
         version: 3.0.9(@types/debug@4.1.12)(@types/node@20.17.28)(happy-dom@17.4.4)(jiti@2.4.2)(lightningcss@1.29.2)(msw@2.7.3(@types/node@20.17.28)(typescript@5.8.2))(yaml@2.7.1)
+
+  playgrounds/noumenon-gleaner-runner:
+    devDependencies:
+      noumenon-gleaner:
+        specifier: workspace:*
+        version: link:../../packages/noumenon-gleaner
 
   playgrounds/ui-craft-playground:
     dependencies:

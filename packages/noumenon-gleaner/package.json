@@ -1,0 +1,15 @@
+{
+  "name": "noumenon-gleaner",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Data extraction tool for Noumenon project",
+  "bin": {
+    "noumenon-gleaner": "./bin/noumenon-gleaner"
+  },
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "cargo build --release && npm run postbuild",
+    "postbuild": "node scripts/postbuild.js"
+  }
+}
