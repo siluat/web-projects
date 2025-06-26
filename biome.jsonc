@@ -14,7 +14,9 @@
       "**/styled-system/**", // Panda CSS generated files
       "packages/shadcn-ui/**", // shadcn/ui generated files
       "**/test-results/**", // Playwright test results
-      "**/*.astro" // Use Astro extension(astro-build.astro-vscode) for formatting
+      "**/*.astro", // Use Astro extension(astro-build.astro-vscode) for formatting
+      "**/coverage/**", // Coverage reports
+      "**/target/**" // Rust build output
     ],
     "ignoreUnknown": false
   },
