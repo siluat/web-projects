@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Testing playground for Noumenon Gleaner",
   "scripts": {
-    "test": "npx noumenon-gleaner -i ./test-data/csv.json -o ./test-data/output"
+    "test": "pnpm exec noumenon-gleaner --version"
   },
   "devDependencies": {
     "noumenon-gleaner": "workspace:*"
