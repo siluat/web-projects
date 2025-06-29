@@ -2,15 +2,10 @@
 
 Noumenon Gleaner 실행 테스트
 
-## Usage
+## Test
 
 ```bash
 $ pnpm test
-```
-
-Expected output:
-
-```bash
-# 다음과 같은 메시지가 출력된다.
-Gleaner is not implemented yet
+# Expected Output:
+noumenon-gleaner {version}
 ```
