@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::fs::File;
 use std::path::Path;
 
@@ -10,14 +11,14 @@ use crate::constants::{FIELD_DESCRIPTIONS_ROW, FIELD_NAMES_ROW, FIELD_TYPES_ROW}
 
 pub struct SchemaBuilder {
     schemas: SchemaMap,
-    processing_stack: Vec<String>, // For circular dependency detection
+    processing_stack: HashSet<String>, // For circular dependency detection
 }
 
 impl SchemaBuilder {
     pub fn new() -> Self {
         Self {
             schemas: SchemaMap::new(),
-            processing_stack: Vec::new(),
+            processing_stack: HashSet::new(),
         }
     }
 
@@ -65,13 +66,13 @@ impl SchemaBuilder {
         }
 
         // Add to processing stack
-        self.processing_stack.push(schema_name.to_string());
+        self.processing_stack.insert(schema_name.to_string());
 
         let csv_path = base_dir.join(format!("{}.csv", schema_name));
 
         if !csv_path.exists() {
             // Remove from processing stack before returning error
-            self.processing_stack.pop();
+            self.processing_stack.remove(&schema_name.to_string());
             return Err(SchemaError::FileNotFound {
                 path: csv_path.to_string_lossy().to_string(),
             });
@@ -81,7 +82,7 @@ impl SchemaBuilder {
         self.schemas.insert(schema_name.to_string(), schema);
 
         // Remove from processing stack
-        self.processing_stack.pop();
+        self.processing_stack.remove(&schema_name.to_string());
 
         Ok(schema_name.to_string())
     }
