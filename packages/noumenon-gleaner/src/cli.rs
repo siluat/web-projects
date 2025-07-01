@@ -7,8 +7,8 @@ use clap::Parser;
 pub struct Cli {
     #[arg(short, long, help = "입력 파일 경로")]
     pub input_file_path: PathBuf,
-    #[arg(short, long, help = "출력 디렉토리 경로")]
-    pub output_dir_path: PathBuf,
+    #[arg(short, long, help = "출력 파일 경로")]
+    pub output_file_path: PathBuf,
 }
 
 #[test]
