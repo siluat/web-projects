@@ -10,6 +10,7 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "cargo build --release && npm run postbuild",
-    "postbuild": "node scripts/postbuild.js"
+    "postbuild": "node scripts/postbuild.js",
+    "item": "cargo run -- -i fixtures/Item.csv -o output/schemas.ts"
   }
 }
