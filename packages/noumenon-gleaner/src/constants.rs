@@ -11,7 +11,7 @@ pub const CUSTOM_TYPE_PATTERNS: &[&str] = &[
 /// Special type names that have unique processing rules
 pub const SPECIAL_TYPES: &[&str] = &["Image", "Row", "Key"];
 
-/// CSV parsing constants
-pub const FIELD_NAMES_ROW: usize = 0;
-pub const FIELD_DESCRIPTIONS_ROW: usize = 1;
-pub const FIELD_TYPES_ROW: usize = 2;
+/// Header indicators for CSV row detection
+pub const FIELD_NAMES_HEADER: &str = "key";
+pub const FIELD_DESCRIPTIONS_HEADER: &str = "#";
+// Field types header will be detected by checking if first column matches any BASIC_TYPES

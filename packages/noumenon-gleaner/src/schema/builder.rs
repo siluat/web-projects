@@ -7,7 +7,7 @@ use super::types::{Field, FieldType, Schema, SchemaMap};
 use super::utils::{
     extract_schema_name_from_path, is_likely_custom_type, is_special_type, parse_bit_value,
 };
-use crate::constants::{FIELD_DESCRIPTIONS_ROW, FIELD_NAMES_ROW, FIELD_TYPES_ROW};
+use crate::constants::{BASIC_TYPES, FIELD_DESCRIPTIONS_HEADER, FIELD_NAMES_HEADER};
 
 pub struct SchemaBuilder {
     schemas: SchemaMap,
@@ -107,9 +107,14 @@ impl SchemaBuilder {
             });
         }
 
-        let field_names = &records[FIELD_NAMES_ROW];
-        let field_descriptions = &records[FIELD_DESCRIPTIONS_ROW];
-        let field_types = &records[FIELD_TYPES_ROW];
+        // Use header-based detection to find row indices
+        let field_names_row = Self::find_field_names_row(&records)?;
+        let field_descriptions_row = Self::find_field_descriptions_row(&records)?;
+        let field_types_row = Self::find_field_types_row(&records)?;
+
+        let field_names = &records[field_names_row];
+        let field_descriptions = &records[field_descriptions_row];
+        let field_types = &records[field_types_row];
 
         if field_names.len() != field_types.len() {
             return Err(SchemaError::InvalidFormat {
@@ -227,6 +232,69 @@ impl SchemaBuilder {
         &self.schemas
     }
 
+    /// Find the row index for field names based on header indicator
+    fn find_field_names_row(records: &[csv::StringRecord]) -> Result<usize, SchemaError> {
+        for (i, record) in records.iter().enumerate() {
+            if let Some(first_col) = record.get(0) {
+                let normalized = first_col.trim_start_matches('\u{feff}').trim();
+                if normalized == FIELD_NAMES_HEADER {
+                    return Ok(i);
+                }
+            }
+        }
+        Err(SchemaError::MissingCsvHeader {
+            header: FIELD_NAMES_HEADER.to_string(),
+        })
+    }
+
+    /// Find the row index for field descriptions based on header indicator
+    fn find_field_descriptions_row(records: &[csv::StringRecord]) -> Result<usize, SchemaError> {
+        let positions: Vec<usize> = records
+            .iter()
+            .enumerate()
+            .filter_map(|(i, record)| {
+                record
+                    .get(0)
+                    .filter(|first_col| first_col.trim() == FIELD_DESCRIPTIONS_HEADER)
+                    .map(|_| i)
+            })
+            .collect();
+
+        match positions.len() {
+            0 => Err(SchemaError::MissingCsvHeader {
+                header: FIELD_DESCRIPTIONS_HEADER.to_string(),
+            }),
+            1 => Ok(positions[0]),
+            _ => Err(SchemaError::DuplicateCsvHeader {
+                header: FIELD_DESCRIPTIONS_HEADER.to_string(),
+            }),
+        }
+    }
+
+    /// Find the row index for field types based on basic type detection
+    fn find_field_types_row(records: &[csv::StringRecord]) -> Result<usize, SchemaError> {
+        let positions: Vec<usize> = records
+            .iter()
+            .enumerate()
+            .filter_map(|(i, record)| {
+                record
+                    .get(0)
+                    .filter(|first_col| BASIC_TYPES.contains(&first_col.trim()))
+                    .map(|_| i)
+            })
+            .collect();
+
+        match positions.len() {
+            0 => Err(SchemaError::MissingCsvHeader {
+                header: "field types (basic type)".to_string(),
+            }),
+            1 => Ok(positions[0]),
+            _ => Err(SchemaError::DuplicateCsvHeader {
+                header: "field types (basic type)".to_string(),
+            }),
+        }
+    }
+
     pub fn print_schemas(&self) {
         for schema in self.schemas.values() {
             println!("Schema: {}", schema.name);
@@ -326,8 +394,7 @@ mod tests {
     #[test]
     fn test_basic_types_schema() {
         let temp_dir = TempDir::new().unwrap();
-        let content =
-            "id,name,level,active\n#,Name,Level,IsActive\nint32,str,byte,bool\n1,\"Test\",10,true";
+        let content = "key,0,1,2\n#,Name,Level,IsActive\nint32,str,byte,bool\n1,\"Test\",10,true";
         let file_path = create_test_csv(&temp_dir, "Basic", content);
 
         let mut builder = SchemaBuilder::new();
@@ -359,12 +426,11 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
 
         // Create main item schema
-        let item_content =
-            "id,name,category\n#,Name,Category\nint32,str,ItemCategory\n1,\"Sword\",1";
+        let item_content = "key,0,1\n#,Name,Category\nint32,str,ItemCategory\n1,\"Sword\",1";
         create_test_csv(&temp_dir, "Item", item_content);
 
         // Create referenced category schema
-        let category_content = "id,name\n#,Name\nbyte,str\n1,\"Weapon\"";
+        let category_content = "key,0\n#,Name\nint32,str\n1,\"Weapon\"";
         create_test_csv(&temp_dir, "ItemCategory", category_content);
 
         let mut builder = SchemaBuilder::new();
@@ -393,11 +459,11 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
 
         // Create A that references B
-        let a_content = "id,ref_b\n#,RefB\nint32,TypeB\n1,1";
+        let a_content = "key,0\n#,RefB\nint32,TypeB\n1,1";
         create_test_csv(&temp_dir, "TypeA", a_content);
 
         // Create B that references A (circular dependency should now be allowed)
-        let b_content = "id,ref_a\n#,RefA\nint32,TypeA\n1,1";
+        let b_content = "key,0\n#,RefA\nint32,TypeA\n1,1";
         create_test_csv(&temp_dir, "TypeB", b_content);
 
         let mut builder = SchemaBuilder::new();
@@ -435,8 +501,7 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
 
         // Create ClassJob that references itself (self-reference should be allowed)
-        let classjob_content =
-            "id,name,parent\n#,Name,Parent\nint32,str,ClassJob\n1,\"Gladiator\",0";
+        let classjob_content = "key,0,1\n#,Name,Parent\nint32,str,ClassJob\n1,\"Gladiator\",0";
         create_test_csv(&temp_dir, "ClassJob", classjob_content);
 
         let mut builder = SchemaBuilder::new();
@@ -462,7 +527,7 @@ mod tests {
     #[test]
     fn test_image_type_parsing() {
         let temp_dir = TempDir::new().unwrap();
-        let content = "id,name,icon,description\n#,Name,Icon,Description\nint32,str,Image,str\n1,\"Sword\",\"021001\",\"A basic sword\"";
+        let content = "key,0,1,2\n#,Name,Icon,Description\nint32,str,Image,str\n1,\"Sword\",\"021001\",\"A basic sword\"";
         let file_path = create_test_csv(&temp_dir, "Item", content);
 
         let mut builder = SchemaBuilder::new();
@@ -492,13 +557,13 @@ mod tests {
     #[test]
     fn test_mixed_types_with_image() {
         let temp_dir = TempDir::new().unwrap();
-        let content = "id,name,icon,level,active,category\n#,Name,Icon,Level,Active,Category\nint32,str,Image,byte,bool,ItemCategory\n1,\"Test Item\",\"65002\",10,true,1";
+        let content = "key,0,1,2,3,4\n#,Name,Icon,Level,Active,Category\nint32,str,Image,byte,bool,ItemCategory\n1,\"Test Item\",\"65002\",10,true,1";
 
         // Create the main schema
         create_test_csv(&temp_dir, "MixedItem", content);
 
         // Create the referenced custom type
-        let category_content = "id,name\n#,Name\nbyte,str\n1,\"Weapon\"";
+        let category_content = "key,0\n#,Name\nint32,str\n1,\"Weapon\"";
         create_test_csv(&temp_dir, "ItemCategory", category_content);
 
         let mut builder = SchemaBuilder::new();
@@ -531,7 +596,7 @@ mod tests {
     fn test_special_types_parsing() {
         let temp_dir = TempDir::new().unwrap();
         let content =
-            "id,name,icon,ref\n#,Name,Icon,Ref\nint32,str,Image,Row\n1,\"Test Item\",\"021001\",0";
+            "key,0,1,2\n#,Name,Icon,Ref\nint32,str,Image,Row\n1,\"Test Item\",\"021001\",0";
         let file_path = create_test_csv(&temp_dir, "SpecialTypes", content);
 
         let mut builder = SchemaBuilder::new();
