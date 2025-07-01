@@ -190,23 +190,7 @@ impl SchemaBuilder {
         for (_, schema) in &self.schemas {
             println!("Schema: {}", schema.name);
             for field in &schema.fields {
-                match &field.field_type {
-                    FieldType::Image => {
-                        println!("  {}: {:?}", field.name, field.field_type);
-                        // Show example of how Image values are processed
-                        if let Some(example_path) = FieldType::process_image_path("65002") {
-                            println!("    Example: 65002 -> {}", example_path);
-                        }
-                    }
-                    FieldType::Row => {
-                        println!("  {}: {:?}", field.name, field.field_type);
-                        println!("    Note: Row type (processing rules TBD)");
-                        println!("    TODO: Implement Row processing logic in next phase");
-                    }
-                    _ => {
-                        println!("  {}: {:?}", field.name, field.field_type);
-                    }
-                }
+                println!("  {}: {:?}", field.name, field.field_type);
             }
             println!();
         }
