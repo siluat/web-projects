@@ -348,12 +348,10 @@ impl SchemaBuilder {
         }
 
         // If empty or starts with number, prefix with underscore
-        if result.is_empty() {
-            result = format!("_{}", result);
-        } else if let Some(first_char) = result.chars().next() {
-            if first_char.is_ascii_digit() {
-                result = format!("_{}", result);
-            }
+        match result.chars().next() {
+            None => result = "_".to_string(),
+            Some(c) if c.is_ascii_digit() => result = format!("_{}", result),
+            _ => {}
         }
 
         // Convert to camelCase

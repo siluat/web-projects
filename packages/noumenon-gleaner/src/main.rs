@@ -20,6 +20,9 @@ fn main() {
             if let SchemaError::FileNotFound { .. } = e {
                 suggest_missing_files(&cli);
             }
+            if let SchemaError::InvalidFormat { .. } = e {
+                print_csv_format_guidance();
+            }
             std::process::exit(1);
         }
     }
@@ -71,4 +74,21 @@ fn suggest_missing_files(cli: &Cli) {
         Err(e) => eprintln!("Could not analyze input file for suggestions: {}", e),
         _ => {} // No missing files
     }
+}
+
+fn print_csv_format_guidance() {
+    eprintln!("");
+    eprintln!("CSV format example:");
+    eprintln!("----------------------");
+    eprintln!("key,0,1,2");
+    eprintln!("#,Name,Level,IsActive");
+    eprintln!("int32,str,byte,bool");
+    eprintln!("1,\"Test\",10,true");
+    eprintln!("");
+    eprintln!("- The first row must start with 'key' and contains field indices/names.");
+    eprintln!("- The second row must start with '#' and contains field descriptions.");
+    eprintln!("- The third row contains field types (e.g., str, int32, etc.).");
+    eprintln!("- Data rows start from the fourth row.");
+    eprintln!("");
+    eprintln!("See docs/schema-generation-process.md for detailed format rules.");
 }
