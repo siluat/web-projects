@@ -4,7 +4,7 @@ mod schema;
 
 use clap::Parser;
 use cli::Cli;
-use schema::{SchemaBuilder, SchemaError, analyze_missing_files};
+use schema::{SchemaBuilder, SchemaError, TypeScriptGenerator, analyze_missing_files};
 
 fn main() {
     let cli = Cli::parse();
@@ -14,7 +14,6 @@ fn main() {
     match build_schemas(&cli) {
         Ok(main_schema_name) => {
             print_success(&main_schema_name);
-            // TODO: extract_and_save_data(&cli, &schemas);
         }
         Err(e) => {
             print_error(&e);
@@ -33,7 +32,18 @@ fn print_configuration(cli: &Cli) {
 
 fn build_schemas(cli: &Cli) -> Result<String, SchemaError> {
     let mut schema_builder = SchemaBuilder::new();
-    schema_builder.build_and_print_schemas(&cli.input_file_path)
+    let main_schema_name = schema_builder.build_and_print_schemas(&cli.input_file_path)?;
+
+    // Generate TypeScript interfaces after successful schema building
+    let generator = TypeScriptGenerator::new();
+    let output_path = cli.output_dir_path.join("schemas.ts");
+    if let Err(e) = generator.generate_and_save(schema_builder.get_all_schemas(), &output_path) {
+        eprintln!("Warning: Failed to generate TypeScript interfaces: {}", e);
+    } else {
+        println!("TypeScript interfaces generated: {}", output_path.display());
+    }
+
+    Ok(main_schema_name)
 }
 
 fn print_success(schema_name: &str) {

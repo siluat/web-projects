@@ -31,7 +31,7 @@ pub fn is_likely_custom_type(type_str: &str) -> bool {
     }
 
     // Check if it starts with uppercase (likely custom type)
-    trimmed.chars().next().map_or(false, |c| c.is_uppercase())
+    trimmed.chars().next().is_some_and(|c| c.is_uppercase())
 }
 
 /// Checks if a type string is a special type that needs unique processing

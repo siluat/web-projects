@@ -107,7 +107,7 @@ impl SchemaBuilder {
         }
 
         let field_names = &records[FIELD_NAMES_ROW];
-        let _field_descriptions = &records[FIELD_DESCRIPTIONS_ROW]; // Skip for now
+        let field_descriptions = &records[FIELD_DESCRIPTIONS_ROW];
         let field_types = &records[FIELD_TYPES_ROW];
 
         if field_names.len() != field_types.len() {
@@ -117,10 +117,55 @@ impl SchemaBuilder {
         }
 
         let mut fields = Vec::new();
-        for (name, type_str) in field_names.iter().zip(field_types.iter()) {
-            let field_type = self.parse_field_type(type_str, base_dir)?;
+        let mut used_names = std::collections::HashSet::new();
+
+        for ((name, description), type_str) in field_names
+            .iter()
+            .zip(field_descriptions.iter())
+            .zip(field_types.iter())
+        {
+            // Special handling for "Key" description - override type to Key
+            let field_type = if description == "Key" {
+                FieldType::Key
+            } else {
+                self.parse_field_type(type_str, base_dir)?
+            };
+
+            // Determine the best field name to use
+            let mut field_name = if description.starts_with('#') {
+                // First field with # description becomes "id"
+                "id".to_string()
+            } else if description.is_empty() {
+                // If description is empty, use original name or create meaningful name
+                if name == "key" {
+                    "id".to_string() // Fallback for key field
+                } else {
+                    // For numeric field names, try to create a meaningful name
+                    if name.chars().all(|c| c.is_ascii_digit()) {
+                        format!("field{}", name)
+                    } else {
+                        name.to_string()
+                    }
+                }
+            } else if description == "Key" {
+                // Special handling for "Key" fields - treat as special type, use key as field name
+                "key".to_string()
+            } else {
+                Self::sanitize_field_name(description)
+            };
+
+            // Handle duplicate field names by adding a suffix
+            let mut counter = 1;
+            let original_name = field_name.clone();
+            while used_names.contains(&field_name) {
+                field_name = format!("{}{}", original_name, counter);
+                counter += 1;
+            }
+
+            used_names.insert(field_name.clone());
+
             fields.push(Field {
-                name: name.to_string(),
+                name: field_name,
                 field_type,
             });
         }
@@ -155,6 +200,7 @@ impl SchemaBuilder {
                     match trimmed {
                         "Image" => Ok(FieldType::Image),
                         "Row" => Ok(FieldType::Row),
+                        "Key" => Ok(FieldType::Key),
                         _ => Ok(FieldType::Custom(trimmed.to_string())), // For future special types
                     }
                 }
@@ -176,24 +222,79 @@ impl SchemaBuilder {
         }
     }
 
-    #[allow(dead_code)]
-    pub fn get_schema(&self, name: &str) -> Option<&Schema> {
-        self.schemas.get(name)
-    }
-
-    #[allow(dead_code)]
     pub fn get_all_schemas(&self) -> &SchemaMap {
         &self.schemas
     }
 
     pub fn print_schemas(&self) {
-        for (_, schema) in &self.schemas {
+        for schema in self.schemas.values() {
             println!("Schema: {}", schema.name);
             for field in &schema.fields {
                 println!("  {}: {:?}", field.name, field.field_type);
             }
             println!();
         }
+    }
+
+    /// Sanitize field name to make it a valid TypeScript identifier
+    fn sanitize_field_name(name: &str) -> String {
+        let mut result = String::new();
+        let mut first_char = true;
+
+        for ch in name.chars() {
+            match ch {
+                // Valid identifier characters
+                'a'..='z' | 'A'..='Z' | '_' => {
+                    result.push(ch);
+                    first_char = false;
+                }
+                '0'..='9' if !first_char => {
+                    result.push(ch);
+                }
+                // Convert various separators to camelCase
+                '{' | '}' | ' ' | '-' | '.' => {
+                    if !result.is_empty() && !result.ends_with('_') {
+                        // Next character should be uppercase for camelCase
+                        first_char = false;
+                    }
+                }
+                _ => {
+                    // Skip other characters
+                }
+            }
+        }
+
+        // If empty or starts with number, prefix with underscore
+        if result.is_empty() || result.chars().next().unwrap_or('_').is_ascii_digit() {
+            result = format!("_{}", result);
+        }
+
+        // Convert to camelCase
+        Self::to_camel_case(&result)
+    }
+
+    /// Convert string to camelCase
+    fn to_camel_case(name: &str) -> String {
+        if name.is_empty() {
+            return name.to_string();
+        }
+
+        let mut result = String::new();
+        let mut capitalize_next = false;
+
+        for (i, ch) in name.chars().enumerate() {
+            if ch == '_' || ch == '-' || ch == ' ' {
+                capitalize_next = true;
+            } else if capitalize_next && i > 0 {
+                result.push(ch.to_ascii_uppercase());
+                capitalize_next = false;
+            } else {
+                result.push(if i == 0 { ch.to_ascii_lowercase() } else { ch });
+                capitalize_next = false;
+            }
+        }
+
+        result
     }
 }
 
@@ -231,7 +332,7 @@ mod tests {
         let schema_name = result.unwrap();
         assert_eq!(schema_name, "Basic");
 
-        let schema = builder.get_schema("Basic").unwrap();
+        let schema = &builder.get_all_schemas()["Basic"];
         assert_eq!(schema.name, "Basic");
         assert_eq!(schema.fields.len(), 4);
 
@@ -244,7 +345,7 @@ mod tests {
         assert_eq!(schema.fields[2].name, "level");
         assert_eq!(schema.fields[2].field_type, FieldType::Byte);
 
-        assert_eq!(schema.fields[3].name, "active");
+        assert_eq!(schema.fields[3].name, "isActive");
         assert_eq!(schema.fields[3].field_type, FieldType::Bool);
     }
 
@@ -271,13 +372,13 @@ mod tests {
         let all_schemas = builder.get_all_schemas();
         assert_eq!(all_schemas.len(), 2);
 
-        let item_schema = builder.get_schema("Item").unwrap();
+        let item_schema = &builder.get_all_schemas()["Item"];
         assert_eq!(
             item_schema.fields[2].field_type,
             FieldType::Custom("ItemCategory".to_string())
         );
 
-        let category_schema = builder.get_schema("ItemCategory").unwrap();
+        let category_schema = &builder.get_all_schemas()["ItemCategory"];
         assert_eq!(category_schema.name, "ItemCategory");
         assert_eq!(category_schema.fields.len(), 2);
     }
@@ -308,7 +409,7 @@ mod tests {
         assert_eq!(all_schemas.len(), 2);
 
         // Verify TypeA schema
-        let type_a_schema = builder.get_schema("TypeA").unwrap();
+        let type_a_schema = &builder.get_all_schemas()["TypeA"];
         assert_eq!(type_a_schema.name, "TypeA");
         assert_eq!(
             type_a_schema.fields[1].field_type,
@@ -316,7 +417,7 @@ mod tests {
         );
 
         // Verify TypeB schema
-        let type_b_schema = builder.get_schema("TypeB").unwrap();
+        let type_b_schema = &builder.get_all_schemas()["TypeB"];
         assert_eq!(type_b_schema.name, "TypeB");
         assert_eq!(
             type_b_schema.fields[1].field_type,
@@ -341,7 +442,7 @@ mod tests {
         let schema_name = result.unwrap();
         assert_eq!(schema_name, "ClassJob");
 
-        let schema = builder.get_schema("ClassJob").unwrap();
+        let schema = &builder.get_all_schemas()["ClassJob"];
         assert_eq!(schema.name, "ClassJob");
         assert_eq!(schema.fields.len(), 3);
 
@@ -366,7 +467,7 @@ mod tests {
         let schema_name = result.unwrap();
         assert_eq!(schema_name, "Item");
 
-        let schema = builder.get_schema("Item").unwrap();
+        let schema = &builder.get_all_schemas()["Item"];
         assert_eq!(schema.name, "Item");
         assert_eq!(schema.fields.len(), 4);
 
@@ -402,7 +503,7 @@ mod tests {
         assert!(result.is_ok());
 
         // Check main schema
-        let item_schema = builder.get_schema("MixedItem").unwrap();
+        let item_schema = &builder.get_all_schemas()["MixedItem"];
         assert_eq!(item_schema.fields.len(), 6);
 
         assert_eq!(item_schema.fields[0].field_type, FieldType::Int32);
@@ -416,7 +517,7 @@ mod tests {
         );
 
         // Check that custom type schema was also created
-        let category_schema = builder.get_schema("ItemCategory").unwrap();
+        let category_schema = &builder.get_all_schemas()["ItemCategory"];
         assert_eq!(category_schema.name, "ItemCategory");
         assert_eq!(category_schema.fields.len(), 2);
     }
@@ -435,7 +536,7 @@ mod tests {
         let schema_name = result.unwrap();
         assert_eq!(schema_name, "SpecialTypes");
 
-        let schema = builder.get_schema("SpecialTypes").unwrap();
+        let schema = &builder.get_all_schemas()["SpecialTypes"];
         assert_eq!(schema.name, "SpecialTypes");
         assert_eq!(schema.fields.len(), 4);
 

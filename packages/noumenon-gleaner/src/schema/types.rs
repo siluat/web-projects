@@ -17,6 +17,7 @@ pub enum FieldType {
     // Special types for game data
     Image, // UI image file path - preserved as-is without processing
     Row,   // Row type - preserved as-is without processing
+    Key,   // Key type - string identifier preserved as-is without processing
 
     // Custom types that reference other CSV files
     Custom(String),

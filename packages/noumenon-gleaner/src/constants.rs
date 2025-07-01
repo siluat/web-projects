@@ -9,7 +9,7 @@ pub const CUSTOM_TYPE_PATTERNS: &[&str] = &[
 ];
 
 /// Special type names that have unique processing rules
-pub const SPECIAL_TYPES: &[&str] = &["Image", "Row"];
+pub const SPECIAL_TYPES: &[&str] = &["Image", "Row", "Key"];
 
 /// CSV parsing constants
 pub const FIELD_NAMES_ROW: usize = 0;
