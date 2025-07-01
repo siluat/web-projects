@@ -1,7 +1,7 @@
-pub mod builder;
-pub mod error;
-pub mod types;
-pub mod utils;
+mod builder;
+mod error;
+mod types;
+mod utils;
 
 // Re-export commonly used types and functions
 pub use builder::SchemaBuilder;

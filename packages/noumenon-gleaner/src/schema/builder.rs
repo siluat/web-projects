@@ -3,7 +3,9 @@ use std::path::Path;
 
 use super::error::SchemaError;
 use super::types::{Field, FieldType, Schema, SchemaMap};
-use super::utils::{extract_schema_name_from_path, is_likely_custom_type, parse_bit_value};
+use super::utils::{
+    extract_schema_name_from_path, is_likely_custom_type, is_special_type, parse_bit_value,
+};
 use crate::constants::{FIELD_DESCRIPTIONS_ROW, FIELD_NAMES_ROW, FIELD_TYPES_ROW};
 
 pub struct SchemaBuilder {
@@ -134,6 +136,7 @@ impl SchemaBuilder {
     ) -> Result<FieldType, SchemaError> {
         let trimmed = type_str.trim();
 
+        // Basic types
         match trimmed {
             "str" => Ok(FieldType::String),
             "int32" => Ok(FieldType::Int32),
@@ -144,17 +147,27 @@ impl SchemaBuilder {
             "sbyte" => Ok(FieldType::SByte),
             "float" => Ok(FieldType::Float),
             "bool" => Ok(FieldType::Bool),
-            s if s.starts_with("bit&") => {
-                let bit_value = parse_bit_value(s);
-                Ok(FieldType::Bit(bit_value))
-            }
-            custom_type => {
-                if is_likely_custom_type(custom_type) {
-                    // Try to build schema for this custom type recursively
-                    self.build_schema_recursive(custom_type, base_dir)?;
-                    Ok(FieldType::Custom(custom_type.to_string()))
-                } else {
-                    // Treat as string if uncertain
+            _ => {
+                // Special types with unique processing rules
+                if is_special_type(trimmed) {
+                    match trimmed {
+                        "Image" => Ok(FieldType::Image),
+                        "Row" => Ok(FieldType::Row),
+                        _ => Ok(FieldType::Custom(trimmed.to_string())), // For future special types
+                    }
+                }
+                // Bit types
+                else if trimmed.starts_with("bit&") {
+                    let bit_value = parse_bit_value(trimmed);
+                    Ok(FieldType::Bit(bit_value))
+                }
+                // Custom types that reference other CSV files
+                else if is_likely_custom_type(trimmed) {
+                    self.build_schema_recursive(trimmed, base_dir)?;
+                    Ok(FieldType::Custom(trimmed.to_string()))
+                }
+                // Unknown types default to string
+                else {
                     Ok(FieldType::String)
                 }
             }
@@ -175,7 +188,23 @@ impl SchemaBuilder {
         for (_, schema) in &self.schemas {
             println!("Schema: {}", schema.name);
             for field in &schema.fields {
-                println!("  {}: {:?}", field.name, field.field_type);
+                match &field.field_type {
+                    FieldType::Image => {
+                        println!("  {}: {:?}", field.name, field.field_type);
+                        // Show example of how Image values are processed
+                        if let Some(example_path) = FieldType::process_image_path("65002") {
+                            println!("    Example: 65002 -> {}", example_path);
+                        }
+                    }
+                    FieldType::Row => {
+                        println!("  {}: {:?}", field.name, field.field_type);
+                        println!("    Note: Row type (processing rules TBD)");
+                        println!("    TODO: Implement Row processing logic in next phase");
+                    }
+                    _ => {
+                        println!("  {}: {:?}", field.name, field.field_type);
+                    }
+                }
             }
             println!();
         }
@@ -291,5 +320,104 @@ mod tests {
             }
             _ => panic!("Expected CircularDependency error"),
         }
+    }
+
+    #[test]
+    fn test_image_type_parsing() {
+        let temp_dir = TempDir::new().unwrap();
+        let content = "id,name,icon,description\n#,Name,Icon,Description\nint32,str,Image,str\n1,\"Sword\",\"021001\",\"A basic sword\"";
+        let file_path = create_test_csv(&temp_dir, "Item", content);
+
+        let mut builder = SchemaBuilder::new();
+        let result = builder.build_schema_from_file(&file_path);
+
+        assert!(result.is_ok());
+        let schema_name = result.unwrap();
+        assert_eq!(schema_name, "Item");
+
+        let schema = builder.get_schema("Item").unwrap();
+        assert_eq!(schema.name, "Item");
+        assert_eq!(schema.fields.len(), 4);
+
+        assert_eq!(schema.fields[0].name, "id");
+        assert_eq!(schema.fields[0].field_type, FieldType::Int32);
+
+        assert_eq!(schema.fields[1].name, "name");
+        assert_eq!(schema.fields[1].field_type, FieldType::String);
+
+        assert_eq!(schema.fields[2].name, "icon");
+        assert_eq!(schema.fields[2].field_type, FieldType::Image);
+
+        assert_eq!(schema.fields[3].name, "description");
+        assert_eq!(schema.fields[3].field_type, FieldType::String);
+    }
+
+    #[test]
+    fn test_mixed_types_with_image() {
+        let temp_dir = TempDir::new().unwrap();
+        let content = "id,name,icon,level,active,category\n#,Name,Icon,Level,Active,Category\nint32,str,Image,byte,bool,ItemCategory\n1,\"Test Item\",\"65002\",10,true,1";
+
+        // Create the main schema
+        create_test_csv(&temp_dir, "MixedItem", content);
+
+        // Create the referenced custom type
+        let category_content = "id,name\n#,Name\nbyte,str\n1,\"Weapon\"";
+        create_test_csv(&temp_dir, "ItemCategory", category_content);
+
+        let mut builder = SchemaBuilder::new();
+        let item_path = temp_dir.path().join("MixedItem.csv");
+        let result = builder.build_schema_from_file(&item_path);
+
+        assert!(result.is_ok());
+
+        // Check main schema
+        let item_schema = builder.get_schema("MixedItem").unwrap();
+        assert_eq!(item_schema.fields.len(), 6);
+
+        assert_eq!(item_schema.fields[0].field_type, FieldType::Int32);
+        assert_eq!(item_schema.fields[1].field_type, FieldType::String);
+        assert_eq!(item_schema.fields[2].field_type, FieldType::Image);
+        assert_eq!(item_schema.fields[3].field_type, FieldType::Byte);
+        assert_eq!(item_schema.fields[4].field_type, FieldType::Bool);
+        assert_eq!(
+            item_schema.fields[5].field_type,
+            FieldType::Custom("ItemCategory".to_string())
+        );
+
+        // Check that custom type schema was also created
+        let category_schema = builder.get_schema("ItemCategory").unwrap();
+        assert_eq!(category_schema.name, "ItemCategory");
+        assert_eq!(category_schema.fields.len(), 2);
+    }
+
+    #[test]
+    fn test_special_types_parsing() {
+        let temp_dir = TempDir::new().unwrap();
+        let content =
+            "id,name,icon,ref\n#,Name,Icon,Ref\nint32,str,Image,Row\n1,\"Test Item\",\"021001\",0";
+        let file_path = create_test_csv(&temp_dir, "SpecialTypes", content);
+
+        let mut builder = SchemaBuilder::new();
+        let result = builder.build_schema_from_file(&file_path);
+
+        assert!(result.is_ok());
+        let schema_name = result.unwrap();
+        assert_eq!(schema_name, "SpecialTypes");
+
+        let schema = builder.get_schema("SpecialTypes").unwrap();
+        assert_eq!(schema.name, "SpecialTypes");
+        assert_eq!(schema.fields.len(), 4);
+
+        assert_eq!(schema.fields[0].name, "id");
+        assert_eq!(schema.fields[0].field_type, FieldType::Int32);
+
+        assert_eq!(schema.fields[1].name, "name");
+        assert_eq!(schema.fields[1].field_type, FieldType::String);
+
+        assert_eq!(schema.fields[2].name, "icon");
+        assert_eq!(schema.fields[2].field_type, FieldType::Image);
+
+        assert_eq!(schema.fields[3].name, "ref");
+        assert_eq!(schema.fields[3].field_type, FieldType::Row);
     }
 }

@@ -57,13 +57,63 @@ int32,str,str,byte,bool
 - `bool`: 불린값
 - `bit&XX`: 비트 플래그 (예: `bit&01`, `bit&02`)
 
+### 특별 타입
+
+#### Image 타입
+
+`Image` 타입은 UI 이미지 파일의 경로를 표현하는 특별한 타입입니다. 이 타입은 게임 데이터의 원시 값을 이미지 파일 경로로 변환하는 특별한 처리 규칙을 따릅니다.
+
+**처리 규칙:**
+
+1. 입력값은 1~6자리 숫자여야 합니다
+2. 입력값을 6자리로 zero padding 처리합니다
+3. 앞 3자리 + "000"을 폴더 이름으로 사용합니다
+4. 6자리로 패딩된 값에 `.png` 확장자를 붙인 값이 파일 이름이 됩니다
+
+**예시:**
+
+- `021001` → `021000/021001.png` (이미 6자리)
+- `65002` → `065000/065002.png` (5자리 → 6자리 패딩)
+- `20001` → `020000/020001.png` (5자리 → 6자리 패딩)
+- `1234` → `001000/001234.png` (4자리 → 6자리 패딩)
+- `123` → `000000/000123.png` (3자리 → 6자리 패딩)
+- `12` → `000000/000012.png` (2자리 → 6자리 패딩)
+- `1` → `000000/000001.png` (1자리 → 6자리 패딩)
+
+**에러 케이스:**
+
+- 7자리 이상의 숫자: `1234567`, `12345678` 등
+- 빈 값이나 `0`
+- 숫자가 아닌 값: `abc123`, `12a456` 등
+- 특수 문자가 포함된 값: `123-456`, `123.456` 등
+
+**CSV 예시:**
+
+```csv
+key,0,1,2
+#,Name,Description,Icon
+int32,str,str,Image
+1,"Iron Sword","A basic iron sword",021001
+2,"Magic Staff","A powerful staff",065432
+```
+
+**Rust 코드에서의 사용:**
+
+```rust
+use noumenon_gleaner::schema::types::FieldType;
+
+// 이미지 경로 변환
+let path = FieldType::process_image_path("65002");
+assert_eq!(path, Some("065000/065002.png".to_string()));
+```
+
 ### 커스텀 타입
 
 다음 조건을 만족하는 타입은 커스텀 타입으로 인식됩니다:
 
 1. **대문자로 시작**: `ItemCategory`, `PlayerClass`
 2. **특정 패턴 포함**: `Category`, `Action`, `Level`, `Param`, `Job`, `Company`, `Series`
-3. **특별한 타입**: `Image`, `Row`
+3. **특별한 타입**: `Row`
 
 커스텀 타입이 발견되면 동일한 디렉토리에서 `<타입명>.csv` 파일을 찾아 재귀적으로 스키마를 생성합니다.
 
@@ -111,6 +161,7 @@ output_dir_path: "output"
 Schema: Item
   id: Int32
   name: String
+  icon: Image
   category: Custom("ItemCategory")
   rarity: Custom("Rarity")
 

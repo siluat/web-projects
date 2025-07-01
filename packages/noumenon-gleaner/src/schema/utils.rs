@@ -1,5 +1,5 @@
 use super::error::SchemaError;
-use crate::constants::{BASIC_TYPES, CUSTOM_TYPE_PATTERNS, SPECIAL_CUSTOM_TYPES};
+use crate::constants::{BASIC_TYPES, CUSTOM_TYPE_PATTERNS, SPECIAL_TYPES};
 use std::path::Path;
 
 /// Determines if a type string represents a likely custom type
@@ -17,9 +17,9 @@ pub fn is_likely_custom_type(type_str: &str) -> bool {
         return false;
     }
 
-    // Check for special custom types
-    if SPECIAL_CUSTOM_TYPES.contains(&trimmed) {
-        return true;
+    // Exclude special types (they have their own processing rules)
+    if SPECIAL_TYPES.contains(&trimmed) {
+        return false;
     }
 
     // Check for custom type patterns
@@ -32,6 +32,11 @@ pub fn is_likely_custom_type(type_str: &str) -> bool {
 
     // Check if it starts with uppercase (likely custom type)
     trimmed.chars().next().map_or(false, |c| c.is_uppercase())
+}
+
+/// Checks if a type string is a special type that needs unique processing
+pub fn is_special_type(type_str: &str) -> bool {
+    SPECIAL_TYPES.contains(&type_str.trim())
 }
 
 /// Parses bit type string (e.g., "bit&01") and returns the bit value
@@ -109,11 +114,26 @@ mod tests {
         assert!(!is_likely_custom_type("bool"));
         assert!(!is_likely_custom_type("bit&01"));
 
+        // Special types should return false (they have their own processing)
+        assert!(!is_likely_custom_type("Image"));
+        assert!(!is_likely_custom_type("Row"));
+
         // Custom types should return true
         assert!(is_likely_custom_type("ItemCategory"));
         assert!(is_likely_custom_type("ClassJob"));
-        assert!(is_likely_custom_type("Image"));
-        assert!(is_likely_custom_type("Row"));
+    }
+
+    #[test]
+    fn test_is_special_type() {
+        // Special types should return true
+        assert!(is_special_type("Image"));
+        assert!(is_special_type("Row"));
+
+        // Basic and custom types should return false
+        assert!(!is_special_type("str"));
+        assert!(!is_special_type("int32"));
+        assert!(!is_special_type("ItemCategory"));
+        assert!(!is_special_type("bit&01"));
     }
 
     #[test]

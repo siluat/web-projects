@@ -8,8 +8,8 @@ pub const CUSTOM_TYPE_PATTERNS: &[&str] = &[
     "Category", "Action", "Level", "Param", "Job", "Company", "Series",
 ];
 
-/// Special type names that are always considered custom types
-pub const SPECIAL_CUSTOM_TYPES: &[&str] = &["Image", "Row"];
+/// Special type names that have unique processing rules
+pub const SPECIAL_TYPES: &[&str] = &["Image", "Row"];
 
 /// CSV parsing constants
 pub const FIELD_NAMES_ROW: usize = 0;
