@@ -17,9 +17,9 @@ pub enum SchemaError {
     #[error("Invalid bit value format: {input}")]
     InvalidBitValue { input: String },
 
-    #[error("Required CSV header not found: {header}")]
-    MissingCsvHeader { header: String },
+    #[error("Required CSV header not found: {header} in file: {path}")]
+    MissingCsvHeader { header: String, path: String },
 
-    #[error("Invalid CSV structure: found multiple {header} rows")]
-    DuplicateCsvHeader { header: String },
+    #[error("Invalid CSV structure: found multiple {header} rows in file: {path}")]
+    DuplicateCsvHeader { header: String, path: String },
 }

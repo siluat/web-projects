@@ -108,9 +108,9 @@ impl SchemaBuilder {
         }
 
         // Use header-based detection to find row indices
-        let field_names_row = Self::find_field_names_row(&records)?;
-        let field_descriptions_row = Self::find_field_descriptions_row(&records)?;
-        let field_types_row = Self::find_field_types_row(&records)?;
+        let field_names_row = Self::find_field_names_row(&records, csv_path)?;
+        let field_descriptions_row = Self::find_field_descriptions_row(&records, csv_path)?;
+        let field_types_row = Self::find_field_types_row(&records, csv_path)?;
 
         let field_names = &records[field_names_row];
         let field_descriptions = &records[field_descriptions_row];
@@ -233,7 +233,10 @@ impl SchemaBuilder {
     }
 
     /// Find the row index for field names based on header indicator
-    fn find_field_names_row(records: &[csv::StringRecord]) -> Result<usize, SchemaError> {
+    fn find_field_names_row(
+        records: &[csv::StringRecord],
+        csv_path: &Path,
+    ) -> Result<usize, SchemaError> {
         for (i, record) in records.iter().enumerate() {
             if let Some(first_col) = record.get(0) {
                 let normalized = first_col.trim_start_matches('\u{feff}').trim();
@@ -244,11 +247,15 @@ impl SchemaBuilder {
         }
         Err(SchemaError::MissingCsvHeader {
             header: FIELD_NAMES_HEADER.to_string(),
+            path: csv_path.display().to_string(),
         })
     }
 
     /// Find the row index for field descriptions based on header indicator
-    fn find_field_descriptions_row(records: &[csv::StringRecord]) -> Result<usize, SchemaError> {
+    fn find_field_descriptions_row(
+        records: &[csv::StringRecord],
+        csv_path: &Path,
+    ) -> Result<usize, SchemaError> {
         let positions: Vec<usize> = records
             .iter()
             .enumerate()
@@ -263,16 +270,21 @@ impl SchemaBuilder {
         match positions.len() {
             0 => Err(SchemaError::MissingCsvHeader {
                 header: FIELD_DESCRIPTIONS_HEADER.to_string(),
+                path: csv_path.display().to_string(),
             }),
             1 => Ok(positions[0]),
             _ => Err(SchemaError::DuplicateCsvHeader {
                 header: FIELD_DESCRIPTIONS_HEADER.to_string(),
+                path: csv_path.display().to_string(),
             }),
         }
     }
 
     /// Find the row index for field types based on basic type detection
-    fn find_field_types_row(records: &[csv::StringRecord]) -> Result<usize, SchemaError> {
+    fn find_field_types_row(
+        records: &[csv::StringRecord],
+        csv_path: &Path,
+    ) -> Result<usize, SchemaError> {
         let positions: Vec<usize> = records
             .iter()
             .enumerate()
@@ -287,10 +299,12 @@ impl SchemaBuilder {
         match positions.len() {
             0 => Err(SchemaError::MissingCsvHeader {
                 header: "field types (basic type)".to_string(),
+                path: csv_path.display().to_string(),
             }),
             1 => Ok(positions[0]),
             _ => Err(SchemaError::DuplicateCsvHeader {
                 header: "field types (basic type)".to_string(),
+                path: csv_path.display().to_string(),
             }),
         }
     }
