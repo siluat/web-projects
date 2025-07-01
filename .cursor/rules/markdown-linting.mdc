@@ -1,0 +1,54 @@
+---
+description: Prevent markdownlint MD040 warnings by requiring language specifiers on all fenced code blocks
+globs: ["**/*.md", "**/*.mdx"]
+alwaysApply: false
+---
+
+# Markdown Code Block Language Requirements
+
+## Mandatory Rule: ALWAYS specify language for fenced code blocks
+
+**NEVER create fenced code blocks without language specifiers** - this causes markdownlint MD040 warnings.
+
+## Required Language Specifiers
+
+MUST use one of these language tags:
+- \`text\` - Plain text, output, diagrams, process flows
+- \`bash\` - Shell commands and terminal output
+- \`sh\` - POSIX shell scripts
+- \`typescript\` - TypeScript code
+- \`javascript\` - JavaScript code  
+- \`json\` - JSON data
+- \`yaml\` - YAML configuration files
+- \`toml\` - TOML configuration files (e.g., Cargo.toml)
+- \`csv\` - CSV data examples
+- \`rust\` - Rust code
+- \`sql\` - SQL queries
+- \`html\` - HTML markup
+- \`css\` - CSS styles
+
+## Examples
+
+**CORRECT:**
+\`\`\`text
+Process: Input → Processing → Output
+\`\`\`
+
+\`\`\`bash
+npm install package-name
+\`\`\`
+
+\`\`\`typescript
+interface User {
+  id: number;
+  name: string;
+}
+\`\`\`
+
+**INCORRECT:**
+\`\`\`
+Missing language specifier causes MD040 warning
+\`\`\`
+
+## Default Fallback
+When uncertain about language type, ALWAYS use \`text\`.
