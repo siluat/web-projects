@@ -52,15 +52,15 @@ impl SchemaBuilder {
         schema_name: &str,
         base_dir: &Path,
     ) -> Result<String, SchemaError> {
-        // Check for circular dependency
-        if self.processing_stack.contains(&schema_name.to_string()) {
-            return Err(SchemaError::CircularDependency {
-                chain: self.processing_stack.join(" -> ") + " -> " + schema_name,
-            });
-        }
-
         // Return if already processed
         if self.schemas.contains_key(schema_name) {
+            return Ok(schema_name.to_string());
+        }
+
+        // Check for circular dependency
+        if self.processing_stack.contains(&schema_name.to_string()) {
+            // If we're already processing this schema, just return the name
+            // This allows circular references to be resolved later
             return Ok(schema_name.to_string());
         }
 
@@ -70,6 +70,8 @@ impl SchemaBuilder {
         let csv_path = base_dir.join(format!("{}.csv", schema_name));
 
         if !csv_path.exists() {
+            // Remove from processing stack before returning error
+            self.processing_stack.pop();
             return Err(SchemaError::FileNotFound {
                 path: csv_path.to_string_lossy().to_string(),
             });
@@ -297,14 +299,14 @@ mod tests {
     }
 
     #[test]
-    fn test_circular_dependency_detection() {
+    fn test_circular_dependency_allowed() {
         let temp_dir = TempDir::new().unwrap();
 
         // Create A that references B
         let a_content = "id,ref_b\n#,RefB\nint32,TypeB\n1,1";
         create_test_csv(&temp_dir, "TypeA", a_content);
 
-        // Create B that references A (circular dependency)
+        // Create B that references A (circular dependency should now be allowed)
         let b_content = "id,ref_a\n#,RefA\nint32,TypeA\n1,1";
         create_test_csv(&temp_dir, "TypeB", b_content);
 
@@ -312,14 +314,59 @@ mod tests {
         let a_path = temp_dir.path().join("TypeA.csv");
         let result = builder.build_schema_from_file(&a_path);
 
-        assert!(result.is_err());
-        match result.unwrap_err() {
-            SchemaError::CircularDependency { chain } => {
-                assert!(chain.contains("TypeA"));
-                assert!(chain.contains("TypeB"));
-            }
-            _ => panic!("Expected CircularDependency error"),
-        }
+        // Circular dependency should now be allowed
+        assert!(result.is_ok());
+        let schema_name = result.unwrap();
+        assert_eq!(schema_name, "TypeA");
+
+        // Check that both schemas were created
+        let all_schemas = builder.get_all_schemas();
+        assert_eq!(all_schemas.len(), 2);
+
+        // Verify TypeA schema
+        let type_a_schema = builder.get_schema("TypeA").unwrap();
+        assert_eq!(type_a_schema.name, "TypeA");
+        assert_eq!(
+            type_a_schema.fields[1].field_type,
+            FieldType::Custom("TypeB".to_string())
+        );
+
+        // Verify TypeB schema
+        let type_b_schema = builder.get_schema("TypeB").unwrap();
+        assert_eq!(type_b_schema.name, "TypeB");
+        assert_eq!(
+            type_b_schema.fields[1].field_type,
+            FieldType::Custom("TypeA".to_string())
+        );
+    }
+
+    #[test]
+    fn test_self_reference_allowed() {
+        let temp_dir = TempDir::new().unwrap();
+
+        // Create ClassJob that references itself (self-reference should be allowed)
+        let classjob_content =
+            "id,name,parent\n#,Name,Parent\nint32,str,ClassJob\n1,\"Gladiator\",0";
+        create_test_csv(&temp_dir, "ClassJob", classjob_content);
+
+        let mut builder = SchemaBuilder::new();
+        let classjob_path = temp_dir.path().join("ClassJob.csv");
+        let result = builder.build_schema_from_file(&classjob_path);
+
+        assert!(result.is_ok());
+        let schema_name = result.unwrap();
+        assert_eq!(schema_name, "ClassJob");
+
+        let schema = builder.get_schema("ClassJob").unwrap();
+        assert_eq!(schema.name, "ClassJob");
+        assert_eq!(schema.fields.len(), 3);
+
+        // Check that the parent field is correctly typed as Custom("ClassJob")
+        assert_eq!(schema.fields[2].name, "parent");
+        assert_eq!(
+            schema.fields[2].field_type,
+            FieldType::Custom("ClassJob".to_string())
+        );
     }
 
     #[test]

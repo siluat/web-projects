@@ -13,7 +13,4 @@ pub enum SchemaError {
 
     #[error("Invalid CSV format: {reason}")]
     InvalidFormat { reason: String },
-
-    #[error("Circular dependency detected: {chain}")]
-    CircularDependency { chain: String },
 }
