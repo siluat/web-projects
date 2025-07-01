@@ -207,7 +207,7 @@ impl SchemaBuilder {
                 }
                 // Bit types
                 else if trimmed.starts_with("bit&") {
-                    let bit_value = parse_bit_value(trimmed);
+                    let bit_value = parse_bit_value(trimmed)?;
                     Ok(FieldType::Bit(bit_value))
                 }
                 // Custom types that reference other CSV files
@@ -266,8 +266,12 @@ impl SchemaBuilder {
         }
 
         // If empty or starts with number, prefix with underscore
-        if result.is_empty() || result.chars().next().unwrap_or('_').is_ascii_digit() {
+        if result.is_empty() {
             result = format!("_{}", result);
+        } else if let Some(first_char) = result.chars().next() {
+            if first_char.is_ascii_digit() {
+                result = format!("_{}", result);
+            }
         }
 
         // Convert to camelCase

@@ -40,11 +40,13 @@ pub fn is_special_type(type_str: &str) -> bool {
 }
 
 /// Parses bit type string (e.g., "bit&01") and returns the bit value
-pub fn parse_bit_value(bit_str: &str) -> u8 {
+pub fn parse_bit_value(bit_str: &str) -> Result<u8, SchemaError> {
     bit_str
         .strip_prefix("bit&")
         .and_then(|s| u8::from_str_radix(s, 16).ok())
-        .unwrap_or(0)
+        .ok_or_else(|| SchemaError::InvalidBitValue {
+            input: bit_str.to_string(),
+        })
 }
 
 /// Extracts schema name from file path
@@ -138,10 +140,19 @@ mod tests {
 
     #[test]
     fn test_parse_bit_value() {
-        assert_eq!(parse_bit_value("bit&01"), 1);
-        assert_eq!(parse_bit_value("bit&02"), 2);
-        assert_eq!(parse_bit_value("bit&FF"), 255);
-        assert_eq!(parse_bit_value("invalid"), 0);
+        assert!(matches!(parse_bit_value("bit&01"), Ok(1)));
+        assert!(matches!(parse_bit_value("bit&02"), Ok(2)));
+        assert!(matches!(parse_bit_value("bit&FF"), Ok(255)));
+        assert!(parse_bit_value("invalid").is_err());
+        assert!(parse_bit_value("bit&").is_err());
+        assert!(parse_bit_value("bit&GG").is_err());
+
+        // Test specific error message for invalid input
+        if let Err(SchemaError::InvalidBitValue { input }) = parse_bit_value("invalid") {
+            assert_eq!(input, "invalid");
+        } else {
+            panic!("Expected InvalidBitValue error");
+        }
     }
 
     #[test]

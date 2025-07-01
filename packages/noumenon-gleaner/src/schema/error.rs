@@ -13,4 +13,7 @@ pub enum SchemaError {
 
     #[error("Invalid CSV format: {reason}")]
     InvalidFormat { reason: String },
+
+    #[error("Invalid bit value format: {input}")]
+    InvalidBitValue { input: String },
 }

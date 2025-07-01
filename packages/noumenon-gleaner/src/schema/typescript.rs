@@ -17,8 +17,15 @@ impl TypeScriptGenerator {
         schemas: &SchemaMap,
         output_path: P,
     ) -> Result<(), SchemaError> {
+        let path = output_path.as_ref();
+
+        // Create parent directories if they don't exist
+        if let Some(parent) = path.parent() {
+            fs::create_dir_all(parent)?;
+        }
+
         let content = self.generate_typescript_interfaces(schemas);
-        fs::write(output_path, content)?;
+        fs::write(path, content)?;
         Ok(())
     }
 
@@ -179,7 +186,15 @@ mod tests {
         let schema = create_test_schema();
         let interface = generator.generate_interface(&schema);
 
-        let expected = "export interface TestItem {\n  id: number;\n  name: string;\n  icon: ImagePath;\n  level: number;\n  active: boolean;\n  category: ItemCategory;\n}\n";
+        let expected = r#"export interface TestItem {
+  id: number;
+  name: string;
+  icon: ImagePath;
+  level: number;
+  active: boolean;
+  category: ItemCategory;
+}
+"#;
 
         assert_eq!(interface, expected);
     }

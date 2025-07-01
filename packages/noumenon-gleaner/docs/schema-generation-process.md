@@ -46,20 +46,30 @@ int32,str,str,byte,bool
 
 ### 기본 타입
 
-- `str`: 문자열
-- `int32`: 32비트 정수
-- `uint32`: 32비트 무부호 정수
-- `int16`: 16비트 정수
-- `uint16`: 16비트 무부호 정수
-- `byte`: 8비트 무부호 정수
-- `sbyte`: 8비트 부호 정수
-- `float`: 부동소수점
-- `bool`: 불린값
-- `bit&XX`: 비트 플래그 (예: `bit&01`, `bit&02`)
+> **표기법 주의**: CSV 파일에서는 소문자 표기(`str`, `int32`)를 사용하고, Rust 코드에서는 PascalCase 표기(`String`, `Int32`)를 사용합니다.
+
+| CSV 표기 | Rust FieldType | 설명                                         |
+| -------- | -------------- | -------------------------------------------- |
+| `str`    | `String`       | 문자열                                       |
+| `int32`  | `Int32`        | 32비트 정수                                  |
+| `uint32` | `Uint32`       | 32비트 무부호 정수                           |
+| `int16`  | `Int16`        | 16비트 정수                                  |
+| `uint16` | `Uint16`       | 16비트 무부호 정수                           |
+| `byte`   | `Byte`         | 8비트 무부호 정수                            |
+| `sbyte`  | `SByte`        | 8비트 부호 정수                              |
+| `float`  | `Float`        | 부동소수점                                   |
+| `bool`   | `Bool`         | 불린값                                       |
+| `bit&XX` | `Bit(u8)`      | 비트 플래그 (16진수, 예: `bit&01`, `bit&FF`) |
 
 ### 특별 타입
 
-#### Image 타입
+| CSV 표기 | Rust FieldType | 설명                                |
+| -------- | -------------- | ----------------------------------- |
+| `Image`  | `Image`        | UI 이미지 파일 ID (그대로 보존)     |
+| `Row`    | `Row`          | 다른 테이블의 행 참조 (그대로 보존) |
+| `Key`    | `Key`          | 키 타입 식별자 (그대로 보존)        |
+
+#### Image 타입 사용 예시
 
 `Image` 타입은 UI 이미지 파일의 ID를 표현하는 특별한 타입입니다. 이 타입의 값은 별도의 후처리 없이 그대로 보존됩니다.
 
@@ -73,9 +83,7 @@ int32,str,str,Image
 2,"Magic Staff","A powerful staff",065432
 ```
 
-#### Row 타입
-
-`Row` 타입은 다른 테이블의 행을 참조하는 특별한 타입입니다. 이 타입의 값은 별도의 후처리 없이 그대로 보존됩니다.
+**생성되는 Rust FieldType**: `FieldType::Image`
 
 ### 커스텀 타입
 
@@ -130,22 +138,22 @@ output_dir_path: "output"
 
 === Generated Schemas ===
 Schema: Item
-  id: Int32
-  name: String
-  icon: Image
-  row_ref: Row
-  category: Custom("ItemCategory")
-  rarity: Custom("Rarity")
+  id: Int32                    (CSV: int32)
+  name: String                 (CSV: str)
+  icon: Image                  (CSV: Image)
+  row_ref: Row                 (CSV: Row)
+  category: Custom("ItemCategory")  (CSV: ItemCategory)
+  rarity: Custom("Rarity")     (CSV: Rarity)
 
 Schema: ItemCategory
-  id: Byte
-  name: String
-  description: String
+  id: Byte                     (CSV: byte)
+  name: String                 (CSV: str)
+  description: String          (CSV: str)
 
 Schema: Rarity
-  id: Byte
-  name: String
-  color: String
+  id: Byte                     (CSV: byte)
+  name: String                 (CSV: str)
+  color: String                (CSV: str)
 
 Successfully built schema: Item
 ```
@@ -198,11 +206,14 @@ src/
 
 ```rust
 pub enum FieldType {
-    // 기본 타입
+    // 기본 타입 (CSV: str, int32, uint32, int16, uint16, byte, sbyte, float, bool, bit&XX)
     String, Int32, Uint32, Int16, Uint16,
     Byte, SByte, Float, Bool, Bit(u8),
 
-    // 커스텀 타입
+    // 특별 타입 (CSV: Image, Row, Key)
+    Image, Row, Key,
+
+    // 커스텀 타입 (CSV: ItemCategory, ClassJob 등)
     Custom(String),
 }
 ```

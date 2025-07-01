@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FieldType {
     // Basic types
     String,
@@ -12,7 +12,7 @@ pub enum FieldType {
     SByte,
     Float,
     Bool,
-    Bit(u8), // bit&01, bit&02, etc.
+    Bit(u8), // bit&01, bit&02, bit&FF, etc. (hexadecimal values)
 
     // Special types for game data
     Image, // UI image file path - preserved as-is without processing
@@ -23,13 +23,13 @@ pub enum FieldType {
     Custom(String),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Field {
     pub name: String,
     pub field_type: FieldType,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Schema {
     pub name: String,
     pub fields: Vec<Field>,
@@ -58,5 +58,52 @@ mod tests {
 
         assert_eq!(field.name, "test_field");
         assert_eq!(field.field_type, FieldType::Image);
+    }
+
+    #[test]
+    fn test_field_equality() {
+        let field1 = Field {
+            name: "test_field".to_string(),
+            field_type: FieldType::Image,
+        };
+        let field2 = Field {
+            name: "test_field".to_string(),
+            field_type: FieldType::Image,
+        };
+        let field3 = Field {
+            name: "different_field".to_string(),
+            field_type: FieldType::Image,
+        };
+
+        assert_eq!(field1, field2);
+        assert_ne!(field1, field3);
+    }
+
+    #[test]
+    fn test_schema_equality() {
+        let field1 = Field {
+            name: "id".to_string(),
+            field_type: FieldType::Int32,
+        };
+        let field2 = Field {
+            name: "name".to_string(),
+            field_type: FieldType::String,
+        };
+
+        let schema1 = Schema {
+            name: "TestSchema".to_string(),
+            fields: vec![field1.clone(), field2.clone()],
+        };
+        let schema2 = Schema {
+            name: "TestSchema".to_string(),
+            fields: vec![field1, field2],
+        };
+        let schema3 = Schema {
+            name: "DifferentSchema".to_string(),
+            fields: vec![],
+        };
+
+        assert_eq!(schema1, schema2);
+        assert_ne!(schema1, schema3);
     }
 }

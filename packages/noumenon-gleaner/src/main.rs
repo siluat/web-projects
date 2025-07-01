@@ -27,7 +27,7 @@ fn main() {
 
 fn print_configuration(cli: &Cli) {
     println!("input_file_path: {:?}", cli.input_file_path);
-    println!("output_dir_path: {:?}", cli.output_dir_path);
+    println!("output_file_path: {:?}", cli.output_file_path);
 }
 
 fn build_schemas(cli: &Cli) -> Result<String, SchemaError> {
@@ -36,12 +36,11 @@ fn build_schemas(cli: &Cli) -> Result<String, SchemaError> {
 
     // Generate TypeScript interfaces after successful schema building
     let generator = TypeScriptGenerator::new();
-    let output_path = cli.output_dir_path.join("schemas.ts");
-    if let Err(e) = generator.generate_and_save(schema_builder.get_all_schemas(), &output_path) {
-        eprintln!("Warning: Failed to generate TypeScript interfaces: {}", e);
-    } else {
-        println!("TypeScript interfaces generated: {}", output_path.display());
-    }
+    generator.generate_and_save(schema_builder.get_all_schemas(), &cli.output_file_path)?;
+    println!(
+        "TypeScript interfaces generated: {}",
+        cli.output_file_path.display()
+    );
 
     Ok(main_schema_name)
 }
