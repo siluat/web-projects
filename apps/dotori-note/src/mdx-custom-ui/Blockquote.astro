@@ -1,0 +1,10 @@
+---
+const props = Astro.props;
+const textStyle = 'dark:text-zinc-200 not-italic font-normal';
+const borderStyle = 'border-l-6 border-purple-300 dark:border-purple-400/40';
+const hideQuotes = '[&_*]:before:content-none [&_*]:after:content-none';
+---
+
+<blockquote {...props} class={`bg-purple-300/10 dark:bg-purple-200/8 pr-4 ${textStyle} ${borderStyle} ${hideQuotes}`}>
+  <slot />
+</blockquote>
