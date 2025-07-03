@@ -1,6 +1,7 @@
 ---
 import ContentLayout from '@/app/layouts/ContentLayout.astro';
 import { getCollection, render } from 'astro:content';
+import Blockquote from '@/mdx-custom-ui/Blockquote.astro';
 
 export async function getStaticPaths() {
   const notes = await getCollection('notes');
@@ -15,5 +16,5 @@ const { Content } = await render(note);
 ---
 
 <ContentLayout title={note.data.title} description={note.data.description}>
-  <Content />
+  <Content components={{ blockquote: Blockquote }} />
 </ContentLayout>
