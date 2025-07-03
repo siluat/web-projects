@@ -15,6 +15,11 @@ const { note } = Astro.props;
 const { Content } = await render(note);
 ---
 
-<ContentLayout title={note.data.title} description={note.data.description}>
+<ContentLayout 
+  title={note.data.title} 
+  description={note.data.description} 
+  created={note.data.created} 
+  modified={note.data.modified}
+>
   <Content components={{ blockquote: Blockquote }} />
 </ContentLayout>

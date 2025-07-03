@@ -9,9 +9,21 @@ import Favicon from '@/app/providers/Favicon.astro';
 interface Props {
   title: string;
   description?: string;
+  created: Date;
+  modified?: Date;
 }
 
-const { title, description } = Astro.props;
+const { title, description, created, modified } = Astro.props;
+const createdText = new Date(created).toLocaleDateString('ko-KR', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+const modifiedText = modified ? new Date(modified).toLocaleDateString('ko-KR', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}) : null;
 ---
 
 <!doctype html>
@@ -35,6 +47,10 @@ const { title, description } = Astro.props;
     <main class="mx-auto max-w-screen-md">
       <article class="prose prose-zinc dark:prose-invert max-w-none px-6 py-12">
         <h1>{title}</h1>
+        <div class="flex flex-col gap-1">
+          {modifiedText ? <p class="not-prose text-sm text-right text-zinc-500 dark:text-zinc-400">최근 변경일: {modifiedText}</p> : null}
+          {createdText ? <p class="not-prose text-sm text-right text-zinc-500 dark:text-zinc-400">최초 작성일: {createdText}</p> : null}
+        </div>
         <slot />
       </article>
     </main>
