@@ -16,6 +16,7 @@ FSD 구조를 폐기하고 기존 구조였던 기능별 구조로 점진적으�
 | ------------------- | ------ | -------------------------------------- |
 | `notes`             | Astro  | MDX 형식의 콘텐츠 파일                 |
 | `src/mdx-custom-ui` | -      | MDX 콘텐츠 렌더링에 사용하는 커스텀 UI |
+| `src/page-layouts`  | -      | 페이지 레이아웃                        |
 | `src/pages`         | Astro  |                                        |
 | --                  | --     | --                                     |
 | `src/app`           | FSD    | deprecated                             |
