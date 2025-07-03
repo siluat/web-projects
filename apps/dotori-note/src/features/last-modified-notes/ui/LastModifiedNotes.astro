@@ -3,7 +3,11 @@ import { getCollection } from 'astro:content';
 import { Badge } from '@siluat/shadcn-ui/components/badge';
 
 const notes = await getCollection('notes');
-const lastModifiedNotes = notes.sort((a, b) => b.data.lastModified.valueOf() - a.data.lastModified.valueOf());
+const lastModifiedNotes = notes.sort((a, b) => {
+  const aDate = a.data.modified || a.data.created;
+  const bDate = b.data.modified || b.data.created;
+  return bDate.valueOf() - aDate.valueOf();
+});
 ---
 
 <ul class="pl-0 flex flex-col">
