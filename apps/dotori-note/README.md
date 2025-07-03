@@ -4,24 +4,25 @@
 
 ## 프로젝트 구조
 
-Astro 프로젝트 기본 구조와 FSD(Feature-Sliced Design) 구조를 조합하여 다음과 같은 레이어 규칙을 따른다.
+~~Astro 프로젝트 기본 구조와 FSD(Feature-Sliced Design) 구조를 조합하여 다음과 같은 레이어 규칙을 따른다.~~  
+FSD 구조를 폐기하고 기존 구조였던 기능별 구조로 점진적으로 변경한다.
 
-| 레이어 | 컨벤션 | 부가 설명 |
-| --- | --- | --- |
-| `notes` | Astro | MDX 형식의 콘텐츠 파일 관리 |
-| `src/app` | FSD | |
-| `src/pages` | Astro | |
-| `src/widgets` | FSD | |
-| `src/features` | FSD | |
-| `src/entities` | FSD | |
-| `src/shared` | FSD | |
+### 원칙
 
-- FSD 레이어 규칙과 동일하게 모든 레이어는 하위 레이어만을 참조할 수 있다.
+- `src` 폴더 하위의 폴더 목록만을 보고 기능들의 목록을 파악할 수 있어야 한다.
+- `src` 폴더 하위의 폴더 내부에는 폴더 중첩을 허용하지 않는다.
 
-### 참고
-
-- [Astro 프로젝트 구조](https://docs.astro.build/en/basics/project-structure/)
-- [Feature-Sliced Design](https://feature-sliced.github.io/documentation/docs/get-started/overview#concepts)
+| 폴더                | 컨벤션 | 부가 설명                              |
+| ------------------- | ------ | -------------------------------------- |
+| `notes`             | Astro  | MDX 형식의 콘텐츠 파일                 |
+| `src/mdx-custom-ui` | -      | MDX 콘텐츠 렌더링에 사용하는 커스텀 UI |
+| `src/pages`         | Astro  |                                        |
+| --                  | --     | --                                     |
+| `src/app`           | FSD    | deprecated                             |
+| `src/widgets`       | FSD    | deprecated                             |
+| `src/features`      | FSD    | deprecated                             |
+| `src/entities`      | FSD    | deprecated                             |
+| `src/shared`        | FSD    | deprecated                             |
 
 ## 기술/패키지 의존성
 
