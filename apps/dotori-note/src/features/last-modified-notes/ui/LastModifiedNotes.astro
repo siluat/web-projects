@@ -1,6 +1,5 @@
 ---
 import { getCollection } from 'astro:content';
-import { Badge } from '@siluat/shadcn-ui/components/badge';
 
 const notes = await getCollection('notes');
 const lastModifiedNotes = notes.sort((a, b) => {
@@ -10,20 +9,31 @@ const lastModifiedNotes = notes.sort((a, b) => {
 });
 ---
 
-<ul class="pl-0 flex flex-col">
+<ul class="pl-0 my-3 flex flex-col">
   {
     lastModifiedNotes.map((note) => (
-      <li class="my-3">
-        <a class="flex flex-col gap-2" href={`/note/${note.id}`}>
-          <span class="text-xl font-bold">
-            {note.data.title}
-          </span>
-          <div class="flex gap-1.5">
+      <li>
+        <a class="grid sm:grid-cols-2 grid-cols-1 gap-2 p-3 hover:bg-purple-200/50 dark:hover:bg-purple-200/20 rounded-md" href={`/note/${note.id}`}>
+          <div class="">
+            <span class="font-bold">
+              {note.data.title}
+            </span>
+          </div>
+          <div class="flex justify-between gap-1">
             {note.data.tags.map((tag) => (
-              <Badge className="rounded-full text-xs font-light text-zinc-500 dark:text-zinc-400" variant="secondary">
-                {tag}
-              </Badge>
+              <span class="text-sm text-zinc-500 dark:text-zinc-400">{tag}</span>
             ))}
+            <span class="text-sm text-right text-zinc-500 dark:text-zinc-400">
+              {note.data.modified ? new Date(note.data.modified).toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+              }) : new Date(note.data.created).toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+              })}
+            </span>
           </div>
         </a>
       </li>
