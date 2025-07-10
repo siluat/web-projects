@@ -4,26 +4,18 @@
 
 ## 프로젝트 구조
 
-~~Astro 프로젝트 기본 구조와 FSD(Feature-Sliced Design) 구조를 조합하여 다음과 같은 레이어 규칙을 따른다.~~  
-FSD 구조를 폐기하고 기존 구조였던 기능별 구조로 점진적으로 변경한다.
+간단하고 탐색하기 쉬운 구조를 유지한다.
 
-### 원칙
-
-- `src` 폴더 하위의 폴더 목록만을 보고 기능들의 목록을 파악할 수 있어야 한다.
-- `src` 폴더 하위의 폴더 내부에는 폴더 중첩을 허용하지 않는다.
-
-| 폴더                | 컨벤션 | 부가 설명                              |
-| ------------------- | ------ | -------------------------------------- |
-| `notes`             | Astro  | MDX 형식의 콘텐츠 파일                 |
-| `src/mdx-custom-ui` | -      | MDX 콘텐츠 렌더링에 사용하는 커스텀 UI |
-| `src/page-layouts`  | -      | 페이지 레이아웃                        |
-| `src/pages`         | Astro  |                                        |
-| --                  | --     | --                                     |
-| `src/app`           | FSD    | deprecated                             |
-| `src/widgets`       | FSD    | deprecated                             |
-| `src/features`      | FSD    | deprecated                             |
-| `src/entities`      | FSD    | deprecated                             |
-| `src/shared`        | FSD    | deprecated                             |
+| 폴더                     | 설명                                                           |
+| ------------------------ | -------------------------------------------------------------- |
+| `notes`                  | 노트 원본 파일 (MDX 형식)                                      |
+| `src/google-tag-manager` | Google Tag Manager 설정                                        |
+| `src/layouts`            | 레이아웃 컴포넌트                                              |
+| `src/meta`               | 사이트 메타 요소                                               |
+| `src/pages`              | [Astro Pages](https://docs.astro.build/en/basics/astro-pages/) |
+| `src/shared-types`       | 공통 타입 정의                                                 |
+| `src/styles`             | 공통 스타일                                                    |
+| `src/widgets`            | 공통 위젯                                                      |
 
 ## 기술/패키지 의존성
 

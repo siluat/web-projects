@@ -1,4 +1,4 @@
-import type { NonEmptyArray } from '../../../shared/model/utility-types';
+import type { NonEmptyArray } from '@/shared-types/utility-types';
 import type { Quote } from './quote-types';
 
 export const quotes: NonEmptyArray<Quote> = [
