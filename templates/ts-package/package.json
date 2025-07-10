@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {},
   "devDependencies": {
-    "@siluat/typescript-config": "workspace:*"
+    "@siluat/typescript-config": "workspace:*",
+    "typescript": "^5.8.3"
   }
 }
