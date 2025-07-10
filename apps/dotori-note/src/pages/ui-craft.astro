@@ -1,5 +1,5 @@
 ---
-import DefaultLayout from '@/page-layouts/DefaultLayout.astro';
+import DefaultPageLayout from '@/layouts/DefaultPageLayout.astro';
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
 } from '@siluat/shadcn-ui/components/card';
 ---
 
-<DefaultLayout title="UI Craft - 도토리 노트" >
+<DefaultPageLayout title="UI Craft - 도토리 노트" >
   <div class="px-4 py-8">
     <h1 class="text-center text-2xl font-bold">UI Craft</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 py-8 items-stretch">
@@ -37,4 +37,4 @@ import {
       </a>
     </div>
   </div>
-</DefaultLayout>
+</DefaultPageLayout>

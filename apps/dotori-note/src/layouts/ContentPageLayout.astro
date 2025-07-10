@@ -1,10 +1,10 @@
 ---
-import GoogleTagProvider from '@/app/providers/GoogleTagProvider.astro';
-import InitTheme from '@/app/providers/InitTheme.astro';
-import '@/app/styles/global.css';
+import InitGoogleTag from '@/google-tag-manager/InitGoogleTag.astro';
+import InitTheme from '@/styles/InitTheme.astro';
+import '@/styles/global.css';
 import Header from '@/widgets/header/Header.astro';
 import '@fontsource-variable/noto-sans-kr';
-import Favicon from '@/app/providers/Favicon.astro';
+import Favicon from '@/meta/Favicon.astro';
 
 interface Props {
   title: string;
@@ -39,7 +39,7 @@ const modifiedText = modified ? new Date(modified).toLocaleDateString('ko-KR', {
     <meta property="twitter:title" content={`${title} - 도토리 노트`} />
     <meta property="twitter:description" content={description} />
     <Favicon />
-    <GoogleTagProvider />
+    <InitGoogleTag />
     <InitTheme />
   </head>
   <body class="bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 break-keep font-noto-sans-kr min-w-80">
