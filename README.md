@@ -9,3 +9,11 @@ Collection of my personal web projects.
 ## Libraries
 
 - [ui-craft](./packages/ui-craft/): My personal UI animation crafting practice.
+
+## Generate a new package
+
+Generate a package of that type by entering the following command and selecting the package type.
+
+```bash
+turbo gen package
+```
