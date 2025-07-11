@@ -1,0 +1,16 @@
+{
+  "name": "noumenon-librarian",
+  "description": "Data pipeline orchestrator for Noumenon project.",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "pnpm exec noumenon-gleaner --version"
+  },
+  "dependencies": {
+    "noumenon-gleaner": "workspace:*"
+  },
+  "devDependencies": {
+    "@siluat/typescript-config": "workspace:*",
+    "typescript": "^5.8.3"
+  },
+  "private": true
+}
