@@ -1,5 +1,6 @@
-import { craftMetaMap } from '@/app/(navigation)/data/craftMeta';
 import { notFound } from 'next/navigation';
+import { craftMetaMap } from '@/app/(navigation)/data/craftMeta';
+
 export default async function Page({
   params,
 }: {
