@@ -24,12 +24,15 @@
 }
 
 .showing {
-  animation: opacity-in 150ms linear forwards, blur-in 400ms linear forwards;
+  animation:
+    opacity-in 150ms linear forwards,
+    blur-in 400ms linear forwards;
 }
 
 .hiding {
-  animation: blur-out 400ms linear forwards, opacity-out 150ms linear 300ms
-    forwards;
+  animation:
+    blur-out 400ms linear forwards,
+    opacity-out 150ms linear 300ms forwards;
 }
 
 @keyframes opacity-in {
