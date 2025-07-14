@@ -14,17 +14,17 @@
   },
   "devDependencies": {
     "@siluat/typescript-config": "workspace:*",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^16.3.0",
     "@types/flubber": "^0.4.0",
-    "@types/react": "^19.0.11",
-    "@types/react-dom": "^19.0.4",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
     "@vitest/coverage-v8": "^3.2.4",
-    "happy-dom": "^17.4.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.9"
+    "happy-dom": "^18.0.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "flubber": "^0.4.2",
-    "framer-motion": "^12.5.0",
+    "framer-motion": "^12.23.5",
     "react-use": "^17.6.0"
   }
 }
