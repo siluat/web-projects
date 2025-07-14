@@ -29,7 +29,10 @@ export function ListItemExpandTransition() {
 function Item({
   item,
   setActiveItem,
-}: { item: Item; setActiveItem: (item: Item) => void }) {
+}: {
+  item: Item;
+  setActiveItem: (item: Item) => void;
+}) {
   return (
     <motion.div
       layoutId={`item-${item.id}`}

@@ -42,7 +42,9 @@ export function CraftListSidebar() {
 
 export function CraftListSidebarProvider({
   children,
-}: { children: React.ReactNode }) {
+}: {
+  children: React.ReactNode;
+}) {
   return <SidebarProvider>{children}</SidebarProvider>;
 }
 
