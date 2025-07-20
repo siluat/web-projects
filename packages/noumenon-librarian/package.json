@@ -3,13 +3,18 @@
   "description": "Data pipeline orchestrator for Noumenon project.",
   "version": "0.0.0",
   "scripts": {
-    "start": "pnpm exec noumenon-gleaner --version"
+    "prepare": "bun run scripts/prepare.ts",
+    "start": "bun run main.ts"
   },
   "dependencies": {
+    "@effect/platform": "^0.88.2",
+    "@effect/platform-node": "^0.91.0",
+    "effect": "^3.16.16",
     "noumenon-gleaner": "workspace:*"
   },
   "devDependencies": {
     "@siluat/typescript-config": "workspace:*",
+    "@types/bun": "^1.2.19",
     "typescript": "^5.8.3"
   },
   "private": true
