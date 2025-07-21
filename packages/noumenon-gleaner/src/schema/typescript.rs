@@ -179,6 +179,10 @@ mod tests {
             "KeyString"
         );
         assert_eq!(
+            generator.field_type_to_typescript(&FieldType::Color),
+            "ColorCode"
+        );
+        assert_eq!(
             generator.field_type_to_typescript(&FieldType::Custom("ItemCategory".to_string())),
             "ItemCategory"
         );
@@ -236,6 +240,52 @@ mod tests {
         assert!(typescript.contains("export type ImagePath = string;"));
         assert!(typescript.contains("export type RowId = number;"));
         assert!(typescript.contains("export type KeyString = string;"));
+        assert!(typescript.contains("export type ColorCode = number;"));
         assert!(typescript.starts_with("// Generated TypeScript interfaces"));
+    }
+
+    #[test]
+    fn test_color_type_typescript_generation() {
+        let generator = TypeScriptGenerator::new();
+        let mut schemas = HashMap::new();
+
+        // Create a schema with Color type field
+        let color_schema = Schema {
+            name: "ColoredItem".to_string(),
+            fields: vec![
+                Field {
+                    name: "id".to_string(),
+                    field_type: FieldType::Int32,
+                },
+                Field {
+                    name: "name".to_string(),
+                    field_type: FieldType::String,
+                },
+                Field {
+                    name: "backgroundColor".to_string(),
+                    field_type: FieldType::Color,
+                },
+                Field {
+                    name: "textColor".to_string(),
+                    field_type: FieldType::Color,
+                },
+            ],
+        };
+        schemas.insert("ColoredItem".to_string(), color_schema);
+
+        let typescript = generator.generate_typescript_interfaces(&schemas);
+
+        // Verify ColorCode type definition is generated
+        assert!(typescript.contains("export type ColorCode = number;"));
+        assert!(typescript.contains("/** Color code identifier */"));
+        
+        // Verify Color fields are properly typed
+        assert!(typescript.contains("backgroundColor: ColorCode;"));
+        assert!(typescript.contains("textColor: ColorCode;"));
+        
+        // Verify interface structure
+        assert!(typescript.contains("export interface ColoredItem"));
+        assert!(typescript.contains("id: number;"));
+        assert!(typescript.contains("name: string;"));
     }
 }

@@ -639,4 +639,72 @@ mod tests {
         assert_eq!(schema.fields[3].name, "ref");
         assert_eq!(schema.fields[3].field_type, FieldType::Row);
     }
+
+    #[test]
+    fn test_color_type_parsing() {
+        let temp_dir = TempDir::new().unwrap();
+        let content =
+            "key,0,1,2\n#,Name,Description,BackgroundColor\nint32,str,str,Color\n1,\"Fire Element\",\"Element of fire\",16711680\n2,\"Water Element\",\"Element of water\",255";
+        let file_path = create_test_csv(&temp_dir, "ColorTest", content);
+
+        let mut builder = SchemaBuilder::new();
+        let result = builder.build_schema_from_file(&file_path);
+
+        assert!(result.is_ok());
+        let schema_name = result.unwrap();
+        assert_eq!(schema_name, "ColorTest");
+
+        let schema = &builder.get_all_schemas()["ColorTest"];
+        assert_eq!(schema.name, "ColorTest");
+        assert_eq!(schema.fields.len(), 4);
+
+        assert_eq!(schema.fields[0].name, "id");
+        assert_eq!(schema.fields[0].field_type, FieldType::Int32);
+
+        assert_eq!(schema.fields[1].name, "name");
+        assert_eq!(schema.fields[1].field_type, FieldType::String);
+
+        assert_eq!(schema.fields[2].name, "description");
+        assert_eq!(schema.fields[2].field_type, FieldType::String);
+
+        assert_eq!(schema.fields[3].name, "backgroundColor");
+        assert_eq!(schema.fields[3].field_type, FieldType::Color);
+    }
+
+    #[test]
+    fn test_mixed_special_types_with_color() {
+        let temp_dir = TempDir::new().unwrap();
+        let content =
+            "key,0,1,2,3,4\n#,Name,Icon,Ref,TextColor,Status\nint32,str,Image,Row,Color,Key\n1,\"Test Item\",\"021001\",0,16777215,\"active\"";
+        let file_path = create_test_csv(&temp_dir, "MixedSpecialTypes", content);
+
+        let mut builder = SchemaBuilder::new();
+        let result = builder.build_schema_from_file(&file_path);
+
+        assert!(result.is_ok());
+        let schema_name = result.unwrap();
+        assert_eq!(schema_name, "MixedSpecialTypes");
+
+        let schema = &builder.get_all_schemas()["MixedSpecialTypes"];
+        assert_eq!(schema.name, "MixedSpecialTypes");
+        assert_eq!(schema.fields.len(), 6);
+
+        assert_eq!(schema.fields[0].name, "id");
+        assert_eq!(schema.fields[0].field_type, FieldType::Int32);
+
+        assert_eq!(schema.fields[1].name, "name");
+        assert_eq!(schema.fields[1].field_type, FieldType::String);
+
+        assert_eq!(schema.fields[2].name, "icon");
+        assert_eq!(schema.fields[2].field_type, FieldType::Image);
+
+        assert_eq!(schema.fields[3].name, "ref");
+        assert_eq!(schema.fields[3].field_type, FieldType::Row);
+
+        assert_eq!(schema.fields[4].name, "textColor");
+        assert_eq!(schema.fields[4].field_type, FieldType::Color);
+
+        assert_eq!(schema.fields[5].name, "status");
+        assert_eq!(schema.fields[5].field_type, FieldType::Key);
+    }
 }
