@@ -2,8 +2,8 @@ use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum SchemaError {
-    #[error("File not found: {path}")]
-    FileNotFound { path: String },
+    #[error("File not found: {path} (referenced from: {source_file})")]
+    FileNotFound { path: String, source_file: String },
 
     #[error("CSV parsing error: {0}")]
     CsvError(#[from] csv::Error),

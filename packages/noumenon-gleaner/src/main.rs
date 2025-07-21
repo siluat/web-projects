@@ -55,8 +55,9 @@ fn print_success(schema_name: &str) {
 fn print_error(error: &SchemaError) {
     eprintln!("Error: {}", error);
 
-    if let SchemaError::FileNotFound { path } = error {
+    if let SchemaError::FileNotFound { path, source_file } = error {
         eprintln!("\nRequired file not found: {}", path);
+        eprintln!("Referenced from: {}", source_file);
         eprintln!(
             "Make sure all referenced CSV files exist in the same directory as the input file."
         );

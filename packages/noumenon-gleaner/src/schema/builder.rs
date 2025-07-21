@@ -45,13 +45,14 @@ impl SchemaBuilder {
                 reason: "Cannot extract schema name from file path".to_string(),
             })?;
 
-        self.build_schema_recursive(&schema_name, path.parent().unwrap_or(Path::new(".")))
+        self.build_schema_recursive(&schema_name, path.parent().unwrap_or(Path::new(".")), path)
     }
 
     fn build_schema_recursive(
         &mut self,
         schema_name: &str,
         base_dir: &Path,
+        source_file: &Path,
     ) -> Result<String, SchemaError> {
         // Return if already processed
         if self.schemas.contains_key(schema_name) {
@@ -75,10 +76,11 @@ impl SchemaBuilder {
             self.processing_stack.remove(&schema_name.to_string());
             return Err(SchemaError::FileNotFound {
                 path: csv_path.to_string_lossy().to_string(),
+                source_file: source_file.to_string_lossy().to_string(),
             });
         }
 
-        let schema = self.parse_csv_file(&csv_path, schema_name, base_dir)?;
+        let schema = self.parse_csv_file(&csv_path, schema_name, base_dir, source_file)?;
         self.schemas.insert(schema_name.to_string(), schema);
 
         // Remove from processing stack
@@ -92,6 +94,7 @@ impl SchemaBuilder {
         csv_path: &Path,
         schema_name: &str,
         base_dir: &Path,
+        _source_file: &Path,
     ) -> Result<Schema, SchemaError> {
         let file = File::open(csv_path)?;
         let mut rdr = csv::ReaderBuilder::new()
@@ -134,7 +137,7 @@ impl SchemaBuilder {
             let field_type = if description == "Key" {
                 FieldType::Key
             } else {
-                self.parse_field_type(type_str, base_dir)?
+                self.parse_field_type(type_str, base_dir, csv_path)?
             };
 
             // Determine the best field name to use
@@ -186,6 +189,7 @@ impl SchemaBuilder {
         &mut self,
         type_str: &str,
         base_dir: &Path,
+        current_file: &Path,
     ) -> Result<FieldType, SchemaError> {
         let trimmed = type_str.trim();
 
@@ -217,7 +221,7 @@ impl SchemaBuilder {
                 }
                 // Custom types that reference other CSV files
                 else if is_likely_custom_type(trimmed) {
-                    self.build_schema_recursive(trimmed, base_dir)?;
+                    self.build_schema_recursive(trimmed, base_dir, current_file)?;
                     Ok(FieldType::Custom(trimmed.to_string()))
                 }
                 // Unknown types default to string
