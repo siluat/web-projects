@@ -83,6 +83,9 @@ impl TypeScriptGenerator {
         types.push_str("/** Key identifier string */\n");
         types.push_str("export type KeyString = string;\n\n");
 
+        types.push_str("/** Color code identifier */\n");
+        types.push_str("export type ColorCode = number;\n\n");
+
         types
     }
 
@@ -100,6 +103,7 @@ impl TypeScriptGenerator {
             FieldType::Image => "ImagePath".to_string(), // Use special type
             FieldType::Row => "RowId".to_string(),     // Use special type
             FieldType::Key => "KeyString".to_string(), // Use special type
+            FieldType::Color => "ColorCode".to_string(), // Use special type
             FieldType::Custom(type_name) => type_name.clone(), // Reference to another interface
         }
     }

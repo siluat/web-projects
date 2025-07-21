@@ -18,6 +18,7 @@ pub enum FieldType {
     Image, // UI image file path - preserved as-is without processing
     Row,   // Row type - preserved as-is without processing
     Key,   // Key type - string identifier preserved as-is without processing
+    Color, // Color type - converted to number (color code)
 
     // Custom types that reference other CSV files
     Custom(String),

@@ -211,6 +211,7 @@ impl SchemaBuilder {
                         "Image" => Ok(FieldType::Image),
                         "Row" => Ok(FieldType::Row),
                         "Key" => Ok(FieldType::Key),
+                        "Color" => Ok(FieldType::Color),
                         _ => Ok(FieldType::Custom(trimmed.to_string())), // For future special types
                     }
                 }
