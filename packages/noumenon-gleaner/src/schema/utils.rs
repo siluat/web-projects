@@ -119,6 +119,8 @@ mod tests {
         // Special types should return false (they have their own processing)
         assert!(!is_likely_custom_type("Image"));
         assert!(!is_likely_custom_type("Row"));
+        assert!(!is_likely_custom_type("Key"));
+        assert!(!is_likely_custom_type("Color"));
 
         // Custom types should return true
         assert!(is_likely_custom_type("ItemCategory"));
@@ -130,6 +132,8 @@ mod tests {
         // Special types should return true
         assert!(is_special_type("Image"));
         assert!(is_special_type("Row"));
+        assert!(is_special_type("Key"));
+        assert!(is_special_type("Color"));
 
         // Basic and custom types should return false
         assert!(!is_special_type("str"));
@@ -178,5 +182,42 @@ mod tests {
 
         // Test with current directory (should exist)
         assert!(Path::new(".").exists());
+    }
+
+    #[test]
+    fn test_color_type_not_treated_as_custom() {
+        // Create a mock StringRecord with Color type
+        let record = csv::StringRecord::from(vec!["str", "int32", "Color", "bool"]);
+        let base_dir = Path::new(".");
+
+        let missing_files = find_missing_files_in_types(&record, base_dir);
+
+        // Color should not be treated as a missing custom type
+        assert!(!missing_files.contains(&"Color".to_string()));
+        // Basic types should not be in the missing files
+        assert!(!missing_files.contains(&"str".to_string()));
+        assert!(!missing_files.contains(&"int32".to_string()));
+        assert!(!missing_files.contains(&"bool".to_string()));
+    }
+
+    #[test]
+    fn test_mixed_types_with_color() {
+        // Create a mock StringRecord mixing special types with custom types
+        let record = csv::StringRecord::from(vec!["str", "Color", "Image", "CustomType", "Row", "Key"]);
+        let base_dir = Path::new(".");
+
+        let missing_files = find_missing_files_in_types(&record, base_dir);
+
+        // Only CustomType should be detected as missing
+        assert!(missing_files.contains(&"CustomType".to_string()));
+        
+        // Special types should not be treated as missing
+        assert!(!missing_files.contains(&"Color".to_string()));
+        assert!(!missing_files.contains(&"Image".to_string()));
+        assert!(!missing_files.contains(&"Row".to_string()));
+        assert!(!missing_files.contains(&"Key".to_string()));
+        
+        // Basic type should not be treated as missing
+        assert!(!missing_files.contains(&"str".to_string()));
     }
 }

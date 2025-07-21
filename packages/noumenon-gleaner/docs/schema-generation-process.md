@@ -63,11 +63,12 @@ int32,str,str,byte,bool
 
 ### 특별 타입
 
-| CSV 표기 | Rust FieldType | 설명                                |
-| -------- | -------------- | ----------------------------------- |
-| `Image`  | `Image`        | UI 이미지 파일 ID (그대로 보존)     |
-| `Row`    | `Row`          | 다른 테이블의 행 참조 (그대로 보존) |
-| `Key`    | `Key`          | 키 타입 식별자 (그대로 보존)        |
+| CSV 표기 | Rust FieldType | TypeScript 타입 | 설명                                      |
+| -------- | -------------- | --------------- | ----------------------------------------- |
+| `Image`  | `Image`        | `ImagePath`     | UI 이미지 파일 ID (그대로 보존)           |
+| `Row`    | `Row`          | `RowId`         | 다른 테이블의 행 참조 (그대로 보존)       |
+| `Key`    | `Key`          | `KeyString`     | 키 타입 식별자 (그대로 보존)              |
+| `Color`  | `Color`        | `ColorCode`     | 색상 코드 (number로 변환, 외부 파일 참조 안함) |
 
 #### Image 타입 사용 예시
 
@@ -85,6 +86,23 @@ int32,str,str,Image
 
 **생성되는 Rust FieldType**: `FieldType::Image`
 
+#### Color 타입 사용 예시
+
+`Color` 타입은 색상 코드를 나타내는 특별한 타입입니다. 이 타입은 외부 Color.csv 파일을 참조하지 않고 number 타입으로 처리됩니다.
+
+**CSV 예시:**
+
+```csv
+key,0,1,2
+#,Name,Description,TextColor
+int32,str,str,Color
+1,"Fire Element","Element of fire",16711680
+2,"Water Element","Element of water",255
+```
+
+**생성되는 Rust FieldType**: `FieldType::Color`
+**TypeScript 출력**: `ColorCode` (number alias)
+
 ### 커스텀 타입
 
 다음 조건을 만족하는 타입은 커스텀 타입으로 인식됩니다:
@@ -94,7 +112,7 @@ int32,str,str,Image
 
 커스텀 타입이 발견되면 동일한 디렉토리에서 `<타입명>.csv` 파일을 찾아 재귀적으로 스키마를 생성합니다.
 
-**주의**: `Image`와 `Row` 타입은 특별 타입으로 분류되어 커스텀 타입 탐색을 하지 않고 그대로 보존됩니다.
+**주의**: `Image`, `Row`, `Key`, `Color` 타입은 특별 타입으로 분류되어 커스텀 타입 탐색을 하지 않고 각각의 고유한 방식으로 처리됩니다.
 
 ## 스키마 생성 프로세스
 
@@ -210,8 +228,8 @@ pub enum FieldType {
     String, Int32, Uint32, Int16, Uint16,
     Byte, SByte, Float, Bool, Bit(u8),
 
-    // 특별 타입 (CSV: Image, Row, Key)
-    Image, Row, Key,
+    // 특별 타입 (CSV: Image, Row, Key, Color)
+    Image, Row, Key, Color,
 
     // 커스텀 타입 (CSV: ItemCategory, ClassJob 등)
     Custom(String),
