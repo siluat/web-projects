@@ -23,6 +23,9 @@ jobs:
         with:
           node-version: 20.x
 
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+
       - name: Install Dependencies
         run: pnpm i
 
