@@ -45,13 +45,14 @@ impl SchemaBuilder {
                 reason: "Cannot extract schema name from file path".to_string(),
             })?;
 
-        self.build_schema_recursive(&schema_name, path.parent().unwrap_or(Path::new(".")))
+        self.build_schema_recursive(&schema_name, path.parent().unwrap_or(Path::new(".")), path)
     }
 
     fn build_schema_recursive(
         &mut self,
         schema_name: &str,
         base_dir: &Path,
+        source_file: &Path,
     ) -> Result<String, SchemaError> {
         // Return if already processed
         if self.schemas.contains_key(schema_name) {
@@ -75,10 +76,11 @@ impl SchemaBuilder {
             self.processing_stack.remove(&schema_name.to_string());
             return Err(SchemaError::FileNotFound {
                 path: csv_path.to_string_lossy().to_string(),
+                source_file: source_file.to_string_lossy().to_string(),
             });
         }
 
-        let schema = self.parse_csv_file(&csv_path, schema_name, base_dir)?;
+        let schema = self.parse_csv_file(&csv_path, schema_name, base_dir, source_file)?;
         self.schemas.insert(schema_name.to_string(), schema);
 
         // Remove from processing stack
@@ -92,6 +94,7 @@ impl SchemaBuilder {
         csv_path: &Path,
         schema_name: &str,
         base_dir: &Path,
+        _source_file: &Path,
     ) -> Result<Schema, SchemaError> {
         let file = File::open(csv_path)?;
         let mut rdr = csv::ReaderBuilder::new()
@@ -134,7 +137,7 @@ impl SchemaBuilder {
             let field_type = if description == "Key" {
                 FieldType::Key
             } else {
-                self.parse_field_type(type_str, base_dir)?
+                self.parse_field_type(type_str, base_dir, csv_path)?
             };
 
             // Determine the best field name to use
@@ -186,6 +189,7 @@ impl SchemaBuilder {
         &mut self,
         type_str: &str,
         base_dir: &Path,
+        current_file: &Path,
     ) -> Result<FieldType, SchemaError> {
         let trimmed = type_str.trim();
 
@@ -207,6 +211,7 @@ impl SchemaBuilder {
                         "Image" => Ok(FieldType::Image),
                         "Row" => Ok(FieldType::Row),
                         "Key" => Ok(FieldType::Key),
+                        "Color" => Ok(FieldType::Color),
                         _ => Ok(FieldType::Custom(trimmed.to_string())), // For future special types
                     }
                 }
@@ -217,7 +222,7 @@ impl SchemaBuilder {
                 }
                 // Custom types that reference other CSV files
                 else if is_likely_custom_type(trimmed) {
-                    self.build_schema_recursive(trimmed, base_dir)?;
+                    self.build_schema_recursive(trimmed, base_dir, current_file)?;
                     Ok(FieldType::Custom(trimmed.to_string()))
                 }
                 // Unknown types default to string
@@ -633,5 +638,73 @@ mod tests {
 
         assert_eq!(schema.fields[3].name, "ref");
         assert_eq!(schema.fields[3].field_type, FieldType::Row);
+    }
+
+    #[test]
+    fn test_color_type_parsing() {
+        let temp_dir = TempDir::new().unwrap();
+        let content =
+            "key,0,1,2\n#,Name,Description,BackgroundColor\nint32,str,str,Color\n1,\"Fire Element\",\"Element of fire\",16711680\n2,\"Water Element\",\"Element of water\",255";
+        let file_path = create_test_csv(&temp_dir, "ColorTest", content);
+
+        let mut builder = SchemaBuilder::new();
+        let result = builder.build_schema_from_file(&file_path);
+
+        assert!(result.is_ok());
+        let schema_name = result.unwrap();
+        assert_eq!(schema_name, "ColorTest");
+
+        let schema = &builder.get_all_schemas()["ColorTest"];
+        assert_eq!(schema.name, "ColorTest");
+        assert_eq!(schema.fields.len(), 4);
+
+        assert_eq!(schema.fields[0].name, "id");
+        assert_eq!(schema.fields[0].field_type, FieldType::Int32);
+
+        assert_eq!(schema.fields[1].name, "name");
+        assert_eq!(schema.fields[1].field_type, FieldType::String);
+
+        assert_eq!(schema.fields[2].name, "description");
+        assert_eq!(schema.fields[2].field_type, FieldType::String);
+
+        assert_eq!(schema.fields[3].name, "backgroundColor");
+        assert_eq!(schema.fields[3].field_type, FieldType::Color);
+    }
+
+    #[test]
+    fn test_mixed_special_types_with_color() {
+        let temp_dir = TempDir::new().unwrap();
+        let content =
+            "key,0,1,2,3,4\n#,Name,Icon,Ref,TextColor,Status\nint32,str,Image,Row,Color,Key\n1,\"Test Item\",\"021001\",0,16777215,\"active\"";
+        let file_path = create_test_csv(&temp_dir, "MixedSpecialTypes", content);
+
+        let mut builder = SchemaBuilder::new();
+        let result = builder.build_schema_from_file(&file_path);
+
+        assert!(result.is_ok());
+        let schema_name = result.unwrap();
+        assert_eq!(schema_name, "MixedSpecialTypes");
+
+        let schema = &builder.get_all_schemas()["MixedSpecialTypes"];
+        assert_eq!(schema.name, "MixedSpecialTypes");
+        assert_eq!(schema.fields.len(), 6);
+
+        assert_eq!(schema.fields[0].name, "id");
+        assert_eq!(schema.fields[0].field_type, FieldType::Int32);
+
+        assert_eq!(schema.fields[1].name, "name");
+        assert_eq!(schema.fields[1].field_type, FieldType::String);
+
+        assert_eq!(schema.fields[2].name, "icon");
+        assert_eq!(schema.fields[2].field_type, FieldType::Image);
+
+        assert_eq!(schema.fields[3].name, "ref");
+        assert_eq!(schema.fields[3].field_type, FieldType::Row);
+
+        assert_eq!(schema.fields[4].name, "textColor");
+        assert_eq!(schema.fields[4].field_type, FieldType::Color);
+
+        assert_eq!(schema.fields[5].name, "status");
+        assert_eq!(schema.fields[5].field_type, FieldType::Key);
     }
 }

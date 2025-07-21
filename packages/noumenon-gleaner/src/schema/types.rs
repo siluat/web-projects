@@ -18,6 +18,7 @@ pub enum FieldType {
     Image, // UI image file path - preserved as-is without processing
     Row,   // Row type - preserved as-is without processing
     Key,   // Key type - string identifier preserved as-is without processing
+    Color, // Color type - converted to number (color code)
 
     // Custom types that reference other CSV files
     Custom(String),
@@ -46,7 +47,10 @@ mod tests {
     fn test_field_type_equality() {
         assert_eq!(FieldType::Image, FieldType::Image);
         assert_eq!(FieldType::Row, FieldType::Row);
+        assert_eq!(FieldType::Color, FieldType::Color);
         assert_ne!(FieldType::Image, FieldType::Row);
+        assert_ne!(FieldType::Color, FieldType::Image);
+        assert_ne!(FieldType::Color, FieldType::Row);
     }
 
     #[test]
@@ -58,6 +62,17 @@ mod tests {
 
         assert_eq!(field.name, "test_field");
         assert_eq!(field.field_type, FieldType::Image);
+    }
+
+    #[test]
+    fn test_color_field_creation() {
+        let color_field = Field {
+            name: "background_color".to_string(),
+            field_type: FieldType::Color,
+        };
+
+        assert_eq!(color_field.name, "background_color");
+        assert_eq!(color_field.field_type, FieldType::Color);
     }
 
     #[test]

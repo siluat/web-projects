@@ -9,7 +9,7 @@ pub const CUSTOM_TYPE_PATTERNS: &[&str] = &[
 ];
 
 /// Special type names that have unique processing rules
-pub const SPECIAL_TYPES: &[&str] = &["Image", "Row", "Key"];
+pub const SPECIAL_TYPES: &[&str] = &["Image", "Row", "Key", "Color"];
 
 /// Header indicators for CSV row detection
 pub const FIELD_NAMES_HEADER: &str = "key";
