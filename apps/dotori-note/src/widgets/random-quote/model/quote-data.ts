@@ -38,4 +38,9 @@ export const quotes: NonEmptyArray<Quote> = [
     translated:
       '내게 가장 생산적인 날 중 하나는, 1000 라인 이상의 코드를 버렸던 날이다.',
   },
+  {
+    source: 'Oliver Wendell Holmes',
+    original:
+      'It is the province of knowledge to speak and it is the privilege of wisdom to listen.',
+  },
 ];
