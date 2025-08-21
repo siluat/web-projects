@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro build && astro preview",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "postinstall": "playwright install"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.0",
