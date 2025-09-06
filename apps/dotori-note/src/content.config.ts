@@ -12,4 +12,18 @@ const notes = defineCollection({
   }),
 });
 
-export const collections = { notes };
+const bookReviews = defineCollection({
+  loader: glob({ pattern: 'book-reviews.json', base: './collection/reviews' }),
+  schema: z.record(
+    z.string(),
+    z.object({
+      title: z.string(),
+      author: z.string(),
+      publisher: z.string(),
+      link: z.string().optional(),
+      reviews: z.array(z.string()),
+    }),
+  ),
+});
+
+export const collections = { notes, bookReviews };

@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+
+const bookReviews = await getCollection('bookReviews');
+const reviews = bookReviews.find((review) => review.id === 'book-reviews')?.data || {};
+---
+
+{Object.entries(reviews).map(([_key, book]) => (
+  <div class="flex items-baseline gap-2">
+    <h2 class="text-lg">
+      {book.title}
+    </h3>
+    {book.link && (
+      <a 
+        href={book.link} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-flex items-center"
+        title="View Book"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+        </svg>
+      </a>
+    )}
+  </div>
+  <section class="book-meta text-sm mt-0">
+    <div class="flex flex-wrap gap-2">
+      <span>{book.author}</span>
+      <span>|</span>
+      <span>{book.publisher}</span>
+    </div>
+  </section>
+  
+  <section class="reviews-section">
+      {book.reviews.map((review, _index) => (
+        <p>{review}</p>
+      ))}
+  </section>
+))}
+
+{Object.keys(reviews).length === 0 && (
+  <div class="empty-state text-center py-12">
+    <p class="text-lg">데이터가 존재하지 않아요</p>
+  </div>
+)}
