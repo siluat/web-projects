@@ -1,13 +1,6 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@siluat/shadcn-ui/components/sidebar';
+import { Sidebar, SidebarProvider } from '@siluat/shadcn-ui/components/sidebar';
 import { ThemeProvider } from './_components/ThemeProvider';
+import { TopBar } from './_components/TopBar';
 import './global.css';
 
 export default function RootLayout({
@@ -30,18 +23,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider>
-            <Sidebar>
-              <SidebarHeader />
-              <SidebarContent>
-                <SidebarGroup />
-                <SidebarGroup />
-              </SidebarContent>
-              <SidebarFooter />
-            </Sidebar>
-            <main>
-              <SidebarTrigger />
-              {children}
-            </main>
+            <div className="flex w-dvw">
+              <Sidebar></Sidebar>
+              <div className="flex grow flex-col">
+                <TopBar />
+                <main className="grow grid place-items-center">{children}</main>
+              </div>
+            </div>
           </SidebarProvider>
         </ThemeProvider>
       </body>
