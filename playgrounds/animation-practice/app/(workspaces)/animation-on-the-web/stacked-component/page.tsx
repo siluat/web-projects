@@ -28,7 +28,7 @@ interface StackedComponentProps {
 export function StackedComponent({ length = 3 }: StackedComponentProps) {
   return (
     <div className="wrapper">
-      {new Array(length).fill(0).map((_, i) => (
+      {Array.from({ length }).map((_, i) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: not important in this case
         <div className="card" key={i} />
       ))}
