@@ -1,11 +1,22 @@
+'use client';
+
+import { useControls } from 'leva';
 import { PageTitle } from '@/app/_components/PageTitle';
 import './styles.css';
 
 export default function Page() {
+  const { length } = useControls({
+    length: {
+      value: 3,
+      min: 1,
+      step: 1,
+    },
+  });
+
   return (
     <>
       <PageTitle title="Stacked Component" />
-      <StackedComponent length={3} />
+      <StackedComponent length={length} />
     </>
   );
 }
