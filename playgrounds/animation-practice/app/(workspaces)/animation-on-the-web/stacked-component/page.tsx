@@ -44,7 +44,7 @@ export function StackedComponent({
   translateIncrement = defaultProps.translateIncrement,
 }: StackedComponentProps) {
   return (
-    <div className="wrapper">
+    <div className="stacked-component-wrapper">
       {Array.from({ length: LENGTH }).map((_, i) => (
         <div
           className="card"
