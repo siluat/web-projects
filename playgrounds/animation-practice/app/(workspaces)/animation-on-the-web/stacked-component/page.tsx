@@ -5,10 +5,13 @@ import { PageTitle } from '@/app/_components/PageTitle';
 import './styles.css';
 
 export default function Page() {
-  const { length } = useControls({
-    length: {
-      value: 3,
-      min: 1,
+  const { scaleIncrement, translateIncrement } = useControls({
+    scaleIncrement: {
+      value: defaultProps.scaleIncrement,
+      step: 0.01,
+    },
+    translateIncrement: {
+      value: defaultProps.translateIncrement,
       step: 1,
     },
   });
@@ -16,21 +19,45 @@ export default function Page() {
   return (
     <>
       <PageTitle title="Stacked Component" />
-      <StackedComponent length={length} />
+      <StackedComponent
+        scaleIncrement={scaleIncrement}
+        translateIncrement={translateIncrement}
+      />
     </>
   );
 }
 
 interface StackedComponentProps {
-  length?: number;
+  scaleIncrement: number;
+  translateIncrement: string;
 }
 
-export function StackedComponent({ length = 3 }: StackedComponentProps) {
+const defaultProps: StackedComponentProps = {
+  scaleIncrement: 0.05,
+  translateIncrement: '-13%',
+};
+
+const LENGTH = 3;
+
+export function StackedComponent({
+  scaleIncrement = defaultProps.scaleIncrement,
+  translateIncrement = defaultProps.translateIncrement,
+}: StackedComponentProps) {
   return (
-    <div className="wrapper">
-      {Array.from({ length }).map((_, i) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: not important in this case
-        <div className="card" key={i} />
+    <div className="stacked-component-wrapper">
+      {Array.from({ length: LENGTH }).map((_, i) => (
+        <div
+          className="card"
+          // biome-ignore lint/suspicious/noArrayIndexKey: not important in this case
+          key={i}
+          style={
+            {
+              '--index': LENGTH - 1 - i,
+              '--scale-increment': `${scaleIncrement}`,
+              '--translate-increment': `${translateIncrement}`,
+            } as React.CSSProperties
+          }
+        />
       ))}
     </div>
   );

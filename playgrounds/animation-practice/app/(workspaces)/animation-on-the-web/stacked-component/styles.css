@@ -1,8 +1,8 @@
-.wrapper {
+.stacked-component-wrapper {
   display: grid;
 }
 
-.card {
+.stacked-component-wrapper .card {
   width: 356px;
   height: 74px;
   box-shadow: 0 4px 12px #0000001a;
@@ -10,4 +10,7 @@
   background: white;
   border-radius: 8px;
   grid-area: 1 / 1;
+
+  transform: scale(calc(1 - var(--index) * var(--scale-increment)))
+    translateY(calc(var(--index) * var(--translate-increment)));
 }
