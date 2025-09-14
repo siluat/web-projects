@@ -51,9 +51,7 @@ export function AppSidebar() {
                   <div className="flex flex-col gap-2 leading-none">
                     <span className="font-medium">Workspace</span>
                     <span className="">
-                      {selectedWorkspaceName
-                        ? selectedWorkspaceName
-                        : 'No workspace selected'}
+                      {workspace?.name ?? 'No workspace selected'}
                     </span>
                   </div>
                   <ChevronsUpDown className="ml-auto" />
