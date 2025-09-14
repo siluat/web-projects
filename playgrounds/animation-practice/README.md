@@ -10,5 +10,5 @@ A playground for practicing UI animations.
 
 ### Adding a new practice
 
-1. Create a new page in `app/(scope)/**`
+1. Create a new page in `app/(workspaces)/**`
 2. Add the name and link to the sidebar configuration in `app/_config/sidebar.config.ts`
