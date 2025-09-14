@@ -1,0 +1,13 @@
+.wrapper {
+  display: grid;
+}
+
+.card {
+  width: 356px;
+  height: 74px;
+  box-shadow: 0 4px 12px #0000001a;
+  border: 1px solid #eeeeee;
+  background: white;
+  border-radius: 8px;
+  grid-area: 1 / 1;
+}

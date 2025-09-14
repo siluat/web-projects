@@ -1,4 +1,5 @@
-import { Sidebar, SidebarProvider } from '@siluat/shadcn-ui/components/sidebar';
+import { SidebarProvider } from '@siluat/shadcn-ui/components/sidebar';
+import { AppSidebar } from './_components/AppSidebar';
 import { ThemeProvider } from './_components/ThemeProvider';
 import { TopBar } from './_components/TopBar';
 import './global.css';
@@ -24,7 +25,7 @@ export default function RootLayout({
         >
           <SidebarProvider>
             <div className="flex w-dvw">
-              <Sidebar></Sidebar>
+              <AppSidebar />
               <div className="flex grow flex-col">
                 <TopBar />
                 <main className="grow grid place-items-center">{children}</main>

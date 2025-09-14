@@ -1,3 +1,3 @@
 export default function Page() {
-  return <h1>No content</h1>;
+  return <h1>Select a component from the sidebar</h1>;
 }
