@@ -1,0 +1,18 @@
+{
+  "extends": "@siluat/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["*"],
+      "@siluat/shadcn-ui/*": ["../../packages/shadcn-ui/src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}
