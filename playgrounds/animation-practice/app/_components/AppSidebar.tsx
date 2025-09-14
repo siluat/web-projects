@@ -50,9 +50,7 @@ export function AppSidebar() {
                 >
                   <div className="flex flex-col gap-2 leading-none">
                     <span className="font-medium">Workspace</span>
-                    <span className="">
-                      {workspace?.name ?? 'No workspace selected'}
-                    </span>
+                    <span>{workspace?.name ?? 'No workspace selected'}</span>
                   </div>
                   <ChevronsUpDown className="ml-auto" />
                 </SidebarMenuButton>
@@ -62,11 +60,16 @@ export function AppSidebar() {
                 align="start"
               >
                 {sidebarConfig.workspaces.map((workspace) => (
-                  <DropdownMenuItem key={workspace.name}>
-                    <Link href={workspace.pathname}>{workspace.name}</Link>
-                    {workspace.pathname === selectedWorkspaceName && (
-                      <Check className="ml-auto" />
-                    )}
+                  <DropdownMenuItem key={workspace.name} asChild>
+                    <Link
+                      href={`/${workspace.pathname}`}
+                      className="flex w-full items-center"
+                    >
+                      {workspace.name}
+                      {workspace.pathname === selectedWorkspaceName && (
+                        <Check className="ml-auto" />
+                      )}
+                    </Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
