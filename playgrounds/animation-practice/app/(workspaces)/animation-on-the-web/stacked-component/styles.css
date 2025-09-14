@@ -10,4 +10,7 @@
   background: white;
   border-radius: 8px;
   grid-area: 1 / 1;
+
+  transform: scale(calc(1 - var(--index) * var(--scale-increment)))
+    translateY(calc(var(--index) * var(--translate-increment)));
 }
