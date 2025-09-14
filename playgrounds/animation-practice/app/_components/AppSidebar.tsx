@@ -27,15 +27,15 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
 
-  const selectedWorkspaceName = useMemo(() => {
+  const selectedWorkspacePathname = useMemo(() => {
     return pathname.split('/')[1];
   }, [pathname]);
 
   const workspace = useMemo(() => {
     return sidebarConfig.workspaces.find(
-      (workspace) => workspace.pathname === selectedWorkspaceName,
+      (workspace) => workspace.pathname === selectedWorkspacePathname,
     );
-  }, [selectedWorkspaceName]);
+  }, [selectedWorkspacePathname]);
 
   return (
     <Sidebar>
@@ -66,7 +66,7 @@ export function AppSidebar() {
                       className="flex w-full items-center"
                     >
                       {workspace.name}
-                      {workspace.pathname === selectedWorkspaceName && (
+                      {workspace.pathname === selectedWorkspacePathname && (
                         <Check className="ml-auto" />
                       )}
                     </Link>
