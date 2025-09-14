@@ -1,5 +1,6 @@
 interface Workspace {
   name: string;
+  pathname: string;
   groups: WorkspaceItemGroup[];
 }
 
@@ -20,6 +21,7 @@ interface SidebarConfig {
 export const sidebarConfig: SidebarConfig = {
   workspaces: [
     {
+      pathname: 'animation-on-the-web',
       name: 'Animation on the Web by Emil',
       groups: [
         {
@@ -27,7 +29,7 @@ export const sidebarConfig: SidebarConfig = {
           items: [
             {
               name: 'Stacked Component',
-              href: '/stacked-component',
+              href: '/animation-on-the-web/stacked-component',
             },
           ],
         },

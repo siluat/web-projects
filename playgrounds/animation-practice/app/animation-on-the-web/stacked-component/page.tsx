@@ -19,7 +19,7 @@ export function StackedComponent({ length = 3 }: StackedComponentProps) {
     <div className="wrapper">
       {new Array(length).fill(0).map((_, i) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: not important in this case
-        <div className={`card transform translate-y-${i * 10}`} key={i} />
+        <div className="card" key={i} />
       ))}
     </div>
   );

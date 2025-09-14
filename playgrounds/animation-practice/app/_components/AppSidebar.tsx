@@ -19,19 +19,21 @@ import {
 } from '@siluat/shadcn-ui/components/sidebar';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
 import { sidebarConfig } from '../_config/sidebar.config';
 
 export function AppSidebar() {
+  const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
 
-  const [selectedWorkspaceName, setSelectedWorkspaceName] = useState<
-    string | undefined
-  >(sidebarConfig.workspaces[0]?.name);
+  const selectedWorkspaceName = useMemo(() => {
+    return pathname.split('/')[1];
+  }, [pathname]);
 
   const workspace = useMemo(() => {
     return sidebarConfig.workspaces.find(
-      (workspace) => workspace.name === selectedWorkspaceName,
+      (workspace) => workspace.pathname === selectedWorkspaceName,
     );
   }, [selectedWorkspaceName]);
 
@@ -49,7 +51,9 @@ export function AppSidebar() {
                   <div className="flex flex-col gap-2 leading-none">
                     <span className="font-medium">Workspace</span>
                     <span className="">
-                      {selectedWorkspaceName ?? 'No workspace selected'}
+                      {selectedWorkspaceName
+                        ? selectedWorkspaceName
+                        : 'No workspace selected'}
                     </span>
                   </div>
                   <ChevronsUpDown className="ml-auto" />
@@ -60,12 +64,9 @@ export function AppSidebar() {
                 align="start"
               >
                 {sidebarConfig.workspaces.map((workspace) => (
-                  <DropdownMenuItem
-                    key={workspace.name}
-                    onSelect={() => setSelectedWorkspaceName(workspace.name)}
-                  >
-                    {workspace.name}
-                    {workspace.name === selectedWorkspaceName && (
+                  <DropdownMenuItem key={workspace.name}>
+                    <Link href={workspace.pathname}>{workspace.name}</Link>
+                    {workspace.pathname === selectedWorkspaceName && (
                       <Check className="ml-auto" />
                     )}
                   </DropdownMenuItem>
