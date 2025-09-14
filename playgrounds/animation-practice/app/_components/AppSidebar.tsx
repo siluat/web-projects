@@ -60,7 +60,7 @@ export function AppSidebar() {
                 align="start"
               >
                 {sidebarConfig.workspaces.map((workspace) => (
-                  <DropdownMenuItem key={workspace.name} asChild>
+                  <DropdownMenuItem key={workspace.pathname} asChild>
                     <Link
                       href={`/${workspace.pathname}`}
                       className="flex w-full items-center"
