@@ -28,7 +28,11 @@ export const sidebarConfig: SidebarConfig = {
           name: 'CSS Animations',
           items: [
             {
-              name: 'Stacked Component',
+              name: 'Button press animation',
+              href: '/animation-on-the-web/button-press-animation',
+            },
+            {
+              name: 'Stacked component',
               href: '/animation-on-the-web/stacked-component',
             },
           ],
