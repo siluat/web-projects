@@ -1,0 +1,10 @@
+{
+  "name": "dotori-garden",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal Knowledge Garden",
+  "scripts": {
+    "build": "cd ../../packages/quartz && pnpm quartz build -d ../../apps/dotori-garden/content",
+    "serve": "cd ../../packages/quartz && pnpm quartz build --serve -d ../../apps/dotori-garden/content"
+  }
+}
