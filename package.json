@@ -14,15 +14,12 @@
     "dev": "turbo dev",
     "build": "turbo run build",
     "test": "turbo run test",
-    "changeset": "changeset",
     "format-and-lint": "biome check .",
     "format-and-lint:fix": "biome check . --write",
     "static-check": "turbo run check-types && turbo run format-and-lint"
   },
   "devDependencies": {
     "@biomejs/biome": "2.1.2",
-    "@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.29.5",
     "@turbo/gen": "^2.5.5",
     "lefthook": "^1.12.2",
     "turbo": "^2.5.5"
