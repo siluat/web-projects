@@ -4,8 +4,8 @@
 
 **Package Management:**
 
-- `pnpm` is the package manager (version 10.13.1+)
-- Node.js 22.5.0+ required
+- `bun` is the package manager (version 1.3.4)
+- Bun 1.3.4+ or Node.js 22.5.0+ and required
 
 **Build & Development:**
 
@@ -28,7 +28,7 @@
 
 ## Repository Architecture
 
-This is a monorepo managed by Turborepo and pnpm workspaces with the following structure:
+This is a monorepo managed by Turborepo and bun workspaces with the following structure:
 
 **Apps (`apps/`):**
 
@@ -55,7 +55,7 @@ This is a monorepo managed by Turborepo and pnpm workspaces with the following s
 - **Backend/CLI:** Rust with Cargo
 - **Testing:** Vitest (React components), Playwright (E2E)
 - **Build Tools:** Turborepo, Biome (formatting/linting)
-- **Package Management:** pnpm workspaces
+- **Package Management:** bun workspaces
 
 ## Code Quality Standards
 

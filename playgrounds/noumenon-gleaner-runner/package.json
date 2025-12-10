@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Testing playground for Noumenon Gleaner",
   "scripts": {
-    "test": "pnpm exec noumenon-gleaner --version"
+    "test": "bun x noumenon-gleaner --version"
   },
   "devDependencies": {
     "noumenon-gleaner": "workspace:*"

@@ -11,7 +11,7 @@ My personal UI animation crafting practice.
 1. Run the following command for development or testing
 
 ```bash
-repository-root@ pnpm dev:ui-craft
+repository-root@ bun dev:ui-craft
 ```
 
 2. Work on UI components in `packages/ui-craft`.
