@@ -19,7 +19,7 @@
     "static-check": "turbo run check-types && turbo run format-and-lint"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.1.2",
+    "@biomejs/biome": "2.3.8",
     "@turbo/gen": "^2.5.5",
     "lefthook": "^2.0.9",
     "turbo": "^2.5.5"
