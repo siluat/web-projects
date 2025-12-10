@@ -2,9 +2,7 @@
   "name": "noumenon-gleaner-runner",
   "version": "1.0.0",
   "description": "Testing playground for Noumenon Gleaner",
-  "scripts": {
-    "test": "bun x noumenon-gleaner --version"
-  },
+  "scripts": {},
   "devDependencies": {
     "noumenon-gleaner": "workspace:*"
   }
