@@ -4,9 +4,10 @@
 
 ## 특징
 
-- **다중 테마 지원**: Blue, Green, Purple, Orange 테마 제공
-- **Color Scheme 지원**: 각 테마별 라이트/다크 color scheme 지원
-- **Tailwind 독립적**: CSS Custom Properties 기반으로 모든 환경에서 사용 가능
+- **Light/Dark 테마**: `data-theme` 속성으로 테마 전환
+- **Primary Color 커스터마이징**: `data-primary` 속성으로 primary color 변경
+- **시스템 설정 지원**: `prefers-color-scheme` 미디어 쿼리 자동 대응
+- **Tailwind 호환**: CSS 변수 기반으로 Tailwind와 완벽 호환
 - **접근성 검사**: Storybook addon-a11y를 통한 WCAG 대비 비율 검사
 
 ## 설치
@@ -23,20 +24,17 @@ bun add @repo/color-tokens
 @import '@repo/color-tokens/themes.css';
 ```
 
-또는
-
-```css
-@import '@repo/color-tokens/index.css';
-```
-
-### 테마 및 Color Scheme 설정
-
-HTML 요소에 `data-theme`과 `data-color-scheme` 속성을 추가하여 테마와 color scheme을 설정합니다:
+### 테마 및 Primary Color 설정
 
 ```html
-<html data-theme="blue" data-color-scheme="light">
-  <!-- 콘텐츠 -->
-</html>
+<!-- 라이트 테마 + 파란색 primary (기본값) -->
+<html data-theme="light">
+
+<!-- 다크 테마 + 보라색 primary -->
+<html data-theme="dark" data-primary="purple">
+
+<!-- 시스템 설정 따르기 + 초록색 primary -->
+<html data-primary="green">
 ```
 
 ### CSS에서 사용
@@ -54,19 +52,39 @@ HTML 요소에 `data-theme`과 `data-color-scheme` 속성을 추가하여 테마
 }
 ```
 
+### Tailwind CSS와 함께 사용
+
+```css
+/* Tailwind CSS v4 */
+@import '@repo/color-tokens/themes.css';
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: var(--color-primary-500);
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+}
+```
+
+```html
+<button class="bg-primary text-primary-foreground">Click</button>
+```
+
 ### TypeScript에서 사용
 
 ```typescript
-import { setTheme, setColorScheme, themeColors, colorThemes } from '@repo/color-tokens';
+import { setTheme, setPrimaryColor, themes, primaryColors } from '@repo/color-tokens';
 
 // 테마 변경
-setTheme(document.documentElement, 'purple');
+setTheme(document.documentElement, 'dark');
 
-// Color scheme 변경
-setColorScheme(document.documentElement, 'dark');
+// Primary color 변경
+setPrimaryColor(document.documentElement, 'purple');
 
 // 색상 값 직접 접근
-const primaryBlue500 = themeColors.blue['500']; // '#3b82f6'
+import { primaryColorPalettes, themeColors } from '@repo/color-tokens';
+const blue500 = primaryColorPalettes.blue['500']; // '#3b82f6'
+const lightBg = themeColors.light.background; // '#ffffff'
 ```
 
 ## 사용 가능한 CSS 변수
@@ -83,13 +101,18 @@ const primaryBlue500 = themeColors.blue['500']; // '#3b82f6'
 | `--color-muted-foreground` | 음소거된 텍스트 |
 | `--color-border` | 테두리 색상 |
 
-### Primary 색상 단계
+### Primary Color 단계
 
-각 테마는 50~950 단계의 색상을 제공합니다:
+각 primary color는 50~950 단계의 색상을 제공합니다:
 
 - `--color-primary-50` ~ `--color-primary-950`
 
 ## 테마 목록
+
+- `light` (기본값)
+- `dark`
+
+## Primary Color 목록
 
 - `blue` (기본값)
 - `green`

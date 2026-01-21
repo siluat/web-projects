@@ -9,14 +9,14 @@ const meta: Meta<typeof ColorPalette> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    theme: {
+    primary: {
       control: 'select',
       options: [undefined, 'blue', 'green', 'purple', 'orange'],
-      description: 'Filter to show only a specific theme',
+      description: 'Filter to show only a specific primary color',
     },
-    showBaseColors: {
+    showThemeColors: {
       control: 'boolean',
-      description: 'Whether to show base semantic colors',
+      description: 'Whether to show theme colors',
     },
   },
 };
@@ -25,57 +25,57 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Shows all color themes and their shades (50-950).
+ * Shows all primary colors and their shades (50-950).
  */
-export const AllThemes: Story = {
+export const AllColors: Story = {
   args: {
-    showBaseColors: true,
+    showThemeColors: true,
   },
 };
 
 /**
- * Shows only the Blue theme palette.
+ * Shows only the Blue primary color palette.
  */
-export const BlueTheme: Story = {
+export const Blue: Story = {
   args: {
-    theme: 'blue',
-    showBaseColors: false,
+    primary: 'blue',
+    showThemeColors: false,
   },
 };
 
 /**
- * Shows only the Green theme palette.
+ * Shows only the Green primary color palette.
  */
-export const GreenTheme: Story = {
+export const Green: Story = {
   args: {
-    theme: 'green',
-    showBaseColors: false,
+    primary: 'green',
+    showThemeColors: false,
   },
 };
 
 /**
- * Shows only the Purple theme palette.
+ * Shows only the Purple primary color palette.
  */
-export const PurpleTheme: Story = {
+export const Purple: Story = {
   args: {
-    theme: 'purple',
-    showBaseColors: false,
+    primary: 'purple',
+    showThemeColors: false,
   },
 };
 
 /**
- * Shows only the Orange theme palette.
+ * Shows only the Orange primary color palette.
  */
-export const OrangeTheme: Story = {
+export const Orange: Story = {
   args: {
-    theme: 'orange',
-    showBaseColors: false,
+    primary: 'orange',
+    showThemeColors: false,
   },
 };
 
 /**
  * Demonstrates semantic colors using CSS variables.
- * Use the Theme and Mode toolbar controls to see how colors change.
+ * Use the Theme and Primary toolbar controls to see how colors change.
  */
 export const SemanticColors: StoryObj<typeof SemanticColorPreview> = {
   render: () => <SemanticColorPreview />,
@@ -83,7 +83,7 @@ export const SemanticColors: StoryObj<typeof SemanticColorPreview> = {
     docs: {
       description: {
         story:
-          'This story demonstrates how semantic color tokens respond to theme and mode changes. Use the Theme and Mode controls in the toolbar to see the colors update in real-time.',
+          'This story demonstrates how semantic color tokens respond to theme and primary color changes. Use the Theme and Primary controls in the toolbar to see the colors update in real-time.',
       },
     },
   },

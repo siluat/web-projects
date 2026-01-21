@@ -13,15 +13,15 @@ const meta: Meta<typeof ContrastChecker> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    theme: {
+    primary: {
       control: 'select',
       options: ['blue', 'green', 'purple', 'orange'],
-      description: 'Theme to check contrast for',
+      description: 'Primary color to check contrast for',
     },
-    colorScheme: {
+    theme: {
       control: 'radio',
       options: ['light', 'dark'],
-      description: 'Color scheme',
+      description: 'Theme',
     },
   },
 };
@@ -30,52 +30,52 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Shows contrast ratios for the Blue theme in light color scheme.
+ * Shows contrast ratios for Blue primary in light theme.
  */
-export const BlueLightScheme: Story = {
+export const BlueLight: Story = {
   args: {
-    theme: 'blue',
-    colorScheme: 'light',
+    primary: 'blue',
+    theme: 'light',
   },
 };
 
 /**
- * Shows contrast ratios for the Blue theme in dark color scheme.
+ * Shows contrast ratios for Blue primary in dark theme.
  */
-export const BlueDarkScheme: Story = {
+export const BlueDark: Story = {
   args: {
-    theme: 'blue',
-    colorScheme: 'dark',
+    primary: 'blue',
+    theme: 'dark',
   },
 };
 
 /**
- * Shows contrast ratios for the Green theme.
+ * Shows contrast ratios for Green primary.
  */
-export const GreenTheme: Story = {
+export const Green: Story = {
   args: {
-    theme: 'green',
-    colorScheme: 'light',
+    primary: 'green',
+    theme: 'light',
   },
 };
 
 /**
- * Shows contrast ratios for the Purple theme.
+ * Shows contrast ratios for Purple primary.
  */
-export const PurpleTheme: Story = {
+export const Purple: Story = {
   args: {
-    theme: 'purple',
-    colorScheme: 'light',
+    primary: 'purple',
+    theme: 'light',
   },
 };
 
 /**
- * Shows contrast ratios for the Orange theme.
+ * Shows contrast ratios for Orange primary.
  */
-export const OrangeTheme: Story = {
+export const Orange: Story = {
   args: {
-    theme: 'orange',
-    colorScheme: 'light',
+    primary: 'orange',
+    theme: 'light',
   },
 };
 
@@ -100,10 +100,10 @@ export const Interactive: StoryObj<typeof InteractiveContrastChecker> = {
 export const Matrix: StoryObj<typeof ContrastMatrix> = {
   render: (args) => <ContrastMatrix {...args} />,
   args: {
-    theme: 'blue',
+    primary: 'blue',
   },
   argTypes: {
-    theme: {
+    primary: {
       control: 'select',
       options: ['blue', 'green', 'purple', 'orange'],
     },
@@ -112,7 +112,7 @@ export const Matrix: StoryObj<typeof ContrastMatrix> = {
     docs: {
       description: {
         story:
-          'A matrix showing contrast ratios between all shades of a theme. Color-coded cells indicate WCAG compliance: green for AAA/AA, yellow for AA Large, and red for failing combinations.',
+          'A matrix showing contrast ratios between all shades of a primary color. Color-coded cells indicate WCAG compliance: green for AAA/AA, yellow for AA Large, and red for failing combinations.',
       },
     },
   },

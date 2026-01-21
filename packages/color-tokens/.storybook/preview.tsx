@@ -10,19 +10,28 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: 'light',
-      values: [
-        { name: 'light', value: '#ffffff' },
-        { name: 'dark', value: '#0a0a0a' },
-      ],
+      disable: true,
     },
   },
   globalTypes: {
     theme: {
-      description: 'Global theme for components',
-      defaultValue: 'blue',
+      description: 'Theme (light/dark)',
+      defaultValue: 'light',
       toolbar: {
         title: 'Theme',
+        icon: 'circlehollow',
+        items: [
+          { value: 'light', title: 'Light' },
+          { value: 'dark', title: 'Dark' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    primary: {
+      description: 'Primary color',
+      defaultValue: 'blue',
+      toolbar: {
+        title: 'Primary',
         icon: 'paintbrush',
         items: [
           { value: 'blue', title: 'Blue' },
@@ -33,29 +42,16 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
-    colorScheme: {
-      description: 'Color scheme for components',
-      defaultValue: 'light',
-      toolbar: {
-        title: 'Scheme',
-        icon: 'circlehollow',
-        items: [
-          { value: 'light', title: 'Light' },
-          { value: 'dark', title: 'Dark' },
-        ],
-        dynamicTitle: true,
-      },
-    },
   },
   decorators: [
     (Story, context) => {
-      const theme = context.globals.theme || 'blue';
-      const colorScheme = context.globals.colorScheme || 'light';
+      const theme = context.globals.theme || 'light';
+      const primary = context.globals.primary || 'blue';
 
       return (
         <div
           data-theme={theme}
-          data-color-scheme={colorScheme}
+          data-primary={primary}
           style={{
             backgroundColor: 'var(--color-background)',
             color: 'var(--color-foreground)',

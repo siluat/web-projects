@@ -3,48 +3,24 @@
  *
  * This file defines color tokens using CSS Custom Properties.
  * It supports:
- * - Multiple primary color themes (blue, green, purple, orange)
- * - Light and dark color scheme for each theme
+ * - Light and dark themes
+ * - Multiple primary colors (blue, green, purple, orange)
  * - Tailwind-independent usage via CSS variables
  *
  * Usage:
  * 1. Import this CSS file in your app
- * 2. Add data-theme="blue|green|purple|orange" to set primary color
- * 3. Add data-color-scheme="light|dark" to set color scheme
+ * 2. Add data-theme="light|dark" to set the theme
+ * 3. Add data-primary="blue|green|purple|orange" to set primary color
  *
  * Example:
- * <html data-theme="blue" data-color-scheme="light">
+ * <html data-theme="light" data-primary="blue">
  */
 
-:root {
-  /* Base colors - semantic tokens */
-  --color-background: var(--color-background-light);
-  --color-foreground: var(--color-foreground-light);
-  --color-primary: var(--color-primary-500);
-  --color-primary-foreground: var(--color-primary-foreground-light);
-  --color-muted: var(--color-muted-light);
-  --color-muted-foreground: var(--color-muted-foreground-light);
-  --color-border: var(--color-border-light);
-
-  /* Light mode base values */
-  --color-background-light: #ffffff;
-  --color-foreground-light: #0a0a0a;
-  --color-muted-light: #f5f5f5;
-  --color-muted-foreground-light: #737373;
-  --color-border-light: #e5e5e5;
-
-  /* Dark mode base values */
-  --color-background-dark: #0a0a0a;
-  --color-foreground-dark: #fafafa;
-  --color-muted-dark: #262626;
-  --color-muted-foreground-dark: #a3a3a3;
-  --color-border-dark: #262626;
-}
-
 /* ============================================
-   BLUE THEME
+   BASE: Primary color definitions (default: blue)
    ============================================ */
-[data-theme='blue'] {
+:root {
+  /* Default primary colors (blue) */
   --color-primary-50: #eff6ff;
   --color-primary-100: #dbeafe;
   --color-primary-200: #bfdbfe;
@@ -56,15 +32,29 @@
   --color-primary-800: #1e40af;
   --color-primary-900: #1e3a8a;
   --color-primary-950: #172554;
-
-  --color-primary-foreground-light: #ffffff;
-  --color-primary-foreground-dark: #ffffff;
 }
 
 /* ============================================
-   GREEN THEME
+   PRIMARY: Blue
    ============================================ */
-[data-theme='green'] {
+[data-primary='blue'] {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
+}
+
+/* ============================================
+   PRIMARY: Green
+   ============================================ */
+[data-primary='green'] {
   --color-primary-50: #f0fdf4;
   --color-primary-100: #dcfce7;
   --color-primary-200: #bbf7d0;
@@ -76,15 +66,12 @@
   --color-primary-800: #166534;
   --color-primary-900: #14532d;
   --color-primary-950: #052e16;
-
-  --color-primary-foreground-light: #ffffff;
-  --color-primary-foreground-dark: #ffffff;
 }
 
 /* ============================================
-   PURPLE THEME
+   PRIMARY: Purple
    ============================================ */
-[data-theme='purple'] {
+[data-primary='purple'] {
   --color-primary-50: #faf5ff;
   --color-primary-100: #f3e8ff;
   --color-primary-200: #e9d5ff;
@@ -96,15 +83,12 @@
   --color-primary-800: #6b21a8;
   --color-primary-900: #581c87;
   --color-primary-950: #3b0764;
-
-  --color-primary-foreground-light: #ffffff;
-  --color-primary-foreground-dark: #ffffff;
 }
 
 /* ============================================
-   ORANGE THEME
+   PRIMARY: Orange
    ============================================ */
-[data-theme='orange'] {
+[data-primary='orange'] {
   --color-primary-50: #fff7ed;
   --color-primary-100: #ffedd5;
   --color-primary-200: #fed7aa;
@@ -116,72 +100,66 @@
   --color-primary-800: #9a3412;
   --color-primary-900: #7c2d12;
   --color-primary-950: #431407;
-
-  --color-primary-foreground-light: #ffffff;
-  --color-primary-foreground-dark: #ffffff;
 }
 
 /* ============================================
-   DEFAULT THEME (Blue)
+   THEME: Light (default)
    ============================================ */
-:root {
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
-  --color-primary-950: #172554;
-
-  --color-primary-foreground-light: #ffffff;
-  --color-primary-foreground-dark: #ffffff;
-}
-
-/* ============================================
-   LIGHT COLOR SCHEME
-   ============================================ */
-[data-color-scheme='light'],
-:root {
+:root,
+[data-theme='light'] {
   color-scheme: light;
-  --color-background: var(--color-background-light);
-  --color-foreground: var(--color-foreground-light);
+
+  /* Background & Foreground */
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+
+  /* Muted */
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #737373;
+
+  /* Border */
+  --color-border: #e5e5e5;
+
+  /* Primary (uses shade 500 for light theme) */
   --color-primary: var(--color-primary-500);
-  --color-primary-foreground: var(--color-primary-foreground-light);
-  --color-muted: var(--color-muted-light);
-  --color-muted-foreground: var(--color-muted-foreground-light);
-  --color-border: var(--color-border-light);
+  --color-primary-foreground: #ffffff;
 }
 
 /* ============================================
-   DARK COLOR SCHEME
+   THEME: Dark
    ============================================ */
-[data-color-scheme='dark'] {
+[data-theme='dark'] {
   color-scheme: dark;
-  --color-background: var(--color-background-dark);
-  --color-foreground: var(--color-foreground-dark);
+
+  /* Background & Foreground */
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
+
+  /* Muted */
+  --color-muted: #262626;
+  --color-muted-foreground: #a3a3a3;
+
+  /* Border */
+  --color-border: #262626;
+
+  /* Primary (uses shade 400 for better visibility in dark theme) */
   --color-primary: var(--color-primary-400);
-  --color-primary-foreground: var(--color-primary-foreground-dark);
-  --color-muted: var(--color-muted-dark);
-  --color-muted-foreground: var(--color-muted-foreground-dark);
-  --color-border: var(--color-border-dark);
+  --color-primary-foreground: #000000;
 }
 
 /* ============================================
    SYSTEM PREFERENCE SUPPORT
    ============================================ */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-color-scheme]) {
+  :root:not([data-theme]) {
     color-scheme: dark;
-    --color-background: var(--color-background-dark);
-    --color-foreground: var(--color-foreground-dark);
+
+    --color-background: #0a0a0a;
+    --color-foreground: #fafafa;
+    --color-muted: #262626;
+    --color-muted-foreground: #a3a3a3;
+    --color-border: #262626;
     --color-primary: var(--color-primary-400);
-    --color-primary-foreground: var(--color-primary-foreground-dark);
-    --color-muted: var(--color-muted-dark);
-    --color-muted-foreground: var(--color-muted-foreground-dark);
-    --color-border: var(--color-border-dark);
+    --color-primary-foreground: #000000;
   }
 }

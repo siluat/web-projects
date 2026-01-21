@@ -5,14 +5,14 @@
  */
 
 /**
- * Available color themes
+ * Available themes (light/dark)
  */
-export type ColorTheme = 'blue' | 'green' | 'purple' | 'orange';
+export type Theme = 'light' | 'dark';
 
 /**
- * Available color schemes (light/dark)
+ * Available primary colors
  */
-export type ColorScheme = 'light' | 'dark';
+export type PrimaryColor = 'blue' | 'green' | 'purple' | 'orange';
 
 /**
  * Primary color shade levels
@@ -43,14 +43,19 @@ export type SemanticColorToken =
   | 'border';
 
 /**
- * All available color themes
+ * All available themes
  */
-export const colorThemes: ColorTheme[] = ['blue', 'green', 'purple', 'orange'];
+export const themes: Theme[] = ['light', 'dark'];
 
 /**
- * All available color schemes
+ * All available primary colors
  */
-export const colorSchemes: ColorScheme[] = ['light', 'dark'];
+export const primaryColors: PrimaryColor[] = [
+  'blue',
+  'green',
+  'purple',
+  'orange',
+];
 
 /**
  * All primary color shades
@@ -84,46 +89,47 @@ export function getSemanticColorVar(token: SemanticColorToken): string {
 }
 
 /**
- * Set the color theme on an element
+ * Set the theme on an element
  */
-export function setTheme(element: HTMLElement, theme: ColorTheme): void {
+export function setTheme(element: HTMLElement, theme: Theme): void {
   element.setAttribute('data-theme', theme);
 }
 
 /**
- * Set the color scheme on an element
+ * Set the primary color on an element
  */
-export function setColorScheme(
+export function setPrimaryColor(
   element: HTMLElement,
-  scheme: ColorScheme,
+  color: PrimaryColor,
 ): void {
-  element.setAttribute('data-color-scheme', scheme);
+  element.setAttribute('data-primary', color);
 }
 
 /**
  * Get the current theme from an element
  */
-export function getTheme(element: HTMLElement): ColorTheme | null {
+export function getTheme(element: HTMLElement): Theme | null {
   const theme = element.getAttribute('data-theme');
-  return colorThemes.includes(theme as ColorTheme)
-    ? (theme as ColorTheme)
+  return themes.includes(theme as Theme) ? (theme as Theme) : null;
+}
+
+/**
+ * Get the current primary color from an element
+ */
+export function getPrimaryColor(element: HTMLElement): PrimaryColor | null {
+  const color = element.getAttribute('data-primary');
+  return primaryColors.includes(color as PrimaryColor)
+    ? (color as PrimaryColor)
     : null;
 }
 
 /**
- * Get the current color scheme from an element
+ * Primary color palette definitions for programmatic access
  */
-export function getColorScheme(element: HTMLElement): ColorScheme | null {
-  const scheme = element.getAttribute('data-color-scheme');
-  return colorSchemes.includes(scheme as ColorScheme)
-    ? (scheme as ColorScheme)
-    : null;
-}
-
-/**
- * Theme color definitions for programmatic access
- */
-export const themeColors: Record<ColorTheme, Record<PrimaryShade, string>> = {
+export const primaryColorPalettes: Record<
+  PrimaryColor,
+  Record<PrimaryShade, string>
+> = {
   blue: {
     '50': '#eff6ff',
     '100': '#dbeafe',
@@ -179,15 +185,26 @@ export const themeColors: Record<ColorTheme, Record<PrimaryShade, string>> = {
 };
 
 /**
- * Base colors for light and dark modes
+ * Theme color definitions for programmatic access
  */
-export const baseColors = {
+export const themeColors: Record<
+  Theme,
+  {
+    background: string;
+    foreground: string;
+    muted: string;
+    mutedForeground: string;
+    border: string;
+    primaryForeground: string;
+  }
+> = {
   light: {
     background: '#ffffff',
     foreground: '#0a0a0a',
     muted: '#f5f5f5',
     mutedForeground: '#737373',
     border: '#e5e5e5',
+    primaryForeground: '#ffffff',
   },
   dark: {
     background: '#0a0a0a',
@@ -195,5 +212,6 @@ export const baseColors = {
     muted: '#262626',
     mutedForeground: '#a3a3a3',
     border: '#262626',
+    primaryForeground: '#000000',
   },
 };

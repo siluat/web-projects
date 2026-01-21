@@ -1,7 +1,7 @@
-import type { ColorTheme } from '../src/index';
+import type { PrimaryColor, Theme } from '../src/index';
 import {
-  baseColors,
-  colorThemes,
+  primaryColorPalettes,
+  primaryColors,
   primaryShades,
   themeColors,
 } from '../src/index';
@@ -50,30 +50,30 @@ function ColorSwatch({ color, name, showHex = true }: ColorSwatchProps) {
 
 interface ColorPaletteProps {
   /**
-   * Which theme to display. If not provided, shows all themes.
+   * Which primary color to display. If not provided, shows all primary colors.
    */
-  theme?: ColorTheme;
+  primary?: PrimaryColor;
   /**
-   * Whether to show base colors (background, foreground, etc.)
+   * Whether to show theme colors (background, foreground, etc.)
    */
-  showBaseColors?: boolean;
+  showThemeColors?: boolean;
 }
 
 /**
  * ColorPalette displays all color tokens for visual reference.
- * It shows primary colors for each theme and base semantic colors.
+ * It shows primary color shades and theme colors.
  */
 export function ColorPalette({
-  theme,
-  showBaseColors = true,
+  primary,
+  showThemeColors = true,
 }: ColorPaletteProps) {
-  const themesToShow = theme ? [theme] : colorThemes;
+  const colorsToShow = primary ? [primary] : primaryColors;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {/* Primary Colors by Theme */}
-      {themesToShow.map((themeName) => (
-        <section key={themeName}>
+      {/* Primary Colors */}
+      {colorsToShow.map((colorName) => (
+        <section key={colorName}>
           <h2
             style={{
               fontSize: '1.25rem',
@@ -83,7 +83,7 @@ export function ColorPalette({
               color: 'var(--color-foreground)',
             }}
           >
-            {themeName} Theme
+            Primary: {colorName}
           </h2>
           <div
             style={{
@@ -95,7 +95,7 @@ export function ColorPalette({
             {primaryShades.map((shade) => (
               <ColorSwatch
                 key={shade}
-                color={themeColors[themeName][shade]}
+                color={primaryColorPalettes[colorName][shade]}
                 name={shade}
               />
             ))}
@@ -103,8 +103,8 @@ export function ColorPalette({
         </section>
       ))}
 
-      {/* Base Colors */}
-      {showBaseColors && (
+      {/* Theme Colors */}
+      {showThemeColors && (
         <>
           <section>
             <h2
@@ -115,7 +115,7 @@ export function ColorPalette({
                 color: 'var(--color-foreground)',
               }}
             >
-              Base Colors - Light Mode
+              Theme: Light
             </h2>
             <div
               style={{
@@ -125,19 +125,19 @@ export function ColorPalette({
               }}
             >
               <ColorSwatch
-                color={baseColors.light.background}
+                color={themeColors.light.background}
                 name="background"
               />
               <ColorSwatch
-                color={baseColors.light.foreground}
+                color={themeColors.light.foreground}
                 name="foreground"
               />
-              <ColorSwatch color={baseColors.light.muted} name="muted" />
+              <ColorSwatch color={themeColors.light.muted} name="muted" />
               <ColorSwatch
-                color={baseColors.light.mutedForeground}
+                color={themeColors.light.mutedForeground}
                 name="muted-foreground"
               />
-              <ColorSwatch color={baseColors.light.border} name="border" />
+              <ColorSwatch color={themeColors.light.border} name="border" />
             </div>
           </section>
 
@@ -150,7 +150,7 @@ export function ColorPalette({
                 color: 'var(--color-foreground)',
               }}
             >
-              Base Colors - Dark Mode
+              Theme: Dark
             </h2>
             <div
               style={{
@@ -160,19 +160,19 @@ export function ColorPalette({
               }}
             >
               <ColorSwatch
-                color={baseColors.dark.background}
+                color={themeColors.dark.background}
                 name="background"
               />
               <ColorSwatch
-                color={baseColors.dark.foreground}
+                color={themeColors.dark.foreground}
                 name="foreground"
               />
-              <ColorSwatch color={baseColors.dark.muted} name="muted" />
+              <ColorSwatch color={themeColors.dark.muted} name="muted" />
               <ColorSwatch
-                color={baseColors.dark.mutedForeground}
+                color={themeColors.dark.mutedForeground}
                 name="muted-foreground"
               />
-              <ColorSwatch color={baseColors.dark.border} name="border" />
+              <ColorSwatch color={themeColors.dark.border} name="border" />
             </div>
           </section>
         </>
@@ -189,11 +189,11 @@ interface SemanticColorPreviewProps {
 }
 
 /**
- * SemanticColorPreview shows how semantic colors look with current theme/mode.
+ * SemanticColorPreview shows how semantic colors look with current theme/primary.
  * This component uses CSS variables directly to demonstrate runtime behavior.
  */
 export function SemanticColorPreview({
-  label = 'Semantic Colors (Current Theme)',
+  label = 'Semantic Colors (Current Settings)',
 }: SemanticColorPreviewProps) {
   return (
     <section>

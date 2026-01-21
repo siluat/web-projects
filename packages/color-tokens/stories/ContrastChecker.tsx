@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import type { ColorTheme, PrimaryShade } from '../src/index';
-import { baseColors, themeColors } from '../src/index';
+import type { PrimaryColor, PrimaryShade, Theme } from '../src/index';
+import { primaryColorPalettes, themeColors } from '../src/index';
 
 /**
  * Parse a hex color string to RGB values
@@ -190,13 +190,13 @@ function ContrastPair({
 
 interface ContrastCheckerProps {
   /**
-   * Theme to check contrast for
+   * Primary color to check contrast for
    */
-  theme?: ColorTheme;
+  primary?: PrimaryColor;
   /**
-   * Color scheme to check (light/dark affects background colors)
+   * Theme to check (light/dark affects background colors)
    */
-  colorScheme?: 'light' | 'dark';
+  theme?: Theme;
 }
 
 /**
@@ -204,11 +204,11 @@ interface ContrastCheckerProps {
  * It helps verify WCAG accessibility compliance.
  */
 export function ContrastChecker({
-  theme = 'blue',
-  colorScheme = 'light',
+  primary = 'blue',
+  theme = 'light',
 }: ContrastCheckerProps) {
-  const base = colorScheme === 'light' ? baseColors.light : baseColors.dark;
-  const primary = themeColors[theme];
+  const base = themeColors[theme];
+  const palette = primaryColorPalettes[primary];
 
   const combinations = useMemo(
     () => [
@@ -219,9 +219,9 @@ export function ContrastChecker({
         backgroundLabel: 'background',
       },
       {
-        foreground: primary['500'],
+        foreground: palette['500'],
         background: base.background,
-        foregroundLabel: `primary-500`,
+        foregroundLabel: 'primary-500',
         backgroundLabel: 'background',
       },
       {
@@ -232,24 +232,24 @@ export function ContrastChecker({
       },
       {
         foreground: '#ffffff',
-        background: primary['500'],
+        background: palette['500'],
         foregroundLabel: 'white',
         backgroundLabel: 'primary-500',
       },
       {
         foreground: '#ffffff',
-        background: primary['600'],
+        background: palette['600'],
         foregroundLabel: 'white',
         backgroundLabel: 'primary-600',
       },
       {
         foreground: '#ffffff',
-        background: primary['700'],
+        background: palette['700'],
         foregroundLabel: 'white',
         backgroundLabel: 'primary-700',
       },
     ],
-    [base, primary],
+    [base, palette],
   );
 
   return (
@@ -264,7 +264,7 @@ export function ContrastChecker({
             textTransform: 'capitalize',
           }}
         >
-          {theme} Theme - {colorScheme}
+          {primary} + {theme}
         </h2>
         <p
           style={{
@@ -554,16 +554,16 @@ export function InteractiveContrastChecker({
 
 interface ContrastMatrixProps {
   /**
-   * Theme to generate matrix for
+   * Primary color to generate matrix for
    */
-  theme?: ColorTheme;
+  primary?: PrimaryColor;
 }
 
 /**
  * ContrastMatrix shows a grid of contrast ratios between all primary shades.
  */
-export function ContrastMatrix({ theme = 'blue' }: ContrastMatrixProps) {
-  const colors = themeColors[theme];
+export function ContrastMatrix({ primary = 'blue' }: ContrastMatrixProps) {
+  const colors = primaryColorPalettes[primary];
   const shades: PrimaryShade[] = [
     '50',
     '100',
@@ -589,7 +589,7 @@ export function ContrastMatrix({ theme = 'blue' }: ContrastMatrixProps) {
           textTransform: 'capitalize',
         }}
       >
-        {theme} Theme - Contrast Matrix
+        {primary} - Contrast Matrix
       </h2>
       <table
         style={{
