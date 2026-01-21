@@ -18,10 +18,10 @@ const meta: Meta<typeof ContrastChecker> = {
       options: ['blue', 'green', 'purple', 'orange'],
       description: 'Theme to check contrast for',
     },
-    mode: {
+    colorScheme: {
       control: 'radio',
       options: ['light', 'dark'],
-      description: 'Color mode',
+      description: 'Color scheme',
     },
   },
 };
@@ -30,22 +30,22 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Shows contrast ratios for the Blue theme in light mode.
+ * Shows contrast ratios for the Blue theme in light color scheme.
  */
-export const BlueLightMode: Story = {
+export const BlueLightScheme: Story = {
   args: {
     theme: 'blue',
-    mode: 'light',
+    colorScheme: 'light',
   },
 };
 
 /**
- * Shows contrast ratios for the Blue theme in dark mode.
+ * Shows contrast ratios for the Blue theme in dark color scheme.
  */
-export const BlueDarkMode: Story = {
+export const BlueDarkScheme: Story = {
   args: {
     theme: 'blue',
-    mode: 'dark',
+    colorScheme: 'dark',
   },
 };
 
@@ -55,7 +55,7 @@ export const BlueDarkMode: Story = {
 export const GreenTheme: Story = {
   args: {
     theme: 'green',
-    mode: 'light',
+    colorScheme: 'light',
   },
 };
 
@@ -65,7 +65,7 @@ export const GreenTheme: Story = {
 export const PurpleTheme: Story = {
   args: {
     theme: 'purple',
-    mode: 'light',
+    colorScheme: 'light',
   },
 };
 
@@ -75,7 +75,7 @@ export const PurpleTheme: Story = {
 export const OrangeTheme: Story = {
   args: {
     theme: 'orange',
-    mode: 'light',
+    colorScheme: 'light',
   },
 };
 

@@ -5,7 +5,7 @@
 ## 특징
 
 - **다중 테마 지원**: Blue, Green, Purple, Orange 테마 제공
-- **라이트/다크 모드**: 각 테마별 라이트/다크 모드 지원
+- **Color Scheme 지원**: 각 테마별 라이트/다크 color scheme 지원
 - **Tailwind 독립적**: CSS Custom Properties 기반으로 모든 환경에서 사용 가능
 - **접근성 검사**: Storybook addon-a11y를 통한 WCAG 대비 비율 검사
 
@@ -29,12 +29,12 @@ bun add @repo/color-tokens
 @import '@repo/color-tokens/index.css';
 ```
 
-### 테마 및 모드 설정
+### 테마 및 Color Scheme 설정
 
-HTML 요소에 `data-theme`과 `data-mode` 속성을 추가하여 테마와 모드를 설정합니다:
+HTML 요소에 `data-theme`과 `data-color-scheme` 속성을 추가하여 테마와 color scheme을 설정합니다:
 
 ```html
-<html data-theme="blue" data-mode="light">
+<html data-theme="blue" data-color-scheme="light">
   <!-- 콘텐츠 -->
 </html>
 ```
@@ -57,13 +57,13 @@ HTML 요소에 `data-theme`과 `data-mode` 속성을 추가하여 테마와 모�
 ### TypeScript에서 사용
 
 ```typescript
-import { setTheme, setMode, themeColors, colorThemes } from '@repo/color-tokens';
+import { setTheme, setColorScheme, themeColors, colorThemes } from '@repo/color-tokens';
 
 // 테마 변경
 setTheme(document.documentElement, 'purple');
 
-// 모드 변경
-setMode(document.documentElement, 'dark');
+// Color scheme 변경
+setColorScheme(document.documentElement, 'dark');
 
 // 색상 값 직접 접근
 const primaryBlue500 = themeColors.blue['500']; // '#3b82f6'

@@ -33,11 +33,11 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
-    colorMode: {
-      description: 'Color mode for components',
+    colorScheme: {
+      description: 'Color scheme for components',
       defaultValue: 'light',
       toolbar: {
-        title: 'Mode',
+        title: 'Scheme',
         icon: 'circlehollow',
         items: [
           { value: 'light', title: 'Light' },
@@ -50,12 +50,12 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const theme = context.globals.theme || 'blue';
-      const colorMode = context.globals.colorMode || 'light';
+      const colorScheme = context.globals.colorScheme || 'light';
 
       return (
         <div
           data-theme={theme}
-          data-mode={colorMode}
+          data-color-scheme={colorScheme}
           style={{
             backgroundColor: 'var(--color-background)',
             color: 'var(--color-foreground)',

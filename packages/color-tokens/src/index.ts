@@ -10,9 +10,9 @@
 export type ColorTheme = 'blue' | 'green' | 'purple' | 'orange';
 
 /**
- * Available color modes
+ * Available color schemes (light/dark)
  */
-export type ColorMode = 'light' | 'dark';
+export type ColorScheme = 'light' | 'dark';
 
 /**
  * Primary color shade levels
@@ -48,9 +48,9 @@ export type SemanticColorToken =
 export const colorThemes: ColorTheme[] = ['blue', 'green', 'purple', 'orange'];
 
 /**
- * All available color modes
+ * All available color schemes
  */
-export const colorModes: ColorMode[] = ['light', 'dark'];
+export const colorSchemes: ColorScheme[] = ['light', 'dark'];
 
 /**
  * All primary color shades
@@ -91,10 +91,13 @@ export function setTheme(element: HTMLElement, theme: ColorTheme): void {
 }
 
 /**
- * Set the color mode on an element
+ * Set the color scheme on an element
  */
-export function setMode(element: HTMLElement, mode: ColorMode): void {
-  element.setAttribute('data-mode', mode);
+export function setColorScheme(
+  element: HTMLElement,
+  scheme: ColorScheme,
+): void {
+  element.setAttribute('data-color-scheme', scheme);
 }
 
 /**
@@ -108,11 +111,13 @@ export function getTheme(element: HTMLElement): ColorTheme | null {
 }
 
 /**
- * Get the current mode from an element
+ * Get the current color scheme from an element
  */
-export function getMode(element: HTMLElement): ColorMode | null {
-  const mode = element.getAttribute('data-mode');
-  return colorModes.includes(mode as ColorMode) ? (mode as ColorMode) : null;
+export function getColorScheme(element: HTMLElement): ColorScheme | null {
+  const scheme = element.getAttribute('data-color-scheme');
+  return colorSchemes.includes(scheme as ColorScheme)
+    ? (scheme as ColorScheme)
+    : null;
 }
 
 /**

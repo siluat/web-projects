@@ -194,9 +194,9 @@ interface ContrastCheckerProps {
    */
   theme?: ColorTheme;
   /**
-   * Mode to check (light/dark affects background colors)
+   * Color scheme to check (light/dark affects background colors)
    */
-  mode?: 'light' | 'dark';
+  colorScheme?: 'light' | 'dark';
 }
 
 /**
@@ -205,9 +205,9 @@ interface ContrastCheckerProps {
  */
 export function ContrastChecker({
   theme = 'blue',
-  mode = 'light',
+  colorScheme = 'light',
 }: ContrastCheckerProps) {
-  const base = mode === 'light' ? baseColors.light : baseColors.dark;
+  const base = colorScheme === 'light' ? baseColors.light : baseColors.dark;
   const primary = themeColors[theme];
 
   const combinations = useMemo(
@@ -264,7 +264,7 @@ export function ContrastChecker({
             textTransform: 'capitalize',
           }}
         >
-          {theme} Theme - {mode} Mode
+          {theme} Theme - {colorScheme}
         </h2>
         <p
           style={{

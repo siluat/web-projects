@@ -4,16 +4,16 @@
  * This file defines color tokens using CSS Custom Properties.
  * It supports:
  * - Multiple primary color themes (blue, green, purple, orange)
- * - Light and dark mode for each theme
+ * - Light and dark color scheme for each theme
  * - Tailwind-independent usage via CSS variables
  *
  * Usage:
  * 1. Import this CSS file in your app
  * 2. Add data-theme="blue|green|purple|orange" to set primary color
- * 3. Add data-mode="light|dark" to set color mode
+ * 3. Add data-color-scheme="light|dark" to set color scheme
  *
  * Example:
- * <html data-theme="blue" data-mode="light">
+ * <html data-theme="blue" data-color-scheme="light">
  */
 
 :root {
@@ -142,10 +142,11 @@
 }
 
 /* ============================================
-   LIGHT MODE
+   LIGHT COLOR SCHEME
    ============================================ */
-[data-mode='light'],
+[data-color-scheme='light'],
 :root {
+  color-scheme: light;
   --color-background: var(--color-background-light);
   --color-foreground: var(--color-foreground-light);
   --color-primary: var(--color-primary-500);
@@ -156,9 +157,10 @@
 }
 
 /* ============================================
-   DARK MODE
+   DARK COLOR SCHEME
    ============================================ */
-[data-mode='dark'] {
+[data-color-scheme='dark'] {
+  color-scheme: dark;
   --color-background: var(--color-background-dark);
   --color-foreground: var(--color-foreground-dark);
   --color-primary: var(--color-primary-400);
@@ -172,7 +174,8 @@
    SYSTEM PREFERENCE SUPPORT
    ============================================ */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-mode]) {
+  :root:not([data-color-scheme]) {
+    color-scheme: dark;
     --color-background: var(--color-background-dark);
     --color-foreground: var(--color-foreground-dark);
     --color-primary: var(--color-primary-400);
