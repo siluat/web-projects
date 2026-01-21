@@ -13,23 +13,13 @@
   },
   "devDependencies": {
     "@siluat/typescript-config": "workspace:*",
-    "@storybook/addon-a11y": "^8.6.15",
-    "@storybook/addon-essentials": "^8.6.15",
-    "@storybook/addon-interactions": "^8.6.15",
-    "@storybook/addon-links": "^8.6.15",
-    "@storybook/blocks": "^8.6.15",
-    "@storybook/react": "^8.6.15",
-    "@storybook/react-vite": "^8.6.15",
-    "@storybook/test": "^8.6.15",
+    "@storybook/addon-a11y": "^10.1.11",
+    "@storybook/react-vite": "^10.1.11",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
-    "rollup": "4.44.0",
-    "storybook": "^8.6.15",
+    "storybook": "^10.1.11",
     "typescript": "^5.8.3",
-    "vite": "^5.4.19"
-  },
-  "overrides": {
-    "rollup": "4.44.0"
+    "vite": "^6.3.5"
   },
   "exports": {
     "./themes.css": "./src/themes.css",
