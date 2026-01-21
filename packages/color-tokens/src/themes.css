@@ -1,0 +1,184 @@
+/**
+ * Color Tokens - CSS Custom Properties
+ *
+ * This file defines color tokens using CSS Custom Properties.
+ * It supports:
+ * - Multiple primary color themes (blue, green, purple, orange)
+ * - Light and dark mode for each theme
+ * - Tailwind-independent usage via CSS variables
+ *
+ * Usage:
+ * 1. Import this CSS file in your app
+ * 2. Add data-theme="blue|green|purple|orange" to set primary color
+ * 3. Add data-mode="light|dark" to set color mode
+ *
+ * Example:
+ * <html data-theme="blue" data-mode="light">
+ */
+
+:root {
+  /* Base colors - semantic tokens */
+  --color-background: var(--color-background-light);
+  --color-foreground: var(--color-foreground-light);
+  --color-primary: var(--color-primary-500);
+  --color-primary-foreground: var(--color-primary-foreground-light);
+  --color-muted: var(--color-muted-light);
+  --color-muted-foreground: var(--color-muted-foreground-light);
+  --color-border: var(--color-border-light);
+
+  /* Light mode base values */
+  --color-background-light: #ffffff;
+  --color-foreground-light: #0a0a0a;
+  --color-muted-light: #f5f5f5;
+  --color-muted-foreground-light: #737373;
+  --color-border-light: #e5e5e5;
+
+  /* Dark mode base values */
+  --color-background-dark: #0a0a0a;
+  --color-foreground-dark: #fafafa;
+  --color-muted-dark: #262626;
+  --color-muted-foreground-dark: #a3a3a3;
+  --color-border-dark: #262626;
+}
+
+/* ============================================
+   BLUE THEME
+   ============================================ */
+[data-theme='blue'] {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
+
+  --color-primary-foreground-light: #ffffff;
+  --color-primary-foreground-dark: #ffffff;
+}
+
+/* ============================================
+   GREEN THEME
+   ============================================ */
+[data-theme='green'] {
+  --color-primary-50: #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+  --color-primary-500: #22c55e;
+  --color-primary-600: #16a34a;
+  --color-primary-700: #15803d;
+  --color-primary-800: #166534;
+  --color-primary-900: #14532d;
+  --color-primary-950: #052e16;
+
+  --color-primary-foreground-light: #ffffff;
+  --color-primary-foreground-dark: #ffffff;
+}
+
+/* ============================================
+   PURPLE THEME
+   ============================================ */
+[data-theme='purple'] {
+  --color-primary-50: #faf5ff;
+  --color-primary-100: #f3e8ff;
+  --color-primary-200: #e9d5ff;
+  --color-primary-300: #d8b4fe;
+  --color-primary-400: #c084fc;
+  --color-primary-500: #a855f7;
+  --color-primary-600: #9333ea;
+  --color-primary-700: #7e22ce;
+  --color-primary-800: #6b21a8;
+  --color-primary-900: #581c87;
+  --color-primary-950: #3b0764;
+
+  --color-primary-foreground-light: #ffffff;
+  --color-primary-foreground-dark: #ffffff;
+}
+
+/* ============================================
+   ORANGE THEME
+   ============================================ */
+[data-theme='orange'] {
+  --color-primary-50: #fff7ed;
+  --color-primary-100: #ffedd5;
+  --color-primary-200: #fed7aa;
+  --color-primary-300: #fdba74;
+  --color-primary-400: #fb923c;
+  --color-primary-500: #f97316;
+  --color-primary-600: #ea580c;
+  --color-primary-700: #c2410c;
+  --color-primary-800: #9a3412;
+  --color-primary-900: #7c2d12;
+  --color-primary-950: #431407;
+
+  --color-primary-foreground-light: #ffffff;
+  --color-primary-foreground-dark: #ffffff;
+}
+
+/* ============================================
+   DEFAULT THEME (Blue)
+   ============================================ */
+:root {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
+
+  --color-primary-foreground-light: #ffffff;
+  --color-primary-foreground-dark: #ffffff;
+}
+
+/* ============================================
+   LIGHT MODE
+   ============================================ */
+[data-mode='light'],
+:root {
+  --color-background: var(--color-background-light);
+  --color-foreground: var(--color-foreground-light);
+  --color-primary: var(--color-primary-500);
+  --color-primary-foreground: var(--color-primary-foreground-light);
+  --color-muted: var(--color-muted-light);
+  --color-muted-foreground: var(--color-muted-foreground-light);
+  --color-border: var(--color-border-light);
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+[data-mode='dark'] {
+  --color-background: var(--color-background-dark);
+  --color-foreground: var(--color-foreground-dark);
+  --color-primary: var(--color-primary-400);
+  --color-primary-foreground: var(--color-primary-foreground-dark);
+  --color-muted: var(--color-muted-dark);
+  --color-muted-foreground: var(--color-muted-foreground-dark);
+  --color-border: var(--color-border-dark);
+}
+
+/* ============================================
+   SYSTEM PREFERENCE SUPPORT
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode]) {
+    --color-background: var(--color-background-dark);
+    --color-foreground: var(--color-foreground-dark);
+    --color-primary: var(--color-primary-400);
+    --color-primary-foreground: var(--color-primary-foreground-dark);
+    --color-muted: var(--color-muted-dark);
+    --color-muted-foreground: var(--color-muted-foreground-dark);
+    --color-border: var(--color-border-dark);
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "@siluat/typescript-config/react-library.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true
+  },
+  "include": ["src/**/*", "stories/**/*", ".storybook/**/*"]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "@repo/color-tokens",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@siluat/typescript-config": "workspace:*",
+    "@storybook/addon-a11y": "^8.6.15",
+    "@storybook/addon-essentials": "^8.6.15",
+    "@storybook/addon-interactions": "^8.6.15",
+    "@storybook/addon-links": "^8.6.15",
+    "@storybook/blocks": "^8.6.15",
+    "@storybook/react": "^8.6.15",
+    "@storybook/react-vite": "^8.6.15",
+    "@storybook/test": "^8.6.15",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "rollup": "4.44.0",
+    "storybook": "^8.6.15",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.19"
+  },
+  "overrides": {
+    "rollup": "4.44.0"
+  },
+  "exports": {
+    "./themes.css": "./src/themes.css",
+    "./index.css": "./src/index.css",
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  }
+}
