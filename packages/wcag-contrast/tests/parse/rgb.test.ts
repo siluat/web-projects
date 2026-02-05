@@ -177,6 +177,16 @@ describe('parseRgb', () => {
       expect(parseRgb('')).toBeNull();
       expect(parseRgb('rgb()')).toBeNull();
     });
+
+    it('should return null for trailing characters', () => {
+      expect(parseRgb('rgb(10px, 20, 30)')).toBeNull();
+      expect(parseRgb('rgb(100%foo, 50%, 0%)')).toBeNull();
+      expect(parseRgb('rgb(255 128 0 / 0.5abc)')).toBeNull();
+    });
+
+    it('should return null for multiple slashes', () => {
+      expect(parseRgb('rgb(255 128 0 / 0.5 / 0.2)')).toBeNull();
+    });
   });
 
   describe('whitespace handling', () => {

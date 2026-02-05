@@ -175,6 +175,19 @@ describe('parseHsl', () => {
       expect(parseHsl('')).toBeNull();
       expect(parseHsl('hsl()')).toBeNull();
     });
+
+    it('should return null for trailing characters in hue', () => {
+      expect(parseHsl('hsl(30degfoo, 50%, 50%)')).toBeNull();
+      expect(parseHsl('hsl(0.5turnxyz 50% 50%)')).toBeNull();
+    });
+
+    it('should return null for trailing characters in saturation/lightness', () => {
+      expect(parseHsl('hsl(180, 50%px, 50%)')).toBeNull();
+    });
+
+    it('should return null for multiple slashes', () => {
+      expect(parseHsl('hsl(180 50% 50% / 0.5 / 0.2)')).toBeNull();
+    });
   });
 
   describe('edge cases', () => {

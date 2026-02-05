@@ -13,6 +13,11 @@ function clamp(value: number, min: number, max: number): number {
 function parseHue(value: string): number {
   const trimmed = value.trim().toLowerCase();
 
+  // Only allow number with optional unit (deg, rad, grad, turn)
+  if (!/^-?\d+(\.\d+)?(deg|rad|grad|turn)?$/.test(trimmed)) {
+    return Number.NaN;
+  }
+
   let degrees: number;
 
   if (trimmed.endsWith('turn')) {
@@ -40,7 +45,9 @@ function parseHue(value: string): number {
  */
 function parsePercentage(value: string): number {
   const trimmed = value.trim();
-  if (!trimmed.endsWith('%')) {
+
+  // Only allow percentage format
+  if (!/^-?\d+(\.\d+)?%$/.test(trimmed)) {
     return Number.NaN;
   }
 
@@ -57,6 +64,12 @@ function parsePercentage(value: string): number {
  */
 function parseAlpha(value: string): number {
   const trimmed = value.trim();
+
+  // Only allow number or percentage format
+  if (!/^-?\d+(\.\d+)?%?$/.test(trimmed)) {
+    return Number.NaN;
+  }
+
   const isPercentage = trimmed.endsWith('%');
   const num = Number.parseFloat(trimmed);
 
@@ -147,6 +160,9 @@ export function parseHsl(color: string): RGB | null {
 
   // Check for slash syntax (modern): hsl(180 50% 50% / 0.5)
   const slashParts = content.trim().split('/');
+  if (slashParts.length > 2) {
+    return null;
+  }
   const firstPart = slashParts[0];
   if (!firstPart) {
     return null;

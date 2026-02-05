@@ -11,7 +11,19 @@ function clamp(value: number, min: number, max: number): number {
  * Parse a color value that may be a number or percentage
  */
 function parseColorValue(value: string, isPercentage: boolean): number {
-  const num = Number.parseFloat(value);
+  const trimmed = value.trim();
+
+  if (isPercentage) {
+    if (!/^-?\d+(\.\d+)?%$/.test(trimmed)) {
+      return Number.NaN;
+    }
+  } else {
+    if (!/^-?\d+(\.\d+)?$/.test(trimmed)) {
+      return Number.NaN;
+    }
+  }
+
+  const num = Number.parseFloat(trimmed);
   if (Number.isNaN(num)) {
     return Number.NaN;
   }
@@ -28,6 +40,12 @@ function parseColorValue(value: string, isPercentage: boolean): number {
  */
 function parseAlpha(value: string): number {
   const trimmed = value.trim();
+
+  // Only allow number or percentage format
+  if (!/^-?\d+(\.\d+)?%?$/.test(trimmed)) {
+    return Number.NaN;
+  }
+
   const isPercentage = trimmed.endsWith('%');
   const num = Number.parseFloat(trimmed);
 
@@ -65,6 +83,9 @@ export function parseRgb(color: string): RGB | null {
 
   // Check for slash syntax (modern): rgb(255 128 0 / 0.5)
   const slashParts = content.trim().split('/');
+  if (slashParts.length > 2) {
+    return null;
+  }
   const firstPart = slashParts[0];
   if (!firstPart) {
     return null;
