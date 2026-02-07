@@ -105,13 +105,6 @@ The only stage in the pipeline that can fail is parsing (String → RGB). The re
 ## Type Definitions
 
 ```typescript
-export interface RGB {
-  r: number; // 0-255
-  g: number; // 0-255
-  b: number; // 0-255
-  a?: number; // 0-1
-}
-
 export type ComplianceLevel = 'AAA' | 'AA' | 'Fail';
 export type TextSize = 'normal' | 'large';
 
@@ -122,6 +115,8 @@ export interface ContrastResult {
 }
 ```
 
+`RGB` is defined internally in `types.ts` but not exported from the public API.
+
 ## Public API
 
 ```typescript
@@ -129,7 +124,6 @@ contrastRatio(fg: string, bg: string): number
 getContrastResult(fg: string, bg: string): ContrastResult
 relativeLuminance(color: string): number
 checkCompliance(ratio: number, textSize: TextSize): ComplianceLevel
-parseColor(color: string): RGB
 ```
 
 ## Issue Breakdown

@@ -58,8 +58,7 @@ export function contrastRatio(fg: string, bg: string): number
 export function getContrastResult(fg: string, bg: string): ContrastResult
 export function relativeLuminance(color: string): number
 export function checkCompliance(ratio: number, textSize: TextSize): ComplianceLevel
-export { parseColor } from './parse';
-export type { RGB, ComplianceLevel, TextSize, ContrastResult } from './types';
+export type { ComplianceLevel, TextSize, ContrastResult } from './types';
 ```
 
 ## Test Cases
