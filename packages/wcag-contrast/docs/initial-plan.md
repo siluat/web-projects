@@ -135,24 +135,28 @@ parseColor(color: string): RGB
 ## Issue Breakdown
 
 ### Issue 1: Project Setup and Type Definitions
+
 - `package.json`, `tsconfig.json`, `vitest.config.ts`
 - `src/types.ts`, `src/index.ts` (type re-export)
 
 **Estimated size:** ~120 lines
 
 ### Issue 2: Basic Color Parsing (HEX, RGB, Named Colors)
+
 - `src/parse.ts`: ColorFormat table structure + parseColor + HEX/RGB extraction
 - `src/named-colors.ts`: CSS 148 named colors data
 
 **Estimated size:** ~400 lines
 
 ### Issue 3: Advanced Color Parsing (HSL, LCH, OKLCH)
+
 - `src/parse.ts` format table extension + color space conversion functions
 - Angle unit parsing utilities (deg, rad, grad, turn)
 
 **Estimated size:** ~350 lines
 
 ### Issue 4: Contrast Ratio and WCAG Compliance
+
 - `src/luminance.ts`: sRGB → linear RGB → relative luminance
 - `src/contrast.ts`: contrast ratio formula + WCAG compliance check
 - `src/index.ts`: complete public API exports
@@ -160,6 +164,7 @@ parseColor(color: string): RGB
 **Estimated size:** ~350 lines
 
 ### Issue 5: CLI
+
 - `src/cli.ts`: argument parsing, output formats (default/json/quiet), error handling
 
 **Estimated size:** ~150 lines
