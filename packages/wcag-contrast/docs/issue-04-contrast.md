@@ -64,16 +64,19 @@ export type { ComplianceLevel, TextSize, ContrastResult } from './types';
 ## Test Cases
 
 ### Relative Luminance
+
 - Black (`#000`): 0
 - White (`#fff`): 1
 - Verify known intermediate values
 
 ### Contrast Ratio
+
 - Black vs White: 21:1
 - Same color: 1:1
 - Verify against WCAG example values
 
 ### WCAG Compliance
+
 - ratio >= 7.0 → normal AAA, large AAA
 - 4.5 <= ratio < 7.0 → normal AA, large AAA
 - 3.0 <= ratio < 4.5 → normal Fail, large AA
