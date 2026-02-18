@@ -1,0 +1,21 @@
+/**
+ * Convert a single HEX character (0-9, a-f, A-F) to its numeric value (0-15).
+ * Returns -1 for invalid characters.
+ */
+export function hexCharToNumber(char: string): number {
+  const code = char.charCodeAt(0);
+  // 0-9
+  if (code >= 48 && code <= 57) return code - 48;
+  // a-f
+  if (code >= 97 && code <= 102) return code - 87;
+  // A-F
+  if (code >= 65 && code <= 70) return code - 55;
+  return -1;
+}
+
+/**
+ * Normalize an integer in the 0-255 range to a 0-1 floating point value.
+ */
+export function normalize8bit(value: number): number {
+  return value / 255;
+}

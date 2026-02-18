@@ -5,7 +5,7 @@
 ### Phase 1: HEX-only Pipeline
 
 - [x] PR 1: Project setup and type definitions
-- [ ] PR 2: HEX parser
+- [x] PR 2: HEX parser
 - [ ] PR 3: sRGB conversion + alpha compositing
 - [ ] PR 4: Luminance/contrast ratio + public API
 - [ ] PR 5: CLI
@@ -38,7 +38,7 @@
 - **Files:** `src/parse/utils.ts`, `src/parse/hex.ts`, `src/parse/index.ts`, tests
 - **Scope:** Parse #RGB, #RRGGBB, #RGBA, #RRGGBBAA using declarative patterns
 - **Verification:** HEX conversion accuracy, alpha value accuracy
-- **Status:** Pending
+- **Status:** Done
 
 ### PR 3: sRGB <-> Linear RGB Conversion + Alpha Compositing
 
