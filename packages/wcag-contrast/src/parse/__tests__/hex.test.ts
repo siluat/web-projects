@@ -110,11 +110,11 @@ describe('parseHex', () => {
     it('parses #f008 with correct alpha', () => {
       const result = parseHex('#f008');
       expect(result).not.toBeNull();
-      expect(result!.r).toBe(1);
-      expect(result!.g).toBe(0);
-      expect(result!.b).toBe(0);
+      expect(result?.r).toBe(1);
+      expect(result?.g).toBe(0);
+      expect(result?.b).toBe(0);
       // 0x88 = 136, 136/255 ≈ 0.533
-      expect(result!.alpha).toBeCloseTo(136 / 255, 10);
+      expect(result?.alpha).toBeCloseTo(136 / 255, 10);
     });
   });
 
@@ -142,11 +142,11 @@ describe('parseHex', () => {
     it('parses #ff000080 as red with ~50% alpha', () => {
       const result = parseHex('#ff000080');
       expect(result).not.toBeNull();
-      expect(result!.r).toBe(1);
-      expect(result!.g).toBe(0);
-      expect(result!.b).toBe(0);
+      expect(result?.r).toBe(1);
+      expect(result?.g).toBe(0);
+      expect(result?.b).toBe(0);
       // 0x80 = 128, 128/255 ≈ 0.502
-      expect(result!.alpha).toBeCloseTo(128 / 255, 10);
+      expect(result?.alpha).toBeCloseTo(128 / 255, 10);
     });
   });
 
