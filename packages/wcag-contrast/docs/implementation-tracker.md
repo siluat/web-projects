@@ -29,7 +29,7 @@
 
 - **Files:** `package.json`, `tsconfig.json`, `vitest.config.ts`, `src/types.ts`, `src/index.ts`
 - **Scope:** Build/test infrastructure, all type definitions from the type system above
-- **Notes:** tsconfig extends `@siluat/typescript-config/base.json`, vitest uses `passWithNoTests: true`
+- **Notes:** tsconfig extends `@siluat/typescript-config/library.json`, vitest uses `passWithNoTests: true`
 - **Verification:** `turbo run static-check --filter=@siluat/wcag-contrast`, `turbo run test --filter=@siluat/wcag-contrast`
 - **Status:** Pending
 

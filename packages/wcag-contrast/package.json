@@ -1,0 +1,19 @@
+{
+  "name": "@siluat/wcag-contrast",
+  "version": "0.0.0",
+  "description": "WCAG 2.1 contrast ratio checker",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@siluat/typescript-config": "workspace:*",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
