@@ -125,18 +125,6 @@
         "react-dom": "^19.0.0",
       },
     },
-    "packages/wcag-contrast": {
-      "name": "@siluat/wcag-contrast",
-      "version": "0.0.0",
-      "bin": {
-        "wcag-contrast": "./dist/cli.js",
-      },
-      "devDependencies": {
-        "@siluat/typescript-config": "workspace:*",
-        "typescript": "^5.8.3",
-        "vitest": "^3.2.4",
-      },
-    },
     "playgrounds/animation-practice": {
       "name": "animation-practice",
       "version": "1.0.0",
@@ -695,8 +683,6 @@
     "@siluat/typescript-config": ["@siluat/typescript-config@workspace:packages/typescript-config"],
 
     "@siluat/ui-craft": ["@siluat/ui-craft@workspace:packages/ui-craft"],
-
-    "@siluat/wcag-contrast": ["@siluat/wcag-contrast@workspace:packages/wcag-contrast"],
 
     "@standard-schema/spec": ["@standard-schema/spec@1.0.0", "", {}, "sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA=="],
 
