@@ -4,7 +4,7 @@
 
 ### Phase 1: HEX-only Pipeline
 
-- [ ] PR 1: Project setup and type definitions
+- [x] PR 1: Project setup and type definitions
 - [ ] PR 2: HEX parser
 - [ ] PR 3: sRGB conversion + alpha compositing
 - [ ] PR 4: Luminance/contrast ratio + public API
@@ -31,7 +31,7 @@
 - **Scope:** Build/test infrastructure, all type definitions from the type system above
 - **Notes:** tsconfig extends `@siluat/typescript-config/library.json`, vitest uses `passWithNoTests: true`
 - **Verification:** `turbo run static-check --filter=@siluat/wcag-contrast`, `turbo run test --filter=@siluat/wcag-contrast`
-- **Status:** Pending
+- **Status:** Done
 
 ### PR 2: HEX Parser
 
