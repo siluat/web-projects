@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { alphaComposite } from './alpha-composite';
 import type { SRGBColor } from './types';
 

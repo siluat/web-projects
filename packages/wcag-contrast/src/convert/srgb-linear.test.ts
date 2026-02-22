@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { srgbChannelToLinear, srgbToLinear } from './srgb-linear';
 
 describe('srgbChannelToLinear', () => {
