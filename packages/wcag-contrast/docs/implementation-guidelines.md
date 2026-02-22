@@ -14,7 +14,7 @@ Prefer declarative code when it provides clear advantages in readability or corr
 
 Leverage TypeScript's type system to prevent misuse at compile time. Distinguish between different color representations (parsed colors, sRGB values, linear RGB, etc.) using distinct types rather than passing raw numbers.
 
-**No escape hatches:** When principles conflict, do not reach for `!` (non-null assertion) or `as` (type assertion) to bypass one principle, nor abandon the other. Find an API that satisfies both principles simultaneously.
+**No escape hatches:** When principles conflict, do not reach for `!` (non-null assertion) or `as` (type assertion) to bypass one principle, nor abandon the other. Find an API that satisfies both principles simultaneously. Note that `as const` (const assertion) is permitted — it narrows a type to its literal form rather than bypassing the type system.
 
 **`noUncheckedIndexedAccess` guide:** Array and string indexing (`arr[0]`, `str[0]`) returns `T | undefined`, so prefer APIs with safe return types. For example, use `string.charAt(i)` instead of `str[i]` — it always returns `string`, eliminating the need for additional type guards.
 

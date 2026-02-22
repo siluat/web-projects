@@ -7,7 +7,7 @@
 - [x] PR 1: Project setup and type definitions
 - [x] PR 2: HEX parser
 - [x] PR 3: sRGB conversion + alpha compositing
-- [ ] PR 4: Luminance/contrast ratio + public API
+- [x] PR 4: Luminance/contrast ratio + public API
 - [ ] PR 5: CLI
 
 ### Phase 2: sRGB Family Extension
@@ -61,9 +61,9 @@
 - **Verification:** Must match README HEX examples:
   - `contrastRatio('#000000', '#ffffff')` -> 21
   - `checkContrast('#333', '#fff')` -> `{ ratio: 12.63, normalText: 'AAA', largeText: 'AAA' }`
-  - `checkContrast('#777', '#fff')` -> `{ ratio: 4.48, normalText: 'AA', largeText: 'AAA' }`
-  - `checkContrast('#999', '#fff')` -> `{ ratio: 2.85, normalText: 'Fail', largeText: 'AA' }`
-- **Status:** Pending
+  - `checkContrast('#777', '#fff')` -> `{ ratio: 4.48, normalText: 'Fail', largeText: 'AA' }`
+  - `checkContrast('#999', '#fff')` -> `{ ratio: 2.85, normalText: 'Fail', largeText: 'Fail' }`
+- **Status:** Done
 
 ### PR 5: CLI Implementation
 
