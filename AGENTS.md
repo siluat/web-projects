@@ -96,6 +96,7 @@ This is a monorepo managed by Turborepo and bun workspaces with the following st
 - UI components: Vitest with React Testing Library
 - E2E tests: Playwright for user-facing applications
 - Rust code: Standard Cargo test framework
+- Test files are co-located with source files (e.g., `foo.test.ts` next to `foo.ts`), not in `__tests__/` subdirectories
 
 ## Build Dependencies
 

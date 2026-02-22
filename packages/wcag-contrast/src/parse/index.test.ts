@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseColor } from '../index';
+import { parseColor } from './index';
 
 describe('parseColor', () => {
   it('parses HEX color strings', () => {

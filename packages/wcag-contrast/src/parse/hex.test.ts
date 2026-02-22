@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseHex } from '../hex';
+import { parseHex } from './hex';
 
 describe('parseHex', () => {
   describe('3-digit (#RGB)', () => {
