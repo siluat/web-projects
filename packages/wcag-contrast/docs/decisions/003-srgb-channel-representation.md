@@ -52,7 +52,7 @@ Reference: [CSS Color Level 4 — The RGB color spaces](https://www.w3.org/TR/cs
 
 The 0-1 representation is maintained across the entire sRGB pipeline:
 
-1. **Parse** — `SRGBColor` channels normalized to 0-1 at parse time (e.g., HEX `#FF` → `1.0`)
+1. **Parse** — `SRGBColor` channels normalized to 0-1 at parse time (e.g., HEX `#FF0000` → R = `1.0`)
 2. **Composite** — `OpaqueRGB` channels remain in 0-1 after alpha compositing
 3. **Linearize** — gamma decompression operates on 0-1 input, produces 0-1 `LinearRGB`
 4. **Luminance** — relative luminance computed from 0-1 linear values
