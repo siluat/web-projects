@@ -15,7 +15,6 @@
     "@astrojs/react": "^4.3.0",
     "@codesandbox/sandpack-react": "^2.20.0",
     "@fontsource-variable/noto-sans-kr": "^5.2.6",
-    "@radix-ui/colors": "^3.0.0",
     "@siluat/shadcn-ui": "workspace:*",
     "@siluat/ui-craft": "workspace:*",
     "@tailwindcss/vite": "^4.1.11",
@@ -23,7 +22,6 @@
     "lucide-react": "catalog:",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "sharp": "^0.34.3",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
