@@ -37,10 +37,10 @@ checkContrast('#333', '#fff');
 // { ratio: 12.63, normalText: 'AAA', largeText: 'AAA' }
 
 checkContrast('#777', '#fff');
-// { ratio: 4.48, normalText: 'AA', largeText: 'AAA' }
+// { ratio: 4.48, normalText: 'Fail', largeText: 'AA' }
 
 checkContrast('#999', '#fff');
-// { ratio: 2.85, normalText: 'Fail', largeText: 'AA' }
+// { ratio: 2.85, normalText: 'Fail', largeText: 'Fail' }
 ```
 
 ## API Reference
@@ -92,7 +92,7 @@ npx @siluat/wcag-contrast '#999' '#fff'
 ```text
 Contrast ratio: 2.85:1
 Normal text: Fail ✗
-Large text:  AA ✓
+Large text:  Fail ✗
 ```
 
 JSON output:
