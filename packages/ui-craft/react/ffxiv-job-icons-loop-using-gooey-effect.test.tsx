@@ -1,14 +1,17 @@
+import { describe, expect, it, mock } from 'bun:test';
 import { act, renderHook } from '@testing-library/react';
-import { useGooeyEffectClassName } from './ffxiv-job-icons-loop-using-gooey-effect.js';
 
-// Mock CSS module
-vi.mock('./ffxiv-job-icons-loop-using-gooey-effect.module.css', () => ({
+mock.module('./ffxiv-job-icons-loop-using-gooey-effect.module.css', () => ({
   default: {
     showing: 'showing',
     hiding: 'hiding',
     hidden: 'hidden',
   },
 }));
+
+const { useGooeyEffectClassName } = await import(
+  './ffxiv-job-icons-loop-using-gooey-effect.js'
+);
 
 describe('useGooeyEffectClassName', () => {
   it('should return the correct initial class names', () => {
