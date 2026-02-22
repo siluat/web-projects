@@ -9,6 +9,7 @@
   },
   "scripts": {
     "test": "bun test",
+    "test:coverage": "bun test --coverage",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
