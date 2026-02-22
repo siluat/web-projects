@@ -58,7 +58,6 @@
       },
       "devDependencies": {
         "@siluat/typescript-config": "workspace:*",
-        "@types/bun": "catalog:",
         "typescript": "^5.8.3",
       },
     },
