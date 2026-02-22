@@ -58,6 +58,8 @@ export type ParsedColor =
   | OKLCHColor;
 
 // Intermediate types for computation
+
+/** Linear-light sRGB after WCAG 2.1 gamma decompression (0-1). */
 export interface LinearRGB {
   r: number;
   g: number;
@@ -68,6 +70,7 @@ export interface XYZColor {
   y: number;
   z: number;
 }
+/** Gamma-encoded sRGB color after alpha compositing (0-1). */
 export interface OpaqueRGB {
   r: number;
   g: number;
@@ -75,7 +78,10 @@ export interface OpaqueRGB {
 }
 
 // Public API types
+
+/** WCAG 2.1 compliance level. */
 export type ComplianceLevel = 'AAA' | 'AA' | 'Fail';
+/** WCAG 2.1 contrast evaluation result. */
 export interface ContrastResult {
   ratio: number;
   normalText: ComplianceLevel;

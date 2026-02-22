@@ -14,9 +14,15 @@ Prefer declarative code when it provides clear advantages in readability or corr
 
 Leverage TypeScript's type system to prevent misuse at compile time. Distinguish between different color representations (parsed colors, sRGB values, linear RGB, etc.) using distinct types rather than passing raw numbers.
 
+**No escape hatches:** When principles conflict, do not reach for `!` (non-null assertion) or `as` (type assertion) to bypass one principle, nor abandon the other. Find an API that satisfies both principles simultaneously.
+
+**`noUncheckedIndexedAccess` guide:** Array and string indexing (`arr[0]`, `str[0]`) returns `T | undefined`, so prefer APIs with safe return types. For example, use `string.charAt(i)` instead of `str[i]` — it always returns `string`, eliminating the need for additional type guards.
+
 ## 4. Spec Compliance
 
-Follow WCAG 2.1 and CSS Color Level 4 specifications precisely. Reference the relevant spec section in comments where the implementation maps to a specific algorithm or formula.
+Follow WCAG 2.1 and CSS Color Level 4 specifications precisely. Where the two specifications conflict (e.g., sRGB gamma threshold), prefer CSS Color Level 4, which reflects the corrected IEC 61966-2-1 sRGB standard. Document any deviation from WCAG 2.1 spec text in an ADR.
+
+Reference the relevant spec section in comments where the implementation maps to a specific algorithm or formula.
 
 **Rationale:** The core value of this package is correctness. Clear traceability between code and spec makes correctness verifiable.
 

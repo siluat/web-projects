@@ -5,7 +5,7 @@
 ### Phase 1: HEX-only Pipeline
 
 - [x] PR 1: Project setup and type definitions
-- [ ] PR 2: HEX parser
+- [x] PR 2: HEX parser
 - [ ] PR 3: sRGB conversion + alpha compositing
 - [ ] PR 4: Luminance/contrast ratio + public API
 - [ ] PR 5: CLI
@@ -38,7 +38,7 @@
 - **Files:** `src/parse/utils.ts`, `src/parse/hex.ts`, `src/parse/index.ts`, tests
 - **Scope:** Parse #RGB, #RRGGBB, #RGBA, #RRGGBBAA using declarative patterns
 - **Verification:** HEX conversion accuracy, alpha value accuracy
-- **Status:** Pending
+- **Status:** Done
 
 ### PR 3: sRGB <-> Linear RGB Conversion + Alpha Compositing
 
@@ -146,7 +146,7 @@ type ParsedColor = SRGBColor | HSLColor | HWBColor | LABColor | LCHColor | OKLAB
 // Intermediate types for computation
 interface LinearRGB { r: number; g: number; b: number }   // 0-1, linear light
 interface XYZColor  { x: number; y: number; z: number }   // CIE XYZ D65
-interface OpaqueRGB { r: number; g: number; b: number }   // 0-255, sRGB, composited
+interface OpaqueRGB { r: number; g: number; b: number }   // 0-1, sRGB, composited
 
 // Public API types
 type ComplianceLevel = 'AAA' | 'AA' | 'Fail';

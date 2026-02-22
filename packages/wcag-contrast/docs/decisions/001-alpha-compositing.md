@@ -53,3 +53,5 @@ Compositing order:
 2. Composite foreground over the result from step 1
 
 This means `contrastRatio('rgba(0,0,0,0.5)', 'white')` evaluates the contrast between medium gray (the composited result) and white — which is what the user actually sees.
+
+**Compositing color space:** Alpha compositing is performed in gamma-encoded sRGB space, matching CSS Compositing Level 1 and browser rendering behavior. This decision applies to both WCAG 2.1 and APCA pipelines — parsing and compositing are shared layers, and the algorithms diverge only at the linearization stage onward.
