@@ -1,6 +1,6 @@
 /**
  * Convert a single HEX character (0-9, a-f, A-F) to its numeric value (0-15).
- * Returns -1 for invalid characters.
+ * Returns NaN for invalid characters.
  */
 export function hexCharToNumber(char: string): number {
   const code = char.charCodeAt(0);
@@ -10,7 +10,7 @@ export function hexCharToNumber(char: string): number {
   if (code >= 97 && code <= 102) return code - 87;
   // A-F
   if (code >= 65 && code <= 70) return code - 55;
-  return -1;
+  return NaN;
 }
 
 /**
