@@ -8,12 +8,13 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "test": "vitest",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@siluat/typescript-config": "workspace:*",
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.4"
+    "@types/bun": "catalog:",
+    "typescript": "^5.8.3"
   }
 }
