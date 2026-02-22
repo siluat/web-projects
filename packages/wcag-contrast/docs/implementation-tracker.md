@@ -146,7 +146,7 @@ type ParsedColor = SRGBColor | HSLColor | HWBColor | LABColor | LCHColor | OKLAB
 // Intermediate types for computation
 interface LinearRGB { r: number; g: number; b: number }   // 0-1, linear light
 interface XYZColor  { x: number; y: number; z: number }   // CIE XYZ D65
-interface OpaqueRGB { r: number; g: number; b: number }   // 0-255, sRGB, composited
+interface OpaqueRGB { r: number; g: number; b: number }   // 0-1, sRGB, composited
 
 // Public API types
 type ComplianceLevel = 'AAA' | 'AA' | 'Fail';

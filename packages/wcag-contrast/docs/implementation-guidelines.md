@@ -20,7 +20,9 @@ Leverage TypeScript's type system to prevent misuse at compile time. Distinguish
 
 ## 4. Spec Compliance
 
-Follow WCAG 2.1 and CSS Color Level 4 specifications precisely. Reference the relevant spec section in comments where the implementation maps to a specific algorithm or formula.
+Follow WCAG 2.1 and CSS Color Level 4 specifications precisely. Where the two specifications conflict (e.g., sRGB gamma threshold), prefer CSS Color Level 4, which reflects the corrected IEC 61966-2-1 sRGB standard. Document any deviation from WCAG 2.1 spec text in an ADR.
+
+Reference the relevant spec section in comments where the implementation maps to a specific algorithm or formula.
 
 **Rationale:** The core value of this package is correctness. Clear traceability between code and spec makes correctness verifiable.
 
