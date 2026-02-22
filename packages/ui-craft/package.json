@@ -19,7 +19,7 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@happy-dom/global-registrator": "^18.0.1",
-    "@types/bun": "^1.2.13",
+    "@types/bun": "catalog:",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "typescript": "^5.8.3"
