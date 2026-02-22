@@ -50,11 +50,11 @@ Reference: [CSS Color Level 4 — sRGB Colors](https://www.w3.org/TR/css-color-4
 
 ## Pipeline
 
-The 0-1 representation is maintained across the entire sRGB pipeline:
+The 0–1 representation is maintained across the entire sRGB pipeline:
 
-1. **Parse** — `SRGBColor` channels normalized to 0-1 at parse time (e.g., HEX `#FF0000` → R = `1.0`)
-2. **Composite** — `OpaqueRGB` channels remain in 0-1 after alpha compositing
-3. **Linearize** — gamma decompression operates on 0-1 input, produces 0-1 `LinearRGB`
-4. **Luminance** — relative luminance computed from 0-1 linear values
+1. **Parse** — `SRGBColor` channels normalized to 0–1 at parse time (e.g., HEX `#FF0000` → R = `1.0`)
+2. **Composite** — `OpaqueRGB` channels remain in 0–1 after alpha compositing
+3. **Linearize** — gamma decompression operates on 0–1 input, produces 0–1 `LinearRGB`
+4. **Luminance** — relative luminance computed from 0–1 linear values
 
-No stage converts to 0-255 or any other integer representation. This eliminates quantization error that would otherwise be introduced by a roundtrip through integer values (~0.004 per channel, compared to ~10⁻¹⁷ from float representation).
+No stage converts to 0–255 or any other integer representation. This eliminates quantization error that would otherwise be introduced by a roundtrip through integer values (~0.004 per channel, compared to ~10⁻¹⁷ from float representation).
