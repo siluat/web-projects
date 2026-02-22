@@ -6,7 +6,7 @@
 
 - [x] PR 1: Project setup and type definitions
 - [x] PR 2: HEX parser
-- [ ] PR 3: sRGB conversion + alpha compositing
+- [x] PR 3: sRGB conversion + alpha compositing
 - [ ] PR 4: Luminance/contrast ratio + public API
 - [ ] PR 5: CLI
 
@@ -47,7 +47,7 @@
   - sRGB gamma correction (WCAG 2.1 Section 1.4.3)
   - Alpha compositing (ADR-001): composite background over white -> composite foreground over result
 - **Verification:** Gamma threshold (0.04045), `rgba(0,0,0,0.5)` over white -> rgb(128,128,128)
-- **Status:** Pending
+- **Status:** Done
 
 ### PR 4: WCAG Luminance/Contrast Ratio + Public API
 
