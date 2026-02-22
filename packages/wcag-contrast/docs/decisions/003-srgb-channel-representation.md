@@ -46,7 +46,7 @@ CSS Color Level 4 defines sRGB channel values in the 0–1 range, and the WCAG r
 
 The floating-point precision loss (~10⁻¹⁵ in the final contrast ratio) is not a concern in practice. WCAG compliance is determined by comparing contrast ratios against fixed thresholds (3:1, 4.5:1, 7:1). For any pair of 8-bit colors, the minimum distance between a computed ratio and a threshold is far larger than the maximum rounding error introduced by this representation.
 
-Reference: [CSS Color Level 4 — The RGB color spaces](https://www.w3.org/TR/css-color-4/#the-srgb-orthogonal-complement)
+Reference: [CSS Color Level 4 — sRGB Colors](https://www.w3.org/TR/css-color-4/#numeric-srgb)
 
 ## Pipeline
 
