@@ -2,13 +2,7 @@
 
 ## HEX Parser
 
-### 1. Assumption About `normalize8bit` Input Range
-
-**Location:** `utils.ts:20`
-
-The name implies an 8-bit value, but the function accepts any number. If `hexCharToNumber` returns `-1`, `hex1` becomes `-17` and `hex2` becomes `-16 + x`, causing `normalize8bit` to return a negative result. Since this cannot be guaranteed at the type level, at minimum the precondition should be documented in a JSDoc comment.
-
-### 2. Regex Length Restriction
+### 1. Regex Length Restriction
 
 **Location:** `hex.ts:41`
 

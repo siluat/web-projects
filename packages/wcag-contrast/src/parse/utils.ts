@@ -15,6 +15,11 @@ export function hexCharToNumber(char: string): number {
 
 /**
  * Normalize an integer in the 0-255 range to a 0-1 floating point value.
+ *
+ * @precondition `value` must be an integer between 0 and 255 inclusive.
+ * This cannot be enforced at the type level in TypeScript.
+ * In the hex parsing pipeline, the regex validation in `parseHex`
+ * guarantees that only valid hex characters reach this function.
  */
 export function normalize8bit(value: number): number {
   return value / 255;
