@@ -36,7 +36,7 @@ const formats: HexFormat[] = [
   },
 ];
 
-const HEX_PATTERN = /^#[0-9a-fA-F]+$/;
+const HEX_PATTERN = /^#[0-9a-fA-F]{3,8}$/;
 
 /**
  * Parse a HEX color string into an SRGBColor.
