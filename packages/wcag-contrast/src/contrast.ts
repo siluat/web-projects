@@ -21,6 +21,15 @@ const LARGE_TEXT_THRESHOLDS = [
 ] as const;
 
 /**
+ * Tolerance for floating-point comparison in threshold checks.
+ *
+ * IEEE 754 arithmetic can produce results like 6.999999999999999 instead
+ * of 7 when dividing (0.35 / 0.05). This tolerance absorbs such artifacts
+ * without promoting genuinely sub-threshold ratios (e.g., 4.496).
+ */
+const FLOAT_TOLERANCE = 1e-10;
+
+/**
  * Determine the compliance level for a contrast ratio against thresholds.
  *
  * Walks the threshold array (strictest-first) and returns the first
@@ -34,11 +43,22 @@ function gradeLevel(
   }>,
 ): ComplianceLevel {
   for (const { min, level } of thresholds) {
-    if (ratio >= min) {
+    if (ratio >= min - FLOAT_TOLERANCE) {
       return level;
     }
   }
   return 'Fail';
+}
+
+/**
+ * Compute the unrounded WCAG 2.1 contrast ratio.
+ *
+ * @see https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio
+ */
+function rawContrastRatio(l1: number, l2: number): number {
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
 }
 
 /**
@@ -49,27 +69,26 @@ function gradeLevel(
  * The order of arguments does not matter — the function
  * automatically determines which is lighter.
  * Result is rounded to two decimal places.
- *
- * @see https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio
  */
 export function computeContrastRatio(l1: number, l2: number): number {
-  const lighter = Math.max(l1, l2);
-  const darker = Math.min(l1, l2);
-  const ratio = (lighter + 0.05) / (darker + 0.05);
-  return Math.round(ratio * 100) / 100;
+  return Math.round(rawContrastRatio(l1, l2) * 100) / 100;
 }
 
 /**
  * Evaluate WCAG 2.1 contrast compliance for two luminance values.
  *
- * Returns the contrast ratio and compliance levels for both
- * normal text (AA >= 4.5, AAA >= 7) and large text (AA >= 3, AAA >= 4.5).
+ * Grading uses the unrounded ratio to avoid boundary misclassification
+ * (e.g., 4.496 rounding to 4.50 should not pass AA's 4.5 threshold).
+ * The returned `ratio` field is rounded for display purposes.
+ *
+ * @see https://www.w3.org/TR/WCAG21/#contrast-minimum
  */
 export function evaluateContrast(l1: number, l2: number): ContrastResult {
-  const ratio = computeContrastRatio(l1, l2);
+  const raw = rawContrastRatio(l1, l2);
+  const ratio = Math.round(raw * 100) / 100;
   return {
     ratio,
-    normalText: gradeLevel(ratio, NORMAL_TEXT_THRESHOLDS),
-    largeText: gradeLevel(ratio, LARGE_TEXT_THRESHOLDS),
+    normalText: gradeLevel(raw, NORMAL_TEXT_THRESHOLDS),
+    largeText: gradeLevel(raw, LARGE_TEXT_THRESHOLDS),
   };
 }
