@@ -15,6 +15,10 @@ describe('computeContrastRatio', () => {
   });
 });
 
+/**
+ * @see https://www.w3.org/TR/WCAG21/#contrast-minimum
+ * @see https://www.w3.org/TR/WCAG21/#contrast-enhanced
+ */
 describe('evaluateContrast', () => {
   it('grades ratio >= 7 as AAA for both text sizes', () => {
     const result = evaluateContrast(0, 1);
