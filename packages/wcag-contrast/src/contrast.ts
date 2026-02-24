@@ -69,6 +69,8 @@ function rawContrastRatio(l1: number, l2: number): number {
  * The order of arguments does not matter — the function
  * automatically determines which is lighter.
  * Result is rounded to two decimal places.
+ *
+ * @see https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio
  */
 export function computeContrastRatio(l1: number, l2: number): number {
   return Math.round(rawContrastRatio(l1, l2) * 100) / 100;
