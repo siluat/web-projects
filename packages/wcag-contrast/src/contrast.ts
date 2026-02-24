@@ -84,6 +84,7 @@ export function computeContrastRatio(l1: number, l2: number): number {
  * The returned `ratio` field is rounded for display purposes.
  *
  * @see https://www.w3.org/TR/WCAG21/#contrast-minimum
+ * @see https://www.w3.org/TR/WCAG21/#contrast-enhanced
  */
 export function evaluateContrast(l1: number, l2: number): ContrastResult {
   const raw = rawContrastRatio(l1, l2);
