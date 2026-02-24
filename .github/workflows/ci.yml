@@ -35,5 +35,12 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Run tests
-        run: bun run test
+      - name: Run tests with coverage
+        run: bun run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/ui-craft/coverage/lcov.info,packages/wcag-contrast/coverage/lcov.info
+          fail_ci_if_error: false
