@@ -106,3 +106,7 @@ Key build dependencies and patterns:
 - Build outputs go to `dist/`, `.next/`, and Rust `target/` directories
 - Rust packages require `cargo build --release` followed by Node.js postbuild scripts
 - Test tasks depend on build completion
+
+## Planning & Ideas
+
+- [Automation Ideas](docs/automation-ideas.md) - Ideas and priorities for agents, skills, and commands
