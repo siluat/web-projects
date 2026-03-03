@@ -31,9 +31,9 @@
 
 ### PR 1: Project Setup and Type Definitions
 
-- **Files:** `package.json`, `tsconfig.json`, `vitest.config.ts`, `src/types.ts`, `src/index.ts`
+- **Files:** `package.json`, `tsconfig.json`, `src/types.ts`, `src/index.ts`
 - **Scope:** Build/test infrastructure, all type definitions from the type system above
-- **Notes:** tsconfig extends `@siluat/typescript-config/library.json`, vitest uses `passWithNoTests: true`
+- **Notes:** tsconfig extends `@siluat/typescript-config/library.json`, test runner is Bun (`bun test`)
 - **Verification:** `turbo run check-types --filter=@siluat/wcag-contrast`, `turbo run test --filter=@siluat/wcag-contrast`
 - **Status:** Done
 
@@ -163,7 +163,6 @@ interface ContrastResult { ratio: number; normalText: ComplianceLevel; largeText
 packages/wcag-contrast/
   package.json
   tsconfig.json
-  vitest.config.ts
   src/
     index.ts                 # Public API
     types.ts                 # All type definitions
