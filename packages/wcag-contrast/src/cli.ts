@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 import { checkContrast } from './index';
 import type { ComplianceLevel, ContrastResult } from './types';
 
