@@ -8,20 +8,21 @@
 - [x] PR 2: HEX parser
 - [x] PR 3: sRGB conversion + alpha compositing
 - [x] PR 4: Luminance/contrast ratio + public API
-- [ ] PR 5: CLI
+- [x] PR 5: CLI
+- [ ] PR 6: npm publish 준비
 
 ### Phase 2: sRGB Family Extension
 
-- [ ] PR 6: Named colors parser
-- [ ] PR 7: RGB parser
-- [ ] PR 8: HSL parser + conversion
-- [ ] PR 9: HWB parser + conversion
+- [ ] PR 7: Named colors parser
+- [ ] PR 8: RGB parser
+- [ ] PR 9: HSL parser + conversion
+- [ ] PR 10: HWB parser + conversion
 
 ### Phase 3: Wide-gamut Color Support
 
-- [ ] PR 10: Wide-gamut color conversion pipeline
-- [ ] PR 11: CSS Color Level 4 gamut mapping
-- [ ] PR 12: LAB/LCH/OKLAB/OKLCH parsers
+- [ ] PR 11: Wide-gamut color conversion pipeline
+- [ ] PR 12: CSS Color Level 4 gamut mapping
+- [ ] PR 13: LAB/LCH/OKLAB/OKLCH parsers
 
 ## PR Details
 
@@ -72,9 +73,16 @@
   - Default: human-readable, `--json`: single-line JSON, `--level AA|AAA`: exit code 0/1
   - Error: stderr, exit code 2
 - **Verification:** Reproduce README CLI examples (HEX-based)
+- **Status:** Done
+
+### PR 6: npm publish 준비
+
+- **Files:** `package.json`, `tsconfig.json` (build config)
+- **Scope:** `private` 제거, 빌드 스텝 추가 (tsc → dist/), bin을 `dist/cli.js`로 변경, exports를 `dist/index.js`로 변경, shebang (`#!/usr/bin/env node`), `files` 필드, `prepublishOnly` 스크립트
+- **Notes:** bin 필드가 현재 `.ts`를 직접 참조하고 있으므로 배포 시 반드시 빌드된 JS로 변경 필요
 - **Status:** Pending
 
-### PR 6: Named Colors Parser
+### PR 7: Named Colors Parser
 
 - **Files:** `src/parse/named-colors.ts`, tests
 - **Scope:** 148 CSS named colors (including `transparent`)
@@ -82,28 +90,28 @@
 - **Integration test:** `contrastRatio('navy', 'white')` -> 15.94
 - **Status:** Pending
 
-### PR 7: RGB Parser
+### PR 8: RGB Parser
 
 - **Files:** `src/parse/rgb.ts`, tests
 - **Scope:** `rgb(255 0 0)`, `rgb(255 0 0 / 0.5)`, `rgba(255, 0, 0, 0.5)` — supports both comma and space syntax
 - **Verification:** `contrastRatio('rgb(0, 0, 0)', '#fff')` -> 21
 - **Status:** Pending
 
-### PR 8: HSL Parser + Conversion
+### PR 9: HSL Parser + Conversion
 
 - **Files:** `src/parse/hsl.ts`, `src/convert/hsl-to-srgb.ts`, tests
 - **Scope:** hsl()/hsla() parsing (deg, rad, grad, turn units), HSL -> sRGB conversion (CSS Color Level 4 Section 7)
 - **Verification:** `hsl(0 100% 50%)` = red, each hue unit conversion
 - **Status:** Pending
 
-### PR 9: HWB Parser + Conversion
+### PR 10: HWB Parser + Conversion
 
 - **Files:** `src/parse/hwb.ts`, `src/convert/hwb-to-srgb.ts`, tests
 - **Scope:** hwb() parsing, HWB -> sRGB conversion (CSS Color Level 4 Section 8)
 - **Verification:** whiteness + blackness > 100% normalization
 - **Status:** Pending
 
-### PR 10: Wide-gamut Color Conversion Pipeline
+### PR 11: Wide-gamut Color Conversion Pipeline
 
 - **Files:** `src/convert/lab-to-xyz.ts`, `src/convert/lch-to-lab.ts`, `src/convert/oklab-to-xyz.ts`, `src/convert/oklch-to-oklab.ts`, `src/convert/xyz-to-linear-rgb.ts`, tests
 - **Scope:**
@@ -115,7 +123,7 @@
 - **Verification:** Spec conversion examples, floating-point tolerance configuration
 - **Status:** Pending
 
-### PR 11: CSS Color Level 4 Gamut Mapping
+### PR 12: CSS Color Level 4 Gamut Mapping
 
 - **Files:** `src/gamut-map.ts`, tests
 - **Scope:** Section 13.2 algorithm — chroma binary search in OKLCH, deltaEOK < 0.02 convergence, 64 iteration limit
@@ -123,7 +131,7 @@
 - **Verification:** Colors within sRGB gamut are not mapped, out-of-gamut colors compared against browser reference values
 - **Status:** Pending
 
-### PR 12: LAB/LCH/OKLAB/OKLCH Parsers
+### PR 13: LAB/LCH/OKLAB/OKLCH Parsers
 
 - **Files:** `src/parse/lab.ts`, `src/parse/lch.ts`, `src/parse/oklab.ts`, `src/parse/oklch.ts`, tests
 - **Scope:** Parse 4 wide-gamut color formats, support both percentage and number values
@@ -198,12 +206,12 @@ packages/wcag-contrast/
 | sRGB inverse gamma correction | WCAG 2.1 1.4.3 | 3 |
 | Alpha compositing | CSS Compositing Level 1 | 3 |
 | Relative luminance / Contrast ratio | WCAG 2.1 1.4.3 | 4 |
-| HSL -> sRGB | CSS Color Level 4 Section 7 | 8 |
-| HWB -> sRGB | CSS Color Level 4 Section 8 | 9 |
-| LAB <-> XYZ, LCH -> LAB | CSS Color Level 4 Section 10.1 | 10 |
-| OKLAB <-> XYZ, OKLCH -> OKLAB | CSS Color Level 4 Section 10.3 | 10 |
-| XYZ -> Linear sRGB | CSS Color Level 4 Section 10.2 | 10 |
-| CSS gamut mapping | CSS Color Level 4 Section 13.2 | 11 |
+| HSL -> sRGB | CSS Color Level 4 Section 7 | 9 |
+| HWB -> sRGB | CSS Color Level 4 Section 8 | 10 |
+| LAB <-> XYZ, LCH -> LAB | CSS Color Level 4 Section 10.1 | 11 |
+| OKLAB <-> XYZ, OKLCH -> OKLAB | CSS Color Level 4 Section 10.3 | 11 |
+| XYZ -> Linear sRGB | CSS Color Level 4 Section 10.2 | 11 |
+| CSS gamut mapping | CSS Color Level 4 Section 13.2 | 12 |
 
 ## Notes
 
