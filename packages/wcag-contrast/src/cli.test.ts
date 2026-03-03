@@ -92,6 +92,18 @@ describe('CLI', () => {
       expect(exitCode).toBe(2);
     });
 
+    it('rejects --json and --level together', async () => {
+      const { stderr, exitCode } = await run([
+        '#333',
+        '#fff',
+        '--json',
+        '--level',
+        'AA',
+      ]);
+      expect(stderr).toContain('--json and --level cannot be used together');
+      expect(exitCode).toBe(2);
+    });
+
     it('prints error as plain text even with --json flag', async () => {
       const { stderr, stdout, exitCode } = await run([
         'not-a-color',

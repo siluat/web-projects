@@ -56,6 +56,10 @@ function parseArgs(argv: string[]): {
     }
   }
 
+  if (json && level !== null) {
+    throw new Error('--json and --level cannot be used together');
+  }
+
   const [foreground, background] = args;
   if (
     args.length !== 2 ||
