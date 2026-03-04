@@ -1,6 +1,6 @@
 # web-projects
 
-[![codecov](https://codecov.io/gh/siluat/web-projects/graph/badge.svg)](https://codecov.io/gh/siluat/web-projects)
+[![codecov](https://codecov.io/gh/siluat/web-projects/graph/badge.svg?token=ML9T466TEB)](https://codecov.io/gh/siluat/web-projects)
 
 Collection of my personal web projects.
 
@@ -13,8 +13,8 @@ Collection of my personal web projects.
 
 ### Libraries
 
-- [@siluat/ui-craft](./packages/ui-craft/): My personal UI animation crafting practice. [![codecov](https://codecov.io/gh/siluat/web-projects/graph/badge.svg?component=ui-craft)](https://codecov.io/gh/siluat/web-projects)
-- [@siluat/color-contrast-cli](./packages/color-contrast-cli/): WCAG 2.1 contrast ratio checker CLI. [![codecov](https://codecov.io/gh/siluat/web-projects/graph/badge.svg?component=color-contrast-cli)](https://codecov.io/gh/siluat/web-projects)
+- [@siluat/ui-craft](./packages/ui-craft/): My personal UI animation crafting practice. [![codecov](https://codecov.io/gh/siluat/web-projects/graph/badge.svg?token=ML9T466TEB&component=ui-craft)](https://codecov.io/gh/siluat/web-projects)
+- [@siluat/color-contrast-cli](./packages/color-contrast-cli/): WCAG 2.1 contrast ratio checker CLI. [![codecov](https://codecov.io/gh/siluat/web-projects/graph/badge.svg?token=ML9T466TEB&component=color-contrast-cli)](https://codecov.io/gh/siluat/web-projects)
 - [@siluat/shadcn-ui](./packages/shadcn-ui/): shadcn/ui components.
 - [@siluat/typescript-config](./packages/typescript-config/): Shared TypeScript configurations.
 - [noumenon-gleaner](./packages/noumenon-gleaner/): Data extraction tool for Noumenon project (Rust CLI).
