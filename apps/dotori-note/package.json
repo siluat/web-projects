@@ -1,5 +1,6 @@
 {
   "name": "dotori-note",
+  "private": true,
   "description": "이것저것 기록하고 관리하기 위한 노트",
   "homepage": "https://dotori.blog",
   "scripts": {
