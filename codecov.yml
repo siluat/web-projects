@@ -8,5 +8,20 @@ coverage:
       default:
         target: auto
 
+flag_management:
+  individual_flags:
+    - name: ui-craft
+      paths:
+        - packages/ui-craft/
+      statuses:
+        - type: project
+          target: auto
+    - name: color-contrast-cli
+      paths:
+        - packages/color-contrast-cli/
+      statuses:
+        - type: project
+          target: auto
+
 comment:
   layout: "condensed_header, condensed_files, condensed_footer"
