@@ -1,4 +1,4 @@
-# @siluat/wcag-contrast
+# @siluat/color-contrast-cli
 
 ## Implementation Guidelines
 

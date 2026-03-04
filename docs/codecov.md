@@ -51,7 +51,7 @@ In `.github/workflows/ci.yml`, append the new package's LCOV path to the `files`
   uses: codecov/codecov-action@v5
   with:
     token: ${{ secrets.CODECOV_TOKEN }}
-    files: packages/ui-craft/coverage/lcov.info,packages/wcag-contrast/coverage/lcov.info,packages/new-package/coverage/lcov.info
+    files: packages/ui-craft/coverage/lcov.info,packages/color-contrast-cli/coverage/lcov.info,packages/new-package/coverage/lcov.info
     fail_ci_if_error: false
 ```
 
@@ -81,9 +81,9 @@ flag_management:
       statuses:
         - type: project
           target: auto
-    - name: wcag-contrast
+    - name: color-contrast-cli
       paths:
-        - packages/wcag-contrast/
+        - packages/color-contrast-cli/
       statuses:
         - type: project
           target: auto
@@ -98,7 +98,7 @@ When using this configuration, the `flags` parameter must also be specified in t
 turbo run test:coverage
 
 # Run coverage for a specific package
-cd packages/wcag-contrast
+cd packages/color-contrast-cli
 bun test --coverage
 ```
 

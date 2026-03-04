@@ -45,7 +45,7 @@
 ### 4. Cursor Rules to Universal Skills (Low)
 
 - **Targets:**
-  - `wcag-contrast-guidelines.mdc` → wcag-contrast development guide
+  - `color-contrast-cli-guidelines.mdc` → color-contrast-cli development guide
   - `animations-guidelines.mdc` → animation guide
 - **Rationale:** Apply consistent guidelines across any agent, not tied to a specific IDE
 - **Note:** Already working in Cursor, so only valuable when other agents are actively used for these packages

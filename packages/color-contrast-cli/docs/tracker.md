@@ -9,7 +9,7 @@
 - [x] PR 3: sRGB conversion + alpha compositing
 - [x] PR 4: Luminance/contrast ratio + public API
 - [x] PR 5: CLI
-- [ ] PR 6: npm publish 준비
+- [x] PR 6: Publish preparation (npm + JSR)
 
 ### Phase 2: sRGB Family Extension
 
@@ -31,7 +31,7 @@
 - **Files:** `package.json`, `tsconfig.json`, `src/types.ts`, `src/index.ts`
 - **Scope:** Build/test infrastructure, all type definitions from the type system above
 - **Notes:** tsconfig extends `@siluat/typescript-config/library.json`, test runner is Bun (`bun test`)
-- **Verification:** `turbo run check-types --filter=@siluat/wcag-contrast`, `turbo run test --filter=@siluat/wcag-contrast`
+- **Verification:** `turbo run check-types --filter=@siluat/color-contrast-cli`, `turbo run test --filter=@siluat/color-contrast-cli`
 - **Status:** Done
 
 ### PR 2: HEX Parser
@@ -75,12 +75,18 @@
 - **Verification:** Reproduce README CLI examples (HEX-based)
 - **Status:** Done
 
-### PR 6: npm publish 준비
+### PR 6: Publish Preparation (npm + JSR)
 
-- **Files:** `package.json`, `tsconfig.json` (build config)
-- **Scope:** `private` 제거, 빌드 스텝 추가 (tsc → dist/), bin을 `dist/cli.js`로 변경, exports를 `dist/index.js`로 변경, shebang (`#!/usr/bin/env node`), `files` 필드, `prepublishOnly` 스크립트
-- **Notes:** bin 필드가 현재 `.ts`를 직접 참조하고 있으므로 배포 시 반드시 빌드된 JS로 변경 필요
-- **Status:** Pending
+- **Files:** `package.json`, `tsdown.config.ts`, `jsr.json`, `.gitignore`, `README.md`, all source files (import extensions)
+- **Scope:**
+  - Remove `private`, bump version to 0.1.0, add public package metadata
+  - Add tsdown build pipeline (ADR-006): `exports` and `bin` point to `dist/`
+  - Shebang changed to `#!/usr/bin/env node` for npm consumers
+  - `files: ["dist"]`, `prepublishOnly` script
+  - Add `jsr.json` for JSR registry support
+  - Update README: distinguish implemented vs planned features, add JSR install instructions
+- **Verification:** type-check, tests, build, `node dist/cli.js`, `npm pack --dry-run`
+- **Status:** Done
 
 ### PR 7: Named Colors Parser
 
@@ -164,7 +170,7 @@ interface ContrastResult { ratio: number; normalText: ComplianceLevel; largeText
 ## File Structure
 
 ```text
-packages/wcag-contrast/
+packages/color-contrast-cli/
   package.json
   tsconfig.json
   src/
