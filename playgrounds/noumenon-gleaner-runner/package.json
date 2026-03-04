@@ -1,5 +1,6 @@
 {
   "name": "noumenon-gleaner-runner",
+  "private": true,
   "version": "1.0.0",
   "description": "Testing playground for Noumenon Gleaner",
   "scripts": {},
