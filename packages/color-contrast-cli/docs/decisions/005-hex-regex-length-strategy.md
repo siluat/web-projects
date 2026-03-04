@@ -31,4 +31,4 @@ Two approaches were considered:
 
 ## References
 
-- `packages/wcag-contrast/src/parse/hex.ts` — HEX parser implementation
+- `packages/color-contrast-cli/src/parse/hex.ts` — HEX parser implementation

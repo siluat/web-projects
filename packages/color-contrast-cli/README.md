@@ -1,17 +1,25 @@
-# @siluat/wcag-contrast
+# @siluat/color-contrast-cli
 
 WCAG 2.1 color contrast checker. Available as both a library and a CLI.
 
 ## Installation
 
 ```bash
-npm install @siluat/wcag-contrast
+npm install @siluat/color-contrast-cli
 # or
-pnpm add @siluat/wcag-contrast
+pnpm add @siluat/color-contrast-cli
 # or
-yarn add @siluat/wcag-contrast
+yarn add @siluat/color-contrast-cli
 # or
-bun add @siluat/wcag-contrast
+bun add @siluat/color-contrast-cli
+```
+
+### JSR
+
+```bash
+deno add jsr:@siluat/color-contrast-cli
+# or
+npx jsr add @siluat/color-contrast-cli
 ```
 
 ## Library
@@ -19,11 +27,12 @@ bun add @siluat/wcag-contrast
 ### Contrast Ratio
 
 ```typescript
-import { contrastRatio } from '@siluat/wcag-contrast';
+import { contrastRatio } from '@siluat/color-contrast-cli';
 
 contrastRatio('#000000', '#ffffff'); // 21
-contrastRatio('rgb(0, 0, 0)', '#fff'); // 21
-contrastRatio('navy', 'white'); // 15.94
+contrastRatio('#00000080', '#ffffff'); // alpha compositing supported
+// contrastRatio('rgb(0, 0, 0)', '#fff'); // planned (Phase 2)
+// contrastRatio('navy', 'white'); // planned (Phase 2)
 ```
 
 Returns the ratio as a `number`.
@@ -31,7 +40,7 @@ Returns the ratio as a `number`.
 ### WCAG Compliance Check
 
 ```typescript
-import { checkContrast } from '@siluat/wcag-contrast';
+import { checkContrast } from '@siluat/color-contrast-cli';
 
 checkContrast('#333', '#fff');
 // { ratio: 12.63, normalText: 'AAA', largeText: 'AAA' }
@@ -70,10 +79,10 @@ WCAG 2.1 compliance thresholds:
 ## CLI
 
 ```bash
-npx @siluat/wcag-contrast '#000' '#fff'
+npx @siluat/color-contrast-cli '#000' '#fff'
 ```
 
-Also available via `pnpm dlx @siluat/wcag-contrast` or `bunx @siluat/wcag-contrast`.
+Also available via `pnpm dlx @siluat/color-contrast-cli` or `bunx @siluat/color-contrast-cli`.
 
 Output:
 
@@ -86,7 +95,7 @@ Large text:  AAA ✓
 Failure case:
 
 ```bash
-npx @siluat/wcag-contrast '#999' '#fff'
+npx @siluat/color-contrast-cli '#999' '#fff'
 ```
 
 ```text
@@ -98,7 +107,7 @@ Large text:  Fail ✗
 JSON output:
 
 ```bash
-npx @siluat/wcag-contrast '#333' '#fff' --json
+npx @siluat/color-contrast-cli '#333' '#fff' --json
 ```
 
 ```json
@@ -108,25 +117,29 @@ npx @siluat/wcag-contrast '#333' '#fff' --json
 CI exit code check (exit 0 on pass, exit 1 on fail). Checks against normal text:
 
 ```bash
-npx @siluat/wcag-contrast '#333' '#fff' --level AA
-npx @siluat/wcag-contrast '#333' '#fff' --level AAA
+npx @siluat/color-contrast-cli '#333' '#fff' --level AA
+npx @siluat/color-contrast-cli '#333' '#fff' --level AAA
 ```
 
 ## Supported Color Formats
 
-All static CSS color values are supported:
+**Currently supported:**
+
+- HEX: `#RGB`, `#RRGGBB`, `#RGBA`, `#RRGGBBAA`
+
+**Planned (Phase 2 — sRGB family):**
 
 - Named colors: `red`, `navy`, `rebeccapurple`, `transparent` (148 named colors)
-- HEX: `#RGB`, `#RRGGBB`, `#RGBA`, `#RRGGBBAA`
 - RGB: `rgb(255 0 0)`, `rgb(255 0 0 / 0.5)`, `rgba(255, 0, 0, 0.5)`
 - HSL: `hsl(120 100% 50%)`, `hsl(120 100% 50% / 0.5)`, `hsla(120, 100%, 50%, 0.5)`
 - HWB: `hwb(120 0% 0%)`, `hwb(120 0% 0% / 0.5)`
+
+**Planned (Phase 3 — wide-gamut):**
+
 - LAB: `lab(50% 40 59.5)`, `lab(50% 40 59.5 / 0.5)`
 - LCH: `lch(52.2% 72.2 50)`, `lch(52.2% 72.2 50 / 0.5)`
 - OKLAB: `oklab(59% 0.1 0.1)`, `oklab(59% 0.1 0.1 / 0.5)`
 - OKLCH: `oklch(60% 0.15 50)`, `oklch(60% 0.15 50 / 0.5)`
-
-Both modern space-separated syntax and legacy comma-separated syntax are supported for `rgb()` and `hsl()`.
 
 ## How Alpha and Wide-Gamut Colors Are Handled
 
@@ -135,10 +148,10 @@ WCAG contrast ratio is defined between opaque sRGB colors. This tool automatical
 **Alpha**: Colors with alpha are composited to produce the opaque color users see on screen. Background is composited over white (browser default), then foreground is composited over the result.
 
 ```typescript
-contrastRatio('rgba(0, 0, 0, 0.5)', 'white'); // contrast of composited gray vs white
+contrastRatio('#00000080', '#ffffff'); // contrast of composited gray vs white
 ```
 
-**Wide-gamut colors**: Colors in LAB, LCH, OKLAB, or OKLCH that fall outside the sRGB gamut are gamut-mapped using the CSS Color Level 4 algorithm — the same method browsers use to render these colors.
+**Wide-gamut colors** (planned): Colors in LAB, LCH, OKLAB, or OKLCH that fall outside the sRGB gamut will be gamut-mapped using the CSS Color Level 4 algorithm — the same method browsers use to render these colors. This feature is not yet implemented.
 
 ## Errors
 
@@ -152,7 +165,7 @@ contrastRatio('not-a-color', '#fff');
 The CLI prints the error message to stderr and exits with code 2 (distinguishing from `--level` failure which exits with code 1):
 
 ```bash
-npx @siluat/wcag-contrast 'not-a-color' '#fff'
+npx @siluat/color-contrast-cli 'not-a-color' '#fff'
 # stderr: Error: Invalid color: "not-a-color"
 # exit code: 2
 ```

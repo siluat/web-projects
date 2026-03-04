@@ -1,9 +1,9 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 import { checkContrast } from './index';
 import type { ComplianceLevel, ContrastResult } from './types';
 
 const USAGE =
-  'Usage: wcag-contrast <foreground> <background> [--json] [--level AA|AAA]';
+  'Usage: contrast <foreground> <background> [--json] [--level AA|AAA]';
 
 function formatLevel(level: ComplianceLevel): string {
   return level === 'Fail' ? 'Fail \u2717' : `${level} \u2713`;
