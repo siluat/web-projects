@@ -1,8 +1,73 @@
 # @siluat/color-contrast-cli
 
-WCAG 2.1 color contrast checker. Available as both a library and a CLI.
+WCAG 2.1 color contrast checker for the command line. Also usable as a library.
+
+## Quick Start
+
+No install needed — run directly:
+
+```bash
+npx @siluat/color-contrast-cli '#000' '#fff'
+# or
+bunx @siluat/color-contrast-cli '#000' '#fff'
+# or
+deno run npm:@siluat/color-contrast-cli '#000' '#fff'
+```
+
+```text
+Contrast ratio: 21:1
+Normal text: AAA ✓
+Large text:  AAA ✓
+```
+
+## CLI
+
+### JSON Output
+
+```bash
+npx @siluat/color-contrast-cli '#333' '#fff' --json
+```
+
+```json
+{"ratio":12.63,"normalText":"AAA","largeText":"AAA"}
+```
+
+### CI Exit Code Check
+
+Exit 0 on pass, exit 1 on fail. Checks against normal text:
+
+```bash
+npx @siluat/color-contrast-cli '#333' '#fff' --level AA
+npx @siluat/color-contrast-cli '#333' '#fff' --level AAA
+```
+
+### Failure Case
+
+```bash
+npx @siluat/color-contrast-cli '#999' '#fff'
+```
+
+```text
+Contrast ratio: 2.85:1
+Normal text: Fail ✗
+Large text:  Fail ✗
+```
+
+### Error Handling
+
+The CLI prints error messages to stderr and exits with code 2 (distinguishing from `--level` failure which exits with code 1):
+
+```bash
+npx @siluat/color-contrast-cli 'not-a-color' '#fff'
+# stderr: Error: Invalid color: "not-a-color"
+# exit code: 2
+```
+
+With `--json`, errors are also printed to stderr as plain text, not JSON.
 
 ## Installation
+
+For use as a library or for global CLI access:
 
 ```bash
 npm install @siluat/color-contrast-cli
@@ -52,6 +117,15 @@ checkContrast('#999', '#fff');
 // { ratio: 2.85, normalText: 'Fail', largeText: 'Fail' }
 ```
 
+### Error Handling
+
+Both `contrastRatio` and `checkContrast` throw an `Error` for invalid color strings:
+
+```typescript
+contrastRatio('not-a-color', '#fff');
+// Error: Invalid color: "not-a-color"
+```
+
 ## API Reference
 
 ```typescript
@@ -75,51 +149,6 @@ WCAG 2.1 compliance thresholds:
 |-------|-------------|------------|
 | AAA   | >= 7        | >= 4.5     |
 | AA    | >= 4.5      | >= 3       |
-
-## CLI
-
-```bash
-npx @siluat/color-contrast-cli '#000' '#fff'
-```
-
-Also available via `pnpm dlx @siluat/color-contrast-cli` or `bunx @siluat/color-contrast-cli`.
-
-Output:
-
-```text
-Contrast ratio: 21:1
-Normal text: AAA ✓
-Large text:  AAA ✓
-```
-
-Failure case:
-
-```bash
-npx @siluat/color-contrast-cli '#999' '#fff'
-```
-
-```text
-Contrast ratio: 2.85:1
-Normal text: Fail ✗
-Large text:  Fail ✗
-```
-
-JSON output:
-
-```bash
-npx @siluat/color-contrast-cli '#333' '#fff' --json
-```
-
-```json
-{"ratio":12.63,"normalText":"AAA","largeText":"AAA"}
-```
-
-CI exit code check (exit 0 on pass, exit 1 on fail). Checks against normal text:
-
-```bash
-npx @siluat/color-contrast-cli '#333' '#fff' --level AA
-npx @siluat/color-contrast-cli '#333' '#fff' --level AAA
-```
 
 ## Supported Color Formats
 
@@ -152,22 +181,3 @@ contrastRatio('#00000080', '#ffffff'); // contrast of composited gray vs white
 ```
 
 **Wide-gamut colors** (planned): Colors in LAB, LCH, OKLAB, or OKLCH that fall outside the sRGB gamut will be gamut-mapped using the CSS Color Level 4 algorithm — the same method browsers use to render these colors. This feature is not yet implemented.
-
-## Errors
-
-Both `contrastRatio` and `checkContrast` throw an `Error` for invalid color strings:
-
-```typescript
-contrastRatio('not-a-color', '#fff');
-// Error: Invalid color: "not-a-color"
-```
-
-The CLI prints the error message to stderr and exits with code 2 (distinguishing from `--level` failure which exits with code 1):
-
-```bash
-npx @siluat/color-contrast-cli 'not-a-color' '#fff'
-# stderr: Error: Invalid color: "not-a-color"
-# exit code: 2
-```
-
-With `--json`, errors are also printed to stderr as plain text, not JSON.
