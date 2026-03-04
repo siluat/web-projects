@@ -26,18 +26,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Verify package.json version
+        env:
+          EXPECTED_VERSION: ${{ inputs.version }}
         run: |
           pkg_version=$(node -p "require('./package.json').version")
-          if [ "$pkg_version" != "${{ inputs.version }}" ]; then
-            echo "::error::package.json version ($pkg_version) does not match input (${{ inputs.version }})"
+          if [ "$pkg_version" != "$EXPECTED_VERSION" ]; then
+            echo "::error::package.json version ($pkg_version) does not match input ($EXPECTED_VERSION)"
             exit 1
           fi
 
       - name: Verify jsr.json version
+        env:
+          EXPECTED_VERSION: ${{ inputs.version }}
         run: |
           jsr_version=$(node -p "require('./jsr.json').version")
-          if [ "$jsr_version" != "${{ inputs.version }}" ]; then
-            echo "::error::jsr.json version ($jsr_version) does not match input (${{ inputs.version }})"
+          if [ "$jsr_version" != "$EXPECTED_VERSION" ]; then
+            echo "::error::jsr.json version ($jsr_version) does not match input ($EXPECTED_VERSION)"
             exit 1
           fi
 
@@ -121,6 +125,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create and push tag
+        env:
+          VERSION: ${{ inputs.version }}
         run: |
-          git tag "@siluat/color-contrast-cli@${{ inputs.version }}"
-          git push origin "@siluat/color-contrast-cli@${{ inputs.version }}"
+          git tag "@siluat/color-contrast-cli@$VERSION"
+          git push origin "@siluat/color-contrast-cli@$VERSION"
