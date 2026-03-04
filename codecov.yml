@@ -8,15 +8,15 @@ coverage:
       default:
         target: auto
 
-flag_management:
-  individual_flags:
-    - name: ui-craft
+component_management:
+  individual_components:
+    - component_id: ui-craft
       paths:
         - packages/ui-craft/
       statuses:
         - type: project
           target: auto
-    - name: color-contrast-cli
+    - component_id: color-contrast-cli
       paths:
         - packages/color-contrast-cli/
       statuses:
