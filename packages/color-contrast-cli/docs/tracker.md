@@ -90,29 +90,29 @@
 
 ### PR 7: Named Colors Parser
 
-- **Files:** `src/parse/named-colors.ts`, tests
+- **Files:** `src/parse/named-colors.ts`, `src/parse/index.ts` (dispatcher), tests
 - **Scope:** 148 CSS named colors (including `transparent`)
 - **Verification:** black, white, red, navy, rebeccapurple, transparent
-- **Integration test:** `contrastRatio('navy', 'white')` -> 15.94
+- **Integration test:** `contrastRatio('navy', 'white')` -> 16.01
 - **Status:** Pending
 
 ### PR 8: RGB Parser
 
-- **Files:** `src/parse/rgb.ts`, tests
+- **Files:** `src/parse/rgb.ts`, `src/parse/index.ts` (dispatcher), tests
 - **Scope:** `rgb(255 0 0)`, `rgb(255 0 0 / 0.5)`, `rgba(255, 0, 0, 0.5)` — supports both comma and space syntax
 - **Verification:** `contrastRatio('rgb(0, 0, 0)', '#fff')` -> 21
 - **Status:** Pending
 
 ### PR 9: HSL Parser + Conversion
 
-- **Files:** `src/parse/hsl.ts`, `src/convert/hsl-to-srgb.ts`, tests
+- **Files:** `src/parse/hsl.ts`, `src/convert/hsl-to-srgb.ts`, `src/parse/index.ts` (dispatcher), `src/index.ts` (parseOrThrow HSL→sRGB 변환), tests
 - **Scope:** hsl()/hsla() parsing (deg, rad, grad, turn units), HSL -> sRGB conversion (CSS Color Level 4 Section 7)
 - **Verification:** `hsl(0 100% 50%)` = red, each hue unit conversion
 - **Status:** Pending
 
 ### PR 10: HWB Parser + Conversion
 
-- **Files:** `src/parse/hwb.ts`, `src/convert/hwb-to-srgb.ts`, tests
+- **Files:** `src/parse/hwb.ts`, `src/convert/hwb-to-srgb.ts`, `src/parse/index.ts` (dispatcher), `src/index.ts` (parseOrThrow HWB→sRGB 변환), tests
 - **Scope:** hwb() parsing, HWB -> sRGB conversion (CSS Color Level 4 Section 8)
 - **Verification:** whiteness + blackness > 100% normalization
 - **Status:** Pending
