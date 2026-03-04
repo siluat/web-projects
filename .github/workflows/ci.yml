@@ -40,9 +40,18 @@ jobs:
       - name: Run tests with coverage
         run: bun run test:coverage
 
-      - name: Upload coverage to Codecov
+      - name: Upload ui-craft coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/ui-craft/coverage/lcov.info,packages/color-contrast-cli/coverage/lcov.info
+          files: packages/ui-craft/coverage/lcov.info
+          flags: ui-craft
+          fail_ci_if_error: false
+
+      - name: Upload color-contrast-cli coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/color-contrast-cli/coverage/lcov.info
+          flags: color-contrast-cli
           fail_ci_if_error: false
