@@ -1,9 +1,12 @@
-name: Publish color-contrast-cli
+name: Publish color-contrast-cli (hotfix)
 
 on:
-  push:
-    tags:
-      - 'color-contrast-cli/v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 0.1.1)'
+        required: true
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,23 +25,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Extract version from tag
-        id: version
-        run: echo "version=${GITHUB_REF_NAME#color-contrast-cli/v}" >> "$GITHUB_OUTPUT"
-
       - name: Verify package.json version
+        env:
+          EXPECTED_VERSION: ${{ inputs.version }}
         run: |
           pkg_version=$(node -p "require('./package.json').version")
-          if [ "$pkg_version" != "${{ steps.version.outputs.version }}" ]; then
-            echo "::error::package.json version ($pkg_version) does not match tag (${{ steps.version.outputs.version }})"
+          if [ "$pkg_version" != "$EXPECTED_VERSION" ]; then
+            echo "::error::package.json version ($pkg_version) does not match input ($EXPECTED_VERSION)"
             exit 1
           fi
 
       - name: Verify jsr.json version
+        env:
+          EXPECTED_VERSION: ${{ inputs.version }}
         run: |
           jsr_version=$(node -p "require('./jsr.json').version")
-          if [ "$jsr_version" != "${{ steps.version.outputs.version }}" ]; then
-            echo "::error::jsr.json version ($jsr_version) does not match tag (${{ steps.version.outputs.version }})"
+          if [ "$jsr_version" != "$EXPECTED_VERSION" ]; then
+            echo "::error::jsr.json version ($jsr_version) does not match input ($EXPECTED_VERSION)"
             exit 1
           fi
 
@@ -78,6 +81,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
+          node-version: '24'
           registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
@@ -107,3 +111,22 @@ jobs:
 
       - name: Publish to JSR
         run: npx jsr publish
+
+  tag:
+    name: Create Git Tag
+    needs: [publish-npm, publish-jsr]
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create and push tag
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          git tag "@siluat/color-contrast-cli@$VERSION"
+          git push origin "@siluat/color-contrast-cli@$VERSION"
