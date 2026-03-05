@@ -46,7 +46,7 @@ describe('parseRgb', () => {
       });
     });
 
-    it('parses rgb with alpha: rgb(255, 0, 0, 0.5)', () => {
+    it('parses rgb with alpha number: rgb(255, 0, 0, 0.5)', () => {
       expect(parseRgb('rgb(255, 0, 0, 0.5)')).toEqual({
         space: 'srgb',
         r: 1,
@@ -247,6 +247,26 @@ describe('parseRgb', () => {
         alpha: 1,
       });
     });
+
+    it('normalizes mid-range values correctly', () => {
+      expect(parseRgb('rgb(128 64 32)')).toEqual({
+        space: 'srgb',
+        r: 128 / 255,
+        g: 64 / 255,
+        b: 32 / 255,
+        alpha: 1,
+      });
+    });
+
+    it('normalizes mid-range percentage values correctly', () => {
+      expect(parseRgb('rgb(50% 25% 75%)')).toEqual({
+        space: 'srgb',
+        r: 0.5,
+        g: 0.25,
+        b: 0.75,
+        alpha: 1,
+      });
+    });
   });
 
   describe('equivalence with hex parser', () => {
@@ -302,6 +322,14 @@ describe('parseRgb', () => {
 
     it('returns null for hex string', () => {
       expect(parseRgb('#ff0000')).toBeNull();
+    });
+
+    it('returns null for invalid alpha in comma syntax', () => {
+      expect(parseRgb('rgb(255, 0, 0, abc)')).toBeNull();
+    });
+
+    it('returns null for invalid alpha in space syntax', () => {
+      expect(parseRgb('rgb(255 0 0 / abc)')).toBeNull();
     });
   });
 });
