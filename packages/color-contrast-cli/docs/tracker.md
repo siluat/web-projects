@@ -18,17 +18,28 @@
 - [ ] PR 9: HSL parser + conversion
 - [ ] PR 10: HWB parser + conversion
 
-**Phase 2 릴리스 체크리스트:**
+**Phase 2 release checklist:**
 
-- [ ] README "Supported Color Formats" 섹션: Named colors, RGB, HSL, HWB를 "Currently supported"로 이동
-- [ ] README 라이브러리 예제: `contrastRatio('navy', 'white')` 등 주석 해제
-- [ ] 버전 범핑 및 배포
+- [ ] README "Supported Color Formats" section: move Named colors, RGB, HSL, HWB to "Currently supported"
+- [ ] README library examples: uncomment `contrastRatio('navy', 'white')` etc.
+- [ ] Version bump and publish
 
 ### Phase 3: Wide-gamut Color Support
 
 - [ ] PR 11: Wide-gamut color conversion pipeline
 - [ ] PR 12: CSS Color Level 4 gamut mapping
 - [ ] PR 13: LAB/LCH/OKLAB/OKLCH parsers
+
+### Phase 4: AI-Friendly Enhancements
+
+AI agents (Claude Code, Cursor, etc.) can execute shell commands directly, so a well-designed CLI is itself an AI interface. This phase focuses on making the CLI and library more effective for other people's AI agents to consume.
+
+- [ ] Structured JSON errors: output errors as JSON when `--json` is used
+- [ ] Resolved colors: include the actual computed colors (after alpha compositing / named color resolution) in output
+- [ ] Batch/stdin input: process multiple color pairs at once, avoiding repeated process spawn overhead
+- [ ] Color suggestion: suggest the closest alternative color that meets a target WCAG level
+- [ ] Public `parseColor` API: expose the color parser for color string validation use cases
+- [ ] Distributable Skill: publish an installable Skill that teaches AI agents to check contrast when color values change
 
 ## PR Details
 
@@ -111,14 +122,14 @@
 
 ### PR 9: HSL Parser + Conversion
 
-- **Files:** `src/parse/hsl.ts`, `src/convert/hsl-to-srgb.ts`, `src/parse/index.ts` (dispatcher), `src/index.ts` (parseOrThrow HSL→sRGB 변환), tests
+- **Files:** `src/parse/hsl.ts`, `src/convert/hsl-to-srgb.ts`, `src/parse/index.ts` (dispatcher), `src/index.ts` (parseOrThrow HSL→sRGB conversion), tests
 - **Scope:** hsl()/hsla() parsing (deg, rad, grad, turn units), HSL -> sRGB conversion (CSS Color Level 4 Section 7)
 - **Verification:** `hsl(0 100% 50%)` = red, each hue unit conversion
 - **Status:** Pending
 
 ### PR 10: HWB Parser + Conversion
 
-- **Files:** `src/parse/hwb.ts`, `src/convert/hwb-to-srgb.ts`, `src/parse/index.ts` (dispatcher), `src/index.ts` (parseOrThrow HWB→sRGB 변환), tests
+- **Files:** `src/parse/hwb.ts`, `src/convert/hwb-to-srgb.ts`, `src/parse/index.ts` (dispatcher), `src/index.ts` (parseOrThrow HWB→sRGB conversion), tests
 - **Scope:** hwb() parsing, HWB -> sRGB conversion (CSS Color Level 4 Section 8)
 - **Verification:** whiteness + blackness > 100% normalization
 - **Status:** Pending
