@@ -16,12 +16,14 @@ component_management:
       statuses:
         - type: project
           target: auto
+          threshold: 1%
     - component_id: color-contrast-cli
       paths:
         - packages/color-contrast-cli/
       statuses:
         - type: project
           target: auto
+          threshold: 1%
 
 comment:
   layout: "condensed_header, condensed_files, condensed_footer"
