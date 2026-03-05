@@ -86,6 +86,26 @@ describe('parseColor', () => {
     expect(parseColor('lab(50% 0 0)')).toBeNull();
   });
 
+  it('parses HWB functional notation', () => {
+    expect(parseColor('hwb(0 0% 0%)')).toEqual({
+      space: 'hwb',
+      h: 0,
+      w: 0,
+      b: 0,
+      alpha: 1,
+    });
+  });
+
+  it('trims whitespace before parsing HWB', () => {
+    expect(parseColor('  hwb(120 0% 0%)  ')).toEqual({
+      space: 'hwb',
+      h: 120 / 360,
+      w: 0,
+      b: 0,
+      alpha: 1,
+    });
+  });
+
   it('returns null for empty string', () => {
     expect(parseColor('')).toBeNull();
     expect(parseColor('   ')).toBeNull();
