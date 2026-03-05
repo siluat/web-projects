@@ -14,7 +14,7 @@
 ### Phase 2: sRGB Family Extension
 
 - [x] PR 7: Named colors parser
-- [ ] PR 8: RGB parser
+- [x] PR 8: RGB parser
 - [ ] PR 9: HSL parser + conversion
 - [ ] PR 10: HWB parser + conversion
 
@@ -107,7 +107,7 @@
 - **Files:** `src/parse/rgb.ts`, `src/parse/index.ts` (dispatcher), tests
 - **Scope:** `rgb(255 0 0)`, `rgb(255 0 0 / 0.5)`, `rgba(255, 0, 0, 0.5)` — supports both comma and space syntax
 - **Verification:** `contrastRatio('rgb(0, 0, 0)', '#fff')` -> 21
-- **Status:** Pending
+- **Status:** Done
 
 ### PR 9: HSL Parser + Conversion
 
