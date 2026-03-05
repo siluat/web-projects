@@ -30,6 +30,16 @@ describe('contrastRatio', () => {
     expect(contrastRatio('hsl(0, 0%, 0%)', '#ffffff')).toBe(21);
   });
 
+  it('returns same ratio for hwb red as hex red vs white', () => {
+    expect(contrastRatio('hwb(0 0% 0%)', '#fff')).toBe(
+      contrastRatio('#ff0000', '#fff'),
+    );
+  });
+
+  it('returns 21 for hwb black vs white', () => {
+    expect(contrastRatio('hwb(0 0% 100%)', '#ffffff')).toBe(21);
+  });
+
   it('handles alpha compositing in the pipeline', () => {
     // Semi-transparent black over white should produce a lower ratio than opaque black
     const ratio = contrastRatio('#00000080', '#ffffff');
@@ -65,6 +75,14 @@ describe('checkContrast', () => {
 
   it('evaluates HSL input correctly', () => {
     expect(checkContrast('hsl(0, 0%, 0%)', 'hsl(0, 0%, 100%)')).toEqual({
+      ratio: 21,
+      normalText: 'AAA',
+      largeText: 'AAA',
+    });
+  });
+
+  it('evaluates HWB input correctly', () => {
+    expect(checkContrast('hwb(0 0% 100%)', 'hwb(0 100% 0%)')).toEqual({
       ratio: 21,
       normalText: 'AAA',
       largeText: 'AAA',

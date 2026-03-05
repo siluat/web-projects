@@ -1,6 +1,7 @@
 import type { ParsedColor } from '../types';
 import { parseHex } from './hex';
 import { parseHsl } from './hsl';
+import { parseHwb } from './hwb';
 import { parseNamedColor } from './named-colors';
 import { parseRgb } from './rgb';
 
@@ -10,7 +11,8 @@ import { parseRgb } from './rgb';
  * Supports HEX formats (#RGB, #RRGGBB, #RGBA, #RRGGBBAA),
  * CSS named colors (red, navy, rebeccapurple, transparent, etc.),
  * RGB functional notation (rgb(), rgba()),
- * and HSL functional notation (hsl(), hsla()).
+ * HSL functional notation (hsl(), hsla()),
+ * and HWB functional notation (hwb()).
  * Returns null if the input cannot be parsed.
  */
 export function parseColor(input: string): ParsedColor | null {
@@ -20,6 +22,7 @@ export function parseColor(input: string): ParsedColor | null {
     parseHex(trimmed) ??
     parseNamedColor(trimmed) ??
     parseRgb(trimmed) ??
-    parseHsl(trimmed)
+    parseHsl(trimmed) ??
+    parseHwb(trimmed)
   );
 }

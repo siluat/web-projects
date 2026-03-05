@@ -1,6 +1,7 @@
 import { alphaComposite } from './alpha-composite';
 import { computeContrastRatio, evaluateContrast } from './contrast';
 import { hslToSrgb } from './convert/hsl-to-srgb';
+import { hwbToSrgb } from './convert/hwb-to-srgb';
 import { srgbToLinear } from './convert/srgb-linear';
 import { relativeLuminance } from './luminance';
 import { parseColor } from './parse';
@@ -12,8 +13,9 @@ export type { ComplianceLevel, ContrastResult } from './types';
  * Parse a color string or throw a descriptive error.
  *
  * Supports sRGB hex strings, CSS named colors, RGB functional notation
- * (rgb(), rgba()), and HSL functional notation (hsl(), hsla()).
- * Non-sRGB inputs (currently HSL) are converted to sRGB before returning.
+ * (rgb(), rgba()), HSL functional notation (hsl(), hsla()),
+ * and HWB functional notation (hwb()).
+ * Non-sRGB inputs are converted to sRGB before returning.
  */
 function parseOrThrow(input: string): SRGBColor {
   const parsed = parseColor(input);
@@ -21,6 +23,7 @@ function parseOrThrow(input: string): SRGBColor {
     throw new Error(`Invalid color: "${input}"`);
   }
   if (parsed.space === 'hsl') return hslToSrgb(parsed);
+  if (parsed.space === 'hwb') return hwbToSrgb(parsed);
   if (parsed.space !== 'srgb') {
     throw new Error(`Unsupported color space: "${parsed.space}"`);
   }
@@ -44,7 +47,7 @@ function colorToLuminance(fg: SRGBColor, bg: SRGBColor): [number, number] {
  * Calculate the WCAG 2.1 contrast ratio between two CSS colors.
  *
  * Accepts any supported color format (hex, named colors, rgb()/rgba(),
- * and hsl()/hsla()). Handles alpha compositing automatically.
+ * hsl()/hsla(), and hwb()). Handles alpha compositing automatically.
  *
  * @returns Contrast ratio rounded to two decimal places (range 1–21)
  */
@@ -58,8 +61,10 @@ export function contrastRatio(foreground: string, background: string): number {
 /**
  * Evaluate WCAG 2.1 contrast compliance between two CSS colors.
  *
- * Returns the contrast ratio and compliance levels for normal text
- * (AA >= 4.5, AAA >= 7) and large text (AA >= 3, AAA >= 4.5).
+ * Accepts any supported color format (hex, named colors, rgb()/rgba(),
+ * hsl()/hsla(), and hwb()). Returns the contrast ratio and compliance
+ * levels for normal text (AA >= 4.5, AAA >= 7) and large text (AA >= 3,
+ * AAA >= 4.5).
  */
 export function checkContrast(
   foreground: string,

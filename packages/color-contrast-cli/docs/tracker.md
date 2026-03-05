@@ -16,7 +16,7 @@
 - [x] PR 7: Named colors parser
 - [x] PR 8: RGB parser
 - [x] PR 9: HSL parser + conversion
-- [ ] PR 10: HWB parser + conversion
+- [x] PR 10: HWB parser + conversion
 
 **Phase 2 release checklist:**
 
@@ -132,7 +132,7 @@ AI agents (Claude Code, Cursor, etc.) can execute shell commands directly, so a 
 - **Files:** `src/parse/hwb.ts`, `src/convert/hwb-to-srgb.ts`, `src/parse/index.ts` (dispatcher), `src/index.ts` (parseOrThrow HWB→sRGB conversion), tests
 - **Scope:** hwb() parsing, HWB -> sRGB conversion (CSS Color Level 4 Section 8)
 - **Verification:** whiteness + blackness > 100% normalization
-- **Status:** Pending
+- **Status:** Done
 
 ### PR 11: Wide-gamut Color Conversion Pipeline
 
