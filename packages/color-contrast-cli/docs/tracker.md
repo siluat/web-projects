@@ -15,7 +15,7 @@
 
 - [x] PR 7: Named colors parser
 - [x] PR 8: RGB parser
-- [ ] PR 9: HSL parser + conversion
+- [x] PR 9: HSL parser + conversion
 - [ ] PR 10: HWB parser + conversion
 
 **Phase 2 release checklist:**
@@ -125,7 +125,7 @@ AI agents (Claude Code, Cursor, etc.) can execute shell commands directly, so a 
 - **Files:** `src/parse/hsl.ts`, `src/convert/hsl-to-srgb.ts`, `src/parse/index.ts` (dispatcher), `src/index.ts` (parseOrThrow HSL→sRGB conversion), tests
 - **Scope:** hsl()/hsla() parsing (deg, rad, grad, turn units), HSL -> sRGB conversion (CSS Color Level 4 Section 7)
 - **Verification:** `hsl(0 100% 50%)` = red, each hue unit conversion
-- **Status:** Pending
+- **Status:** Done
 
 ### PR 10: HWB Parser + Conversion
 

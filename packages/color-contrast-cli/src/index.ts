@@ -1,5 +1,6 @@
 import { alphaComposite } from './alpha-composite';
 import { computeContrastRatio, evaluateContrast } from './contrast';
+import { hslToSrgb } from './convert/hsl-to-srgb';
 import { srgbToLinear } from './convert/srgb-linear';
 import { relativeLuminance } from './luminance';
 import { parseColor } from './parse';
@@ -10,16 +11,16 @@ export type { ComplianceLevel, ContrastResult } from './types';
 /**
  * Parse a color string or throw a descriptive error.
  *
- * Supports sRGB hex strings, CSS named colors, and RGB functional
- * notation (rgb(), rgba()). When additional parsers (HSL, HWB, etc.)
- * are added, this function will serve as the dispatch point for
- * color space conversion.
+ * Supports sRGB hex strings, CSS named colors, RGB functional notation
+ * (rgb(), rgba()), and HSL functional notation (hsl(), hsla()).
+ * Non-sRGB color spaces are converted to sRGB before returning.
  */
 function parseOrThrow(input: string): SRGBColor {
   const parsed = parseColor(input);
   if (parsed === null) {
     throw new Error(`Invalid color: "${input}"`);
   }
+  if (parsed.space === 'hsl') return hslToSrgb(parsed);
   if (parsed.space !== 'srgb') {
     throw new Error(`Unsupported color space: "${parsed.space}"`);
   }
@@ -42,8 +43,8 @@ function colorToLuminance(fg: SRGBColor, bg: SRGBColor): [number, number] {
 /**
  * Calculate the WCAG 2.1 contrast ratio between two CSS colors.
  *
- * Accepts any supported color format (hex, named colors, and rgb()/rgba()).
- * Handles alpha compositing automatically.
+ * Accepts any supported color format (hex, named colors, rgb()/rgba(),
+ * and hsl()/hsla()). Handles alpha compositing automatically.
  *
  * @returns Contrast ratio rounded to two decimal places (range 1–21)
  */

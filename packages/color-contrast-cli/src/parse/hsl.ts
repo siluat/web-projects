@@ -1,28 +1,29 @@
-import type { SRGBColor } from '../types';
+import type { HSLColor } from '../types';
 import {
   hasLength,
   normalizeAlpha,
+  normalizeHue,
   normalizePercentage,
-  normalizeRgbChannel,
 } from './utils';
 
 /**
- * Parse a CSS rgb()/rgba() color string into an SRGBColor.
+ * Parse a CSS hsl()/hsla() color string into an HSLColor.
  *
  * Supports both modern (space-separated) and legacy (comma-separated) syntax
- * as defined in CSS Color Level 4, Section 4.1.
+ * as defined in CSS Color Level 4, Section 7.
  *
- * - Modern:  rgb(R G B) or rgb(R G B / A)
- * - Legacy:  rgb(R, G, B) or rgb(R, G, B, A)
- * - Channels may be numbers (0-255) or percentages (0%-100%), but not mixed.
- * - Alpha may be a number (0-1) or percentage (0%-100%) regardless of channel type.
- * - rgba() is a legacy alias and behaves identically.
- * - Out-of-range values are clamped.
+ * - Modern:  hsl(H S L) or hsl(H S L / A)
+ * - Legacy:  hsl(H, S, L) or hsl(H, S, L, A)
+ * - Hue may include an angle unit (deg, rad, grad, turn) or be unitless (treated as degrees).
+ * - Saturation and Lightness must be percentages.
+ * - Alpha may be a number (0-1) or percentage (0%-100%).
+ * - hsla() is a legacy alias and behaves identically.
+ * - Out-of-range values are clamped (S, L, alpha) or wrapped (hue).
  *
  * Not supported: `none` keyword, `calc()`, scientific notation.
  */
-export function parseRgb(input: string): SRGBColor | null {
-  const match = /^rgba?\(\s*(.*?)\s*\)$/i.exec(input);
+export function parseHsl(input: string): HSLColor | null {
+  const match = /^hsla?\(\s*(.*?)\s*\)$/i.exec(input);
   if (!match) return null;
 
   const body = match[1];
@@ -36,6 +37,9 @@ const NUMBER_RE = /^[+-]?\d+(\.\d+)?$|^[+-]?\.\d+$/;
 
 /** Percentage literal: number followed by %. */
 const PERCENT_RE = /^[+-]?\d+(\.\d+)?%$|^[+-]?\.\d+%$/;
+
+/** Hue token: number with optional angle unit. */
+const HUE_RE = /^([+-]?\d+(\.\d+)?|[+-]?\.\d+)(deg|rad|grad|turn)?$/i;
 
 function isNumber(s: string): boolean {
   return NUMBER_RE.test(s);
@@ -54,6 +58,33 @@ function parsePercentValue(s: string): number {
 }
 
 /**
+ * Parse a hue token into degrees.
+ * Supports unitless, deg, rad, grad, turn.
+ * Returns null if the token is invalid.
+ */
+function parseHueToken(token: string): number | null {
+  const match = HUE_RE.exec(token);
+  if (!match) return null;
+
+  const value = Number.parseFloat(token);
+  const unit = match[3]?.toLowerCase();
+
+  switch (unit) {
+    case undefined:
+    case 'deg':
+      return value;
+    case 'rad':
+      return value * (180 / Math.PI);
+    case 'grad':
+      return value * 0.9;
+    case 'turn':
+      return value * 360;
+    default:
+      return null;
+  }
+}
+
+/**
  * Parse alpha from a token that may be a number (0-1) or percentage (0%-100%).
  * Returns null if the token is neither.
  */
@@ -64,37 +95,33 @@ function parseAlphaToken(token: string): number | null {
 }
 
 /**
- * Convert 3 channel tokens to normalized [r, g, b].
- * All tokens must be the same type (all numbers or all percentages).
- * Returns null if count is not 3, types are mixed, or tokens are invalid.
+ * Parse hue, saturation, and lightness from three tokens.
+ * Hue must be a valid hue token; S and L must be percentages.
+ * Returns null if any token is invalid.
  */
 function parseChannels(tokens: string[]): [number, number, number] | null {
   if (!hasLength(tokens, 3)) return null;
 
-  const allNumbers =
-    isNumber(tokens[0]) && isNumber(tokens[1]) && isNumber(tokens[2]);
-  const allPercents =
-    isPercent(tokens[0]) && isPercent(tokens[1]) && isPercent(tokens[2]);
+  const hueDeg = parseHueToken(tokens[0]);
+  if (hueDeg === null) return null;
 
-  if (!allNumbers && !allPercents) return null;
+  if (!isPercent(tokens[1]) || !isPercent(tokens[2])) return null;
 
-  const parse = allNumbers ? parseNumber : parsePercentValue;
-  const normalize = allNumbers ? normalizeRgbChannel : normalizePercentage;
   return [
-    normalize(parse(tokens[0])),
-    normalize(parse(tokens[1])),
-    normalize(parse(tokens[2])),
+    normalizeHue(hueDeg),
+    normalizePercentage(parsePercentValue(tokens[1])),
+    normalizePercentage(parsePercentValue(tokens[2])),
   ];
 }
 
 /**
- * Build an SRGBColor from parsed channels and an optional alpha token.
+ * Build an HSLColor from parsed channels and an optional alpha token.
  * Returns null if the alpha token is present but invalid.
  */
 function buildWithAlpha(
   channels: [number, number, number],
   alphaToken: string | null,
-): SRGBColor | null {
+): HSLColor | null {
   let alpha = 1;
   if (alphaToken !== null) {
     const parsed = parseAlphaToken(alphaToken);
@@ -102,16 +129,16 @@ function buildWithAlpha(
     alpha = parsed;
   }
   return {
-    space: 'srgb',
-    r: channels[0],
-    g: channels[1],
-    b: channels[2],
+    space: 'hsl',
+    h: channels[0],
+    s: channels[1],
+    l: channels[2],
     alpha,
   };
 }
 
-/** Parse legacy comma-separated syntax: R, G, B or R, G, B, A */
-function parseCommaSyntax(body: string): SRGBColor | null {
+/** Parse legacy comma-separated syntax: H, S, L or H, S, L, A */
+function parseCommaSyntax(body: string): HSLColor | null {
   const parts = body.split(',').map((p) => p.trim());
   if (parts.length !== 3 && parts.length !== 4) return null;
 
@@ -121,8 +148,8 @@ function parseCommaSyntax(body: string): SRGBColor | null {
   return buildWithAlpha(channels, parts[3] ?? null);
 }
 
-/** Parse modern space-separated syntax: R G B or R G B / A */
-function parseSpaceSyntax(body: string): SRGBColor | null {
+/** Parse modern space-separated syntax: H S L or H S L / A */
+function parseSpaceSyntax(body: string): HSLColor | null {
   const slashIndex = body.indexOf('/');
 
   let channelPart: string;
