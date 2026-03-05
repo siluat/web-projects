@@ -62,8 +62,28 @@ describe('parseColor', () => {
     });
   });
 
+  it('parses HSL functional notation', () => {
+    expect(parseColor('hsl(0, 100%, 50%)')).toEqual({
+      space: 'hsl',
+      h: 0,
+      s: 1,
+      l: 0.5,
+      alpha: 1,
+    });
+  });
+
+  it('trims whitespace before parsing HSL', () => {
+    expect(parseColor('  hsl(120 100% 50%)  ')).toEqual({
+      space: 'hsl',
+      h: 120 / 360,
+      s: 1,
+      l: 0.5,
+      alpha: 1,
+    });
+  });
+
   it('returns null for unsupported formats', () => {
-    expect(parseColor('hsl(0, 100%, 50%)')).toBeNull();
+    expect(parseColor('lab(50% 0 0)')).toBeNull();
   });
 
   it('returns null for empty string', () => {

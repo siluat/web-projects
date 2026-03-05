@@ -53,3 +53,18 @@ export function normalizePercentage(value: number): number {
 export function normalizeAlpha(value: number): number {
   return clamp(value, 0, 1);
 }
+
+/**
+ * Normalize a hue angle in degrees to the 0-1 range.
+ * Wraps negative and >360 values using modular arithmetic.
+ */
+export function normalizeHue(degrees: number): number {
+  const wrapped = degrees % 360;
+  return (wrapped < 0 ? wrapped + 360 : wrapped) / 360;
+}
+
+/** Type guard that narrows an array to a fixed-length tuple. */
+export function hasLength<T>(arr: T[], n: 3): arr is [T, T, T];
+export function hasLength<T>(arr: T[], n: number): boolean {
+  return arr.length === n;
+}
