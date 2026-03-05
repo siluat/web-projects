@@ -96,8 +96,8 @@ import { contrastRatio } from '@siluat/color-contrast-cli';
 
 contrastRatio('#000000', '#ffffff'); // 21
 contrastRatio('#00000080', '#ffffff'); // alpha compositing supported
-// contrastRatio('rgb(0, 0, 0)', '#fff'); // planned (Phase 2)
-// contrastRatio('navy', 'white'); // planned (Phase 2)
+contrastRatio('rgb(0, 0, 0)', '#fff'); // RGB functional notation
+contrastRatio('navy', 'white'); // CSS named colors
 ```
 
 Returns the ratio as a `number`.
@@ -155,15 +155,12 @@ WCAG 2.1 compliance thresholds:
 **Currently supported:**
 
 - HEX: `#RGB`, `#RRGGBB`, `#RGBA`, `#RRGGBBAA`
-
-**Planned (Phase 2 — sRGB family):**
-
 - Named colors: `red`, `navy`, `rebeccapurple`, `transparent` (148 named colors)
 - RGB: `rgb(255 0 0)`, `rgb(255 0 0 / 0.5)`, `rgba(255, 0, 0, 0.5)`
 - HSL: `hsl(120 100% 50%)`, `hsl(120 100% 50% / 0.5)`, `hsla(120, 100%, 50%, 0.5)`
 - HWB: `hwb(120 0% 0%)`, `hwb(120 0% 0% / 0.5)`
 
-**Planned (Phase 3 — wide-gamut):**
+**Planned (wide-gamut):**
 
 - LAB: `lab(50% 40 59.5)`, `lab(50% 40 59.5 / 0.5)`
 - LCH: `lch(52.2% 72.2 50)`, `lch(52.2% 72.2 50 / 0.5)`
