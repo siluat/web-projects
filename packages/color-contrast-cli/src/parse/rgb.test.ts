@@ -267,6 +267,36 @@ describe('parseRgb', () => {
         alpha: 1,
       });
     });
+
+    it('parses channels with leading + sign', () => {
+      expect(parseRgb('rgb(+255 +0 +0)')).toEqual({
+        space: 'srgb',
+        r: 1,
+        g: 0,
+        b: 0,
+        alpha: 1,
+      });
+    });
+
+    it('parses percentage channels with leading + sign', () => {
+      expect(parseRgb('rgb(+100% +0% +0%)')).toEqual({
+        space: 'srgb',
+        r: 1,
+        g: 0,
+        b: 0,
+        alpha: 1,
+      });
+    });
+
+    it('parses alpha with leading + sign', () => {
+      expect(parseRgb('rgb(255 0 0 / +0.5)')).toEqual({
+        space: 'srgb',
+        r: 1,
+        g: 0,
+        b: 0,
+        alpha: 0.5,
+      });
+    });
   });
 
   describe('equivalence with hex parser', () => {

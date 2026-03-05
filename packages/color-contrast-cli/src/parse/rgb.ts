@@ -31,10 +31,10 @@ export function parseRgb(input: string): SRGBColor | null {
 }
 
 /** Number literal: optional sign, integer or decimal, no scientific notation. */
-const NUMBER_RE = /^-?\d+(\.\d+)?$|^-?\.\d+$/;
+const NUMBER_RE = /^[+-]?\d+(\.\d+)?$|^[+-]?\.\d+$/;
 
 /** Percentage literal: number followed by %. */
-const PERCENT_RE = /^-?\d+(\.\d+)?%$|^-?\.\d+%$/;
+const PERCENT_RE = /^[+-]?\d+(\.\d+)?%$|^[+-]?\.\d+%$/;
 
 function isNumber(s: string): boolean {
   return NUMBER_RE.test(s);
@@ -65,23 +65,22 @@ function parseAlphaToken(token: string): number | null {
 /**
  * Convert 3 channel tokens to normalized [r, g, b].
  * All tokens must be the same type (all numbers or all percentages).
- * Returns null if types are mixed or invalid.
+ * Returns null if count is not 3, types are mixed, or tokens are invalid.
  */
-function parseChannels(
-  tokens: [string, string, string],
-): [number, number, number] | null {
-  const allNumbers = tokens.every(isNumber);
-  const allPercents = tokens.every(isPercent);
+function parseChannels(tokens: string[]): [number, number, number] | null {
+  const a = tokens[0];
+  const b = tokens[1];
+  const c = tokens[2];
+  if (!a || !b || !c || tokens.length !== 3) return null;
+
+  const allNumbers = isNumber(a) && isNumber(b) && isNumber(c);
+  const allPercents = isPercent(a) && isPercent(b) && isPercent(c);
 
   if (!allNumbers && !allPercents) return null;
 
   const parse = allNumbers ? parseNumber : parsePercentValue;
   const normalize = allNumbers ? normalizeRgbChannel : normalizePercentage;
-  return [
-    normalize(parse(tokens[0])),
-    normalize(parse(tokens[1])),
-    normalize(parse(tokens[2])),
-  ];
+  return [normalize(parse(a)), normalize(parse(b)), normalize(parse(c))];
 }
 
 /**
@@ -112,8 +111,7 @@ function parseCommaSyntax(body: string): SRGBColor | null {
   const parts = body.split(',').map((p) => p.trim());
   if (parts.length !== 3 && parts.length !== 4) return null;
 
-  const channelTokens = parts.slice(0, 3) as [string, string, string];
-  const channels = parseChannels(channelTokens);
+  const channels = parseChannels(parts.slice(0, 3));
   if (!channels) return null;
 
   return buildWithAlpha(channels, parts[3] ?? null);
@@ -136,8 +134,7 @@ function parseSpaceSyntax(body: string): SRGBColor | null {
   const tokens = channelPart.split(/\s+/);
   if (tokens.length !== 3) return null;
 
-  const channelTokens = tokens as [string, string, string];
-  const channels = parseChannels(channelTokens);
+  const channels = parseChannels(tokens);
   if (!channels) return null;
 
   return buildWithAlpha(channels, alphaPart);
