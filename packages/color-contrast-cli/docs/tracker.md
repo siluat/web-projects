@@ -20,9 +20,9 @@
 
 **Phase 2 release checklist:**
 
-- [ ] README "Supported Color Formats" section: move Named colors, RGB, HSL, HWB to "Currently supported"
-- [ ] README library examples: uncomment `contrastRatio('navy', 'white')` etc.
-- [ ] Version bump and publish
+- [x] README "Supported Color Formats" section: move Named colors, RGB, HSL, HWB to "Currently supported"
+- [x] README library examples: uncomment `contrastRatio('navy', 'white')` etc.
+- [x] Version bump and publish
 
 ### Phase 3: Wide-gamut Color Support
 
