@@ -13,10 +13,16 @@
 
 ### Phase 2: sRGB Family Extension
 
-- [ ] PR 7: Named colors parser
+- [x] PR 7: Named colors parser
 - [ ] PR 8: RGB parser
 - [ ] PR 9: HSL parser + conversion
 - [ ] PR 10: HWB parser + conversion
+
+**Phase 2 릴리스 체크리스트:**
+
+- [ ] README "Supported Color Formats" 섹션: Named colors, RGB, HSL, HWB를 "Currently supported"로 이동
+- [ ] README 라이브러리 예제: `contrastRatio('navy', 'white')` 등 주석 해제
+- [ ] 버전 범핑 및 배포
 
 ### Phase 3: Wide-gamut Color Support
 
@@ -94,7 +100,7 @@
 - **Scope:** 148 CSS named colors (including `transparent`)
 - **Verification:** black, white, red, navy, rebeccapurple, transparent
 - **Integration test:** `contrastRatio('navy', 'white')` -> 16.01
-- **Status:** Pending
+- **Status:** Done
 
 ### PR 8: RGB Parser
 

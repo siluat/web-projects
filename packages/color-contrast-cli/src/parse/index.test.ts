@@ -22,10 +22,29 @@ describe('parseColor', () => {
     });
   });
 
+  it('parses named colors', () => {
+    expect(parseColor('red')).toEqual({
+      space: 'srgb',
+      r: 1,
+      g: 0,
+      b: 0,
+      alpha: 1,
+    });
+  });
+
+  it('parses transparent', () => {
+    expect(parseColor('transparent')).toEqual({
+      space: 'srgb',
+      r: 0,
+      g: 0,
+      b: 0,
+      alpha: 0,
+    });
+  });
+
   it('returns null for unsupported formats', () => {
     expect(parseColor('rgb(255, 0, 0)')).toBeNull();
     expect(parseColor('hsl(0, 100%, 50%)')).toBeNull();
-    expect(parseColor('red')).toBeNull();
   });
 
   it('returns null for empty string', () => {

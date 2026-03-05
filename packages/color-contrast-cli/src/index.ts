@@ -10,7 +10,7 @@ export type { ComplianceLevel, ContrastResult } from './types';
 /**
  * Parse a color string or throw a descriptive error.
  *
- * Currently only sRGB hex strings are supported. When additional
+ * Supports sRGB hex strings and CSS named colors. When additional
  * parsers (HSL, HWB, etc.) are added, this function will serve
  * as the dispatch point for color space conversion.
  */
@@ -41,7 +41,7 @@ function colorToLuminance(fg: SRGBColor, bg: SRGBColor): [number, number] {
 /**
  * Calculate the WCAG 2.1 contrast ratio between two CSS colors.
  *
- * Accepts any supported color format (currently hex).
+ * Accepts any supported color format (hex and named colors).
  * Handles alpha compositing automatically.
  *
  * @returns Contrast ratio rounded to two decimal places (range 1–21)
