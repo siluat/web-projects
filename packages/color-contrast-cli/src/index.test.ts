@@ -12,6 +12,10 @@ describe('contrastRatio', () => {
     );
   });
 
+  it('returns 16.01 for navy vs white', () => {
+    expect(contrastRatio('navy', 'white')).toBe(16.01);
+  });
+
   it('handles alpha compositing in the pipeline', () => {
     // Semi-transparent black over white should produce a lower ratio than opaque black
     const ratio = contrastRatio('#00000080', '#ffffff');
