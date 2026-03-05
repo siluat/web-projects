@@ -52,5 +52,5 @@ jobs:
 
       - name: Publish to JSR
         if: contains(steps.changesets.outputs.publishedPackages, '@siluat/color-contrast-cli')
-        run: npx jsr publish
+        run: npx jsr publish --allow-dirty
         working-directory: packages/color-contrast-cli
