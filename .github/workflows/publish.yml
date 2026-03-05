@@ -96,6 +96,7 @@ jobs:
   publish-jsr:
     name: Publish to JSR
     needs: build
+    if: always() && needs.build.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 3
     permissions:
@@ -110,11 +111,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Publish to JSR
-        run: npx jsr publish
+        run: npx jsr publish --allow-dirty
 
   tag:
     name: Create Git Tag
     needs: [publish-npm, publish-jsr]
+    if: always() && (needs.publish-npm.result == 'success' || needs.publish-jsr.result == 'success')
     runs-on: ubuntu-latest
     timeout-minutes: 1
     permissions:
