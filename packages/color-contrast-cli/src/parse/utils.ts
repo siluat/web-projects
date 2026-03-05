@@ -24,3 +24,32 @@ export function hexCharToNumber(char: string): number {
 export function normalize8bit(value: number): number {
   return value / 255;
 }
+
+/** Clamp a number to the inclusive range [min, max]. */
+export function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+/**
+ * Normalize an RGB channel value (0-255) to 0-1.
+ * Clamps out-of-range values before normalizing.
+ */
+export function normalizeRgbChannel(value: number): number {
+  return clamp(value, 0, 255) / 255;
+}
+
+/**
+ * Normalize a percentage value (0-100) to 0-1.
+ * Clamps out-of-range values before normalizing.
+ */
+export function normalizePercentage(value: number): number {
+  return clamp(value, 0, 100) / 100;
+}
+
+/**
+ * Normalize an alpha value to the 0-1 range.
+ * Clamps out-of-range values.
+ */
+export function normalizeAlpha(value: number): number {
+  return clamp(value, 0, 1);
+}

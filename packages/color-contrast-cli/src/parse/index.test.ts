@@ -42,8 +42,27 @@ describe('parseColor', () => {
     });
   });
 
+  it('parses RGB functional notation', () => {
+    expect(parseColor('rgb(255, 0, 0)')).toEqual({
+      space: 'srgb',
+      r: 1,
+      g: 0,
+      b: 0,
+      alpha: 1,
+    });
+  });
+
+  it('trims whitespace before parsing RGB', () => {
+    expect(parseColor('  rgb(255 0 0)  ')).toEqual({
+      space: 'srgb',
+      r: 1,
+      g: 0,
+      b: 0,
+      alpha: 1,
+    });
+  });
+
   it('returns null for unsupported formats', () => {
-    expect(parseColor('rgb(255, 0, 0)')).toBeNull();
     expect(parseColor('hsl(0, 100%, 50%)')).toBeNull();
   });
 
