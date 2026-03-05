@@ -13,7 +13,7 @@ export type { ComplianceLevel, ContrastResult } from './types';
  *
  * Supports sRGB hex strings, CSS named colors, RGB functional notation
  * (rgb(), rgba()), and HSL functional notation (hsl(), hsla()).
- * Non-sRGB color spaces are converted to sRGB before returning.
+ * Non-sRGB inputs (currently HSL) are converted to sRGB before returning.
  */
 function parseOrThrow(input: string): SRGBColor {
   const parsed = parseColor(input);
