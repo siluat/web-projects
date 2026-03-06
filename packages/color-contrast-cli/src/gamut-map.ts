@@ -190,16 +190,16 @@ export function gamutMapOklch(color: OKLCHColor): SRGBColor {
     }
 
     clipped = clipLinearRgb(currentLinear);
+    bestClip = clipped;
     clippedOklab = xyzToOklab(linearRgbToXyz(clipped));
     const dE = deltaEOK(currentOklab, clippedOklab);
 
-    if (dE - JND < GAMUT_EPSILON) {
-      if (JND - dE < GAMUT_EPSILON) {
-        break;
-      }
+    if (Math.abs(dE - JND) < GAMUT_EPSILON) {
+      break;
+    }
+    if (dE < JND) {
       min = chroma;
     } else {
-      bestClip = clipped;
       max = chroma;
     }
   }
