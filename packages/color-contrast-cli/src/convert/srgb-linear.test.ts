@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'bun:test';
-import { srgbChannelToLinear, srgbToLinear } from './srgb-linear';
+import {
+  linearToSrgbChannel,
+  srgbChannelToLinear,
+  srgbToLinear,
+} from './srgb-linear';
 
 describe('srgbChannelToLinear', () => {
   describe('boundary values', () => {
@@ -43,6 +47,48 @@ describe('srgbChannelToLinear', () => {
       const channel = 128 / 255;
       // CSS Color 4 §10.2 sample code: sRGB 128/255 ≈ 0.2158605 in linear light
       expect(srgbChannelToLinear(channel)).toBeCloseTo(0.2158605, 5);
+    });
+  });
+});
+
+describe('linearToSrgbChannel', () => {
+  describe('boundary values', () => {
+    it('returns 0 for value = 0', () => {
+      expect(linearToSrgbChannel(0)).toBe(0);
+    });
+
+    it('returns 1 for value = 1', () => {
+      expect(linearToSrgbChannel(1)).toBeCloseTo(1, 10);
+    });
+  });
+
+  describe('threshold boundary', () => {
+    it('uses linear formula at threshold (0.0031308)', () => {
+      expect(linearToSrgbChannel(0.0031308)).toBeCloseTo(0.0031308 * 12.92, 10);
+    });
+
+    it('uses power curve just above threshold (0.0031309)', () => {
+      expect(linearToSrgbChannel(0.0031309)).toBeCloseTo(
+        1.055 * 0.0031309 ** (1 / 2.4) - 0.055,
+        10,
+      );
+    });
+  });
+
+  describe('mid-range values', () => {
+    it('gamma-encodes 0.2158605 back to approximately 128/255', () => {
+      // Inverse of the srgbChannelToLinear test case
+      expect(linearToSrgbChannel(0.2158605)).toBeCloseTo(128 / 255, 4);
+    });
+  });
+
+  describe('round-trip consistency', () => {
+    it.each([
+      0, 0.01, 0.04045, 0.1, 0.25, 0.5, 0.75, 1,
+    ])('linearToSrgbChannel(srgbChannelToLinear(%f)) ≈ %f', (v) => {
+      // Precision 7 (~5e-8): the threshold junction (0.04045) incurs ~3e-8
+      // floating-point mismatch between the two piecewise segments.
+      expect(linearToSrgbChannel(srgbChannelToLinear(v))).toBeCloseTo(v, 7);
     });
   });
 });

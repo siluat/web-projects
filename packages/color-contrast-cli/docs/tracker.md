@@ -27,7 +27,7 @@
 ### Phase 3: Wide-gamut Color Support
 
 - [x] PR 11: Wide-gamut color conversion pipeline
-- [ ] PR 12: CSS Color Level 4 gamut mapping
+- [x] PR 12: CSS Color Level 4 gamut mapping
 - [ ] PR 13: LAB/LCH/OKLAB/OKLCH parsers
 
 **Phase 3 release checklist (0.3.0):**
@@ -156,11 +156,11 @@ AI agents (Claude Code, Cursor, etc.) can execute shell commands directly, so a 
 
 ### PR 12: CSS Color Level 4 Gamut Mapping
 
-- **Files:** `src/gamut-map.ts`, tests
+- **Files:** `src/gamut-map.ts`, `src/convert/srgb-linear.ts` (`linearToSrgbChannel` added), `src/convert/index.ts`, tests
 - **Scope:** Section 13.2 algorithm — chroma binary search in OKLCH, deltaEOK < 0.02 convergence, 64 iteration limit
 - **Notes:** See `docs/decisions/002-gamut-mapping.md`
-- **Verification:** Colors within sRGB gamut are not mapped, out-of-gamut colors compared against browser reference values
-- **Status:** Pending
+- **Verification:** In-gamut passthrough, out-of-gamut colors compared against Color.js 0.6.1 reference values, achromatic/NaN hue edge cases
+- **Status:** Done
 
 ### PR 13: LAB/LCH/OKLAB/OKLCH Parsers
 
