@@ -70,6 +70,14 @@ describe('contrastRatio', () => {
     expect(ratio).toBeGreaterThan(1);
     expect(ratio).toBeLessThan(21);
   });
+
+  it('produces same ratio for equivalent LAB and LCH colors', () => {
+    // lab(50 25 -25) = lch(50 35.3553 315)
+    // C = hypot(25, 25) ≈ 35.3553, H = atan2(-25, 25) = -45° → 315°
+    const labRatio = contrastRatio('lab(50 25 -25)', '#fff');
+    const lchRatio = contrastRatio('lch(50 35.3553 315)', '#fff');
+    expect(labRatio).toBe(lchRatio);
+  });
 });
 
 describe('checkContrast', () => {
