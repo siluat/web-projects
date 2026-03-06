@@ -35,16 +35,9 @@
 - [x] README "How Alpha and Wide-Gamut Colors Are Handled" section: update wide-gamut paragraph to reflect implemented status
 - [x] README library examples: add wide-gamut color example (e.g., `contrastRatio('oklch(60% 0.15 50)', 'white')`)
 
-### Phase 4: AI-Friendly Enhancements
+### Future Work
 
-AI agents (Claude Code, Cursor, etc.) can execute shell commands directly, so a well-designed CLI is itself an AI interface. This phase focuses on making the CLI and library more effective for other people's AI agents to consume.
-
-- [ ] Structured JSON errors: output errors as JSON when `--json` is used
-- [ ] Resolved colors: include the actual computed colors (after alpha compositing / named color resolution) in output
-- [ ] Batch/stdin input: process multiple color pairs at once, avoiding repeated process spawn overhead
-- [ ] Color suggestion: suggest the closest alternative color that meets a target WCAG level
-- [ ] Public `parseColor` API: expose the color parser for color string validation use cases
-- [ ] Distributable Skill: publish an installable Skill that teaches AI agents to check contrast when color values change
+All planned improvements are tracked in [cli-improvement-ideas.md](cli-improvement-ideas.md).
 
 ## PR Details
 

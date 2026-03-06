@@ -4,14 +4,22 @@ WCAG 2.1 color contrast checker for the command line. Also usable as a library.
 
 ## Quick Start
 
-No install needed — run directly:
+Try without installing:
 
 ```bash
 npx @siluat/color-contrast-cli '#000' '#fff'
-# or
-bunx @siluat/color-contrast-cli '#000' '#fff'
-# or
-deno run npm:@siluat/color-contrast-cli '#000' '#fff'
+```
+
+For regular use, install globally:
+
+```bash
+npm install -g @siluat/color-contrast-cli
+```
+
+Then use the short `contrast` command:
+
+```bash
+contrast '#000' '#fff'
 ```
 
 ```text
@@ -25,7 +33,7 @@ Large text:  AAA ✓
 ### JSON Output
 
 ```bash
-npx @siluat/color-contrast-cli '#333' '#fff' --json
+contrast '#333' '#fff' --json
 ```
 
 ```json
@@ -37,14 +45,14 @@ npx @siluat/color-contrast-cli '#333' '#fff' --json
 Exit 0 on pass, exit 1 on fail. Checks against normal text:
 
 ```bash
-npx @siluat/color-contrast-cli '#333' '#fff' --level AA
-npx @siluat/color-contrast-cli '#333' '#fff' --level AAA
+contrast '#333' '#fff' --level AA
+contrast '#333' '#fff' --level AAA
 ```
 
 ### Failure Case
 
 ```bash
-npx @siluat/color-contrast-cli '#999' '#fff'
+contrast '#999' '#fff'
 ```
 
 ```text
@@ -58,7 +66,7 @@ Large text:  Fail ✗
 The CLI prints error messages to stderr and exits with code 2 (distinguishing from `--level` failure which exits with code 1):
 
 ```bash
-npx @siluat/color-contrast-cli 'not-a-color' '#fff'
+contrast 'not-a-color' '#fff'
 # stderr: Error: Invalid color: "not-a-color"
 # exit code: 2
 ```
@@ -67,7 +75,15 @@ With `--json`, errors are also printed to stderr as plain text, not JSON.
 
 ## Installation
 
-For use as a library or for global CLI access:
+### Global (CLI)
+
+```bash
+npm install -g @siluat/color-contrast-cli
+```
+
+This registers the `contrast` command globally.
+
+### Local (library or project-scoped CLI)
 
 ```bash
 npm install @siluat/color-contrast-cli
@@ -85,6 +101,16 @@ bun add @siluat/color-contrast-cli
 deno add jsr:@siluat/color-contrast-cli
 # or
 npx jsr add @siluat/color-contrast-cli
+```
+
+### Run without installing
+
+```bash
+npx @siluat/color-contrast-cli '#000' '#fff'
+# or
+bunx @siluat/color-contrast-cli '#000' '#fff'
+# or
+deno run npm:@siluat/color-contrast-cli '#000' '#fff'
 ```
 
 ## Library
