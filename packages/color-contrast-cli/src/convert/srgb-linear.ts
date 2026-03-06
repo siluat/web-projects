@@ -11,6 +11,7 @@ import type { LinearRGB, OpaqueRGB } from '../types';
  * @see ADR-004 for threshold choice (0.04045 vs WCAG 2.1's 0.03928)
  */
 const GAMMA_THRESHOLD = 0.04045;
+const LINEAR_THRESHOLD = 0.0031308;
 const LINEAR_SLOPE = 12.92;
 const POWER_OFFSET = 0.055;
 const POWER_SCALE = 1.055;
@@ -31,6 +32,23 @@ export function srgbChannelToLinear(channel: number): number {
     return channel / LINEAR_SLOPE;
   }
   return ((channel + POWER_OFFSET) / POWER_SCALE) ** POWER_EXPONENT;
+}
+
+/**
+ * Convert a single linear-light value to gamma-encoded sRGB.
+ *
+ * IEC 61966-2-1 forward transfer function (inverse of {@link srgbChannelToLinear}):
+ * - Below threshold: linear segment `value * 12.92`
+ * - Above threshold: power curve `1.055 * value^(1/2.4) - 0.055`
+ *
+ * @param value - Linear-light value (may be outside [0, 1] for out-of-gamut colors)
+ * @returns Gamma-encoded sRGB value
+ */
+export function linearToSrgbChannel(value: number): number {
+  if (value <= LINEAR_THRESHOLD) {
+    return value * LINEAR_SLOPE;
+  }
+  return POWER_SCALE * value ** (1 / POWER_EXPONENT) - POWER_OFFSET;
 }
 
 /**
