@@ -26,9 +26,16 @@
 
 ### Phase 3: Wide-gamut Color Support
 
-- [ ] PR 11: Wide-gamut color conversion pipeline
+- [x] PR 11: Wide-gamut color conversion pipeline
 - [ ] PR 12: CSS Color Level 4 gamut mapping
 - [ ] PR 13: LAB/LCH/OKLAB/OKLCH parsers
+
+**Phase 3 release checklist (0.3.0):**
+
+- [ ] README "Supported Color Formats" section: move LAB, LCH, OKLAB, OKLCH from "Planned" to "Currently supported"
+- [ ] README "How Alpha and Wide-Gamut Colors Are Handled" section: update wide-gamut paragraph to reflect implemented status
+- [ ] README library examples: add wide-gamut color example (e.g., `contrastRatio('oklch(60% 0.15 50)', 'white')`)
+- [ ] Version bump and publish
 
 ### Phase 4: AI-Friendly Enhancements
 
@@ -144,7 +151,8 @@ AI agents (Claude Code, Cursor, etc.) can execute shell commands directly, so a 
   - OKLCH -> OKLAB (Section 10.3)
   - XYZ D65 -> Linear sRGB (Section 10.2, 3x3 matrix)
 - **Verification:** Spec conversion examples, floating-point tolerance configuration
-- **Status:** Pending
+- **Learning doc:** `docs/learning/wide-gamut-conversions.md`
+- **Status:** Done
 
 ### PR 12: CSS Color Level 4 Gamut Mapping
 
