@@ -98,6 +98,7 @@ contrastRatio('#000000', '#ffffff'); // 21
 contrastRatio('#00000080', '#ffffff'); // alpha compositing supported
 contrastRatio('rgb(0, 0, 0)', '#fff'); // RGB functional notation
 contrastRatio('navy', 'white'); // CSS named colors
+contrastRatio('oklch(60% 0.15 50)', 'white'); // wide-gamut colors
 ```
 
 Returns the ratio as a `number`.
@@ -152,16 +153,11 @@ WCAG 2.1 compliance thresholds:
 
 ## Supported Color Formats
 
-**Currently supported:**
-
 - HEX: `#RGB`, `#RRGGBB`, `#RGBA`, `#RRGGBBAA`
 - Named colors: `red`, `navy`, `rebeccapurple`, `transparent` (148 named colors)
 - RGB: `rgb(255 0 0)`, `rgb(255 0 0 / 0.5)`, `rgba(255, 0, 0, 0.5)`
 - HSL: `hsl(120 100% 50%)`, `hsl(120 100% 50% / 0.5)`, `hsla(120, 100%, 50%, 0.5)`
 - HWB: `hwb(120 0% 0%)`, `hwb(120 0% 0% / 0.5)`
-
-**Planned (wide-gamut):**
-
 - LAB: `lab(50% 40 59.5)`, `lab(50% 40 59.5 / 0.5)`
 - LCH: `lch(52.2% 72.2 50)`, `lch(52.2% 72.2 50 / 0.5)`
 - OKLAB: `oklab(59% 0.1 0.1)`, `oklab(59% 0.1 0.1 / 0.5)`
@@ -177,4 +173,4 @@ WCAG contrast ratio is defined between opaque sRGB colors. This tool automatical
 contrastRatio('#00000080', '#ffffff'); // contrast of composited gray vs white
 ```
 
-**Wide-gamut colors** (planned): Colors in LAB, LCH, OKLAB, or OKLCH that fall outside the sRGB gamut will be gamut-mapped using the CSS Color Level 4 algorithm — the same method browsers use to render these colors. This feature is not yet implemented.
+**Wide-gamut colors**: Colors in LAB, LCH, OKLAB, or OKLCH that fall outside the sRGB gamut are gamut-mapped using the CSS Color Level 4 algorithm (Section 13.2) — the same method browsers use to render these colors.

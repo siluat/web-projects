@@ -22,20 +22,18 @@
 
 - [x] README "Supported Color Formats" section: move Named colors, RGB, HSL, HWB to "Currently supported"
 - [x] README library examples: uncomment `contrastRatio('navy', 'white')` etc.
-- [x] Version bump and publish
 
 ### Phase 3: Wide-gamut Color Support
 
 - [x] PR 11: Wide-gamut color conversion pipeline
 - [x] PR 12: CSS Color Level 4 gamut mapping
-- [ ] PR 13: LAB/LCH/OKLAB/OKLCH parsers
+- [x] PR 13: LAB/LCH/OKLAB/OKLCH parsers
 
 **Phase 3 release checklist (0.3.0):**
 
-- [ ] README "Supported Color Formats" section: move LAB, LCH, OKLAB, OKLCH from "Planned" to "Currently supported"
-- [ ] README "How Alpha and Wide-Gamut Colors Are Handled" section: update wide-gamut paragraph to reflect implemented status
-- [ ] README library examples: add wide-gamut color example (e.g., `contrastRatio('oklch(60% 0.15 50)', 'white')`)
-- [ ] Version bump and publish
+- [x] README "Supported Color Formats" section: move LAB, LCH, OKLAB, OKLCH from "Planned" to "Currently supported"
+- [x] README "How Alpha and Wide-Gamut Colors Are Handled" section: update wide-gamut paragraph to reflect implemented status
+- [x] README library examples: add wide-gamut color example (e.g., `contrastRatio('oklch(60% 0.15 50)', 'white')`)
 
 ### Phase 4: AI-Friendly Enhancements
 
@@ -164,10 +162,10 @@ AI agents (Claude Code, Cursor, etc.) can execute shell commands directly, so a 
 
 ### PR 13: LAB/LCH/OKLAB/OKLCH Parsers
 
-- **Files:** `src/parse/lab.ts`, `src/parse/lch.ts`, `src/parse/oklab.ts`, `src/parse/oklch.ts`, tests
-- **Scope:** Parse 4 wide-gamut color formats, support both percentage and number values
+- **Files:** `src/parse/lab.ts`, `src/parse/lch.ts`, `src/parse/oklab.ts`, `src/parse/oklch.ts`, `src/convert/xyz-to-oklab.ts`, `src/convert/oklab-to-oklch.ts`, `src/parse/utils.ts` (`wrapHueDegrees` added), `src/parse/index.ts` (dispatcher), `src/convert/index.ts` (exports), `src/index.ts` (parseOrThrow switch), tests
+- **Scope:** Parse 4 wide-gamut color formats, support both percentage and number values, XYZ→OKLAB and OKLAB→OKLCH inverse conversions, complete switch-based routing in parseOrThrow
 - **Integration test:** contrastRatio calculation with wide-gamut colors works correctly through gamut mapping
-- **Status:** Pending
+- **Status:** Done
 
 ## Type System
 
@@ -220,9 +218,11 @@ packages/color-contrast-cli/
       hwb-to-srgb.ts         # HWB -> sRGB
       lab-to-xyz.ts          # LAB -> XYZ
       lch-to-lab.ts          # LCH -> LAB
+      oklab-to-oklch.ts      # OKLAB -> OKLCH
       oklab-to-xyz.ts        # OKLAB -> XYZ
       oklch-to-oklab.ts      # OKLCH -> OKLAB
       xyz-to-linear-rgb.ts   # XYZ -> Linear RGB
+      xyz-to-oklab.ts        # XYZ -> OKLAB
     gamut-map.ts             # CSS Color Level 4 gamut mapping
     alpha-composite.ts       # Alpha compositing
     luminance.ts             # WCAG relative luminance
@@ -243,6 +243,9 @@ packages/color-contrast-cli/
 | OKLAB <-> XYZ, OKLCH -> OKLAB | CSS Color Level 4 Section 10.3 | 11 |
 | XYZ -> Linear sRGB | CSS Color Level 4 Section 10.2 | 11 |
 | CSS gamut mapping | CSS Color Level 4 Section 13.2 | 12 |
+| lab()/lch() parsing | CSS Color Level 4 Section 10.1 | 13 |
+| oklab()/oklch() parsing | CSS Color Level 4 Section 10.3 | 13 |
+| XYZ -> OKLAB, OKLAB -> OKLCH | CSS Color Level 4 Section 10.3 | 13 |
 
 ## Notes
 

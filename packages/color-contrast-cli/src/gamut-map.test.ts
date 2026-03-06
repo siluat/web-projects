@@ -130,6 +130,19 @@ describe('gamutMapOklch', () => {
     });
   });
 
+  describe('initial clip early return', () => {
+    it('returns clipped result for barely-out-of-gamut color', () => {
+      // oklch(0.5, 0.22, 0) is just barely outside sRGB (linear g ≈ -0.012).
+      // Naive clipping produces deltaEOK ≈ 0.018 < JND (0.02), so the
+      // algorithm returns the clipped result early without binary search.
+      const result = gamutMapOklch(oklch(0.5, 0.22, 0));
+      expect(result.space).toBe('srgb');
+      expect(result.r).toBeCloseTo(0.7304, 2);
+      expect(result.g).toBeCloseTo(0, 2);
+      expect(result.b).toBeCloseTo(0.3689, 2);
+    });
+  });
+
   describe('alpha preservation', () => {
     it('preserves alpha for in-gamut color', () => {
       const result = gamutMapOklch(oklch(0.5, 0.1, 180, 0.5));

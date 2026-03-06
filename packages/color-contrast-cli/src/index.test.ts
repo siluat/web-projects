@@ -40,11 +40,43 @@ describe('contrastRatio', () => {
     expect(contrastRatio('hwb(0 0% 100%)', '#ffffff')).toBe(21);
   });
 
+  it('returns 21 for oklch black vs white', () => {
+    expect(contrastRatio('oklch(0 0 0)', '#ffffff')).toBe(21);
+  });
+
+  it('returns 21 for lab black vs white', () => {
+    expect(contrastRatio('lab(0 0 0)', '#ffffff')).toBe(21);
+  });
+
+  it('returns 21 for oklab black vs white', () => {
+    expect(contrastRatio('oklab(0 0 0)', '#ffffff')).toBe(21);
+  });
+
+  it('returns 21 for lch black vs white', () => {
+    expect(contrastRatio('lch(0 0 0)', '#ffffff')).toBe(21);
+  });
+
+  it('returns same ratio for oklch red as hex red vs white', () => {
+    const hexRedRatio = contrastRatio('#ff0000', '#fff');
+    // OKLCH red (sRGB red expressed in OKLCH, from Color.js 0.6.1)
+    // After gamut mapping, should produce approximately the same ratio
+    const oklchRatio = contrastRatio('oklch(0.6280 0.2577 29.23)', '#fff');
+    expect(Math.abs(oklchRatio - hexRedRatio)).toBeLessThanOrEqual(0.01);
+  });
+
   it('handles alpha compositing in the pipeline', () => {
     // Semi-transparent black over white should produce a lower ratio than opaque black
     const ratio = contrastRatio('#00000080', '#ffffff');
     expect(ratio).toBeGreaterThan(1);
     expect(ratio).toBeLessThan(21);
+  });
+
+  it('produces same ratio for equivalent LAB and LCH colors', () => {
+    // lab(50 25 -25) = lch(50 35.3553 315)
+    // C = hypot(25, 25) ≈ 35.3553, H = atan2(-25, 25) = -45° → 315°
+    const labRatio = contrastRatio('lab(50 25 -25)', '#fff');
+    const lchRatio = contrastRatio('lch(50 35.3553 315)', '#fff');
+    expect(labRatio).toBe(lchRatio);
   });
 });
 
@@ -83,6 +115,14 @@ describe('checkContrast', () => {
 
   it('evaluates HWB input correctly', () => {
     expect(checkContrast('hwb(0 0% 100%)', 'hwb(0 100% 0%)')).toEqual({
+      ratio: 21,
+      normalText: 'AAA',
+      largeText: 'AAA',
+    });
+  });
+
+  it('evaluates OKLCH input correctly', () => {
+    expect(checkContrast('oklch(0 0 0)', 'oklch(1 0 0)')).toEqual({
       ratio: 21,
       normalText: 'AAA',
       largeText: 'AAA',
