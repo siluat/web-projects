@@ -132,19 +132,14 @@ describe('gamutMapOklch', () => {
 
   describe('initial clip early return', () => {
     it('returns clipped result for barely-out-of-gamut color', () => {
-      // oklch(0.5, 0.17, 0) is just barely outside sRGB gamut.
-      // Naive clipping produces a result within JND (deltaEOK < 0.02)
-      // of the original, so the algorithm returns early at lines 172-174
-      // without entering the binary search loop.
-      const result = gamutMapOklch(oklch(0.5, 0.17, 0));
+      // oklch(0.5, 0.22, 0) is just barely outside sRGB (linear g ≈ -0.012).
+      // Naive clipping produces deltaEOK ≈ 0.018 < JND (0.02), so the
+      // algorithm returns the clipped result early without binary search.
+      const result = gamutMapOklch(oklch(0.5, 0.22, 0));
       expect(result.space).toBe('srgb');
-      // All channels should be in [0, 1]
-      expect(result.r).toBeGreaterThanOrEqual(0);
-      expect(result.r).toBeLessThanOrEqual(1);
-      expect(result.g).toBeGreaterThanOrEqual(0);
-      expect(result.g).toBeLessThanOrEqual(1);
-      expect(result.b).toBeGreaterThanOrEqual(0);
-      expect(result.b).toBeLessThanOrEqual(1);
+      expect(result.r).toBeCloseTo(0.7304, 2);
+      expect(result.g).toBeCloseTo(0, 2);
+      expect(result.b).toBeCloseTo(0.3689, 2);
     });
   });
 
