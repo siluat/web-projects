@@ -83,7 +83,47 @@ describe('parseColor', () => {
   });
 
   it('returns null for unsupported formats', () => {
-    expect(parseColor('lab(50% 0 0)')).toBeNull();
+    expect(parseColor('color(display-p3 1 0 0)')).toBeNull();
+  });
+
+  it('parses LAB functional notation', () => {
+    expect(parseColor('lab(50 25 -25)')).toEqual({
+      space: 'lab',
+      l: 50,
+      a: 25,
+      b: -25,
+      alpha: 1,
+    });
+  });
+
+  it('parses LCH functional notation', () => {
+    expect(parseColor('lch(50 30 120)')).toEqual({
+      space: 'lch',
+      l: 50,
+      c: 30,
+      h: 120,
+      alpha: 1,
+    });
+  });
+
+  it('parses OKLAB functional notation', () => {
+    expect(parseColor('oklab(0.5 0.1 -0.1)')).toEqual({
+      space: 'oklab',
+      l: 0.5,
+      a: 0.1,
+      b: -0.1,
+      alpha: 1,
+    });
+  });
+
+  it('parses OKLCH functional notation', () => {
+    expect(parseColor('oklch(0.6 0.15 50)')).toEqual({
+      space: 'oklch',
+      l: 0.6,
+      c: 0.15,
+      h: 50,
+      alpha: 1,
+    });
   });
 
   it('parses HWB functional notation', () => {

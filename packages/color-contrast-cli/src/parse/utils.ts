@@ -63,6 +63,18 @@ export function normalizeHue(degrees: number): number {
   return (wrapped < 0 ? wrapped + 360 : wrapped) / 360;
 }
 
+/**
+ * Wrap a hue angle in degrees to the [0, 360) range.
+ *
+ * Same modular arithmetic as `normalizeHue`, but returns degrees
+ * instead of dividing by 360. LCH/OKLCH conversion functions
+ * expect hue in degrees, unlike HSL/HWB which use [0, 1].
+ */
+export function wrapHueDegrees(degrees: number): number {
+  const wrapped = degrees % 360;
+  return wrapped < 0 ? wrapped + 360 : wrapped;
+}
+
 /** Type guard that narrows an array to a fixed-length tuple. */
 export function hasLength<T>(arr: T[], n: 3): arr is [T, T, T];
 export function hasLength<T>(arr: T[], n: number): boolean {
