@@ -1,5 +1,17 @@
 # @siluat/color-contrast-cli
 
+## 0.3.0
+
+### Minor Changes
+
+- [#79](https://github.com/siluat/web-projects/pull/79) [`7af35da`](https://github.com/siluat/web-projects/commit/7af35dae704869a5dbbd01f73aa99155ec7c387a) - Add wide-gamut color conversion pipeline (LCH, OKLCH, LAB, OKLAB → XYZ-D65 → linear sRGB) per CSS Color Level 4 Sections 10.1–10.3
+
+- [`8cf1d27`](https://github.com/siluat/web-projects/commit/8cf1d27a427e20a127720403f2bfe9c8596eedf4) - Add LAB, LCH, OKLAB, OKLCH color format parsers per CSS Color Level 4 Sections 10.1 and 10.3
+
+### Patch Changes
+
+- [#81](https://github.com/siluat/web-projects/pull/81) [`cfab92c`](https://github.com/siluat/web-projects/commit/cfab92cb59659cb377b24bf042b58745f7fa9903) - Add CSS Color Level 4 Section 13.2 gamut mapping algorithm for mapping wide-gamut colors into sRGB via chroma binary search in OKLCH
+
 ## 0.2.0
 
 ### Minor Changes
