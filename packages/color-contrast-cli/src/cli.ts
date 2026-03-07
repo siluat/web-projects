@@ -148,7 +148,9 @@ function main(): void {
         }
 
         if (parsed.level !== null) {
-          process.exit(passesLevel(result.normalText, parsed.level) ? 0 : 1);
+          process.exitCode = passesLevel(result.normalText, parsed.level)
+            ? 0
+            : 1;
         }
       }
     }
