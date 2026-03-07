@@ -67,6 +67,7 @@ function buildHelpText(): string {
     "  ccr '#333' '#fff'",
     '  ccr black white --json',
     "  ccr 'rgb(0,0,0)' 'hsl(0 0% 100%)' --level AA",
+    "  ccr '#333' '#fff' --level AA --json",
     '',
   ];
   return lines.join('\n');
@@ -115,10 +116,6 @@ function parseArgs(argv: string[]): ParseResult {
     level = levelValue;
   }
 
-  if (json && level !== null) {
-    throw new Error('--json and --level cannot be used together');
-  }
-
   const [foreground, background] = positional;
   if (
     positional.length !== 2 ||
@@ -144,14 +141,14 @@ function main(): void {
       case 'run': {
         const result = checkContrast(parsed.foreground, parsed.background);
 
-        if (parsed.level !== null) {
-          process.exit(passesLevel(result.normalText, parsed.level) ? 0 : 1);
-        }
-
         if (parsed.json) {
           process.stdout.write(`${JSON.stringify(result)}\n`);
-        } else {
+        } else if (parsed.level === null) {
           process.stdout.write(`${formatHumanReadable(result)}\n`);
+        }
+
+        if (parsed.level !== null) {
+          process.exit(passesLevel(result.normalText, parsed.level) ? 0 : 1);
         }
       }
     }

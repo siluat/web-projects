@@ -7,7 +7,7 @@
 Selected from [cli-improvement-ideas.md](cli-improvement-ideas.md):
 
 - [x] `--help` / `--version` flags
-- [ ] Allow `--level` + `--json` together
+- [x] Allow `--level` + `--json` together
 
 **Release checklist:**
 
