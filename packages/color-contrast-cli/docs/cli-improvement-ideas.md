@@ -6,8 +6,8 @@ Ideas for improving the CLI's usability, inspired by [@googleworkspace/cli](http
 
 Currently no `--help` or `--version` flag exists. Invalid arguments only show a one-line usage string.
 
-- `contrast --help`: Show supported color formats, options, and usage examples
-- `contrast --version`: Show package version
+- `ccr --help`: Show supported color formats, options, and usage examples
+- `ccr --version`: Show package version
 - Include color format examples in help output since color syntax is complex
 
 ## 2. Allow `--level` + `--json` Together
@@ -15,7 +15,7 @@ Currently no `--help` or `--version` flag exists. Invalid arguments only show a 
 Currently `--level` and `--json` are mutually exclusive. In CI pipelines, it's common to want both: exit code for pass/fail AND JSON stdout for parsing.
 
 ```bash
-result=$(contrast '#333' '#fff' --level AA --json)
+result=$(ccr '#333' '#fff' --level AA --json)
 # exit code 0 or 1 + JSON stdout
 ```
 
@@ -24,7 +24,7 @@ result=$(contrast '#333' '#fff' --level AA --json)
 Show the internal conversion pipeline for transparency and education, especially useful for wide-gamut colors and alpha compositing.
 
 ```text
-$ contrast 'oklch(60% 0.15 50)' 'white' --verbose
+$ ccr 'oklch(60% 0.15 50)' 'white' --verbose
 
 Foreground: oklch(60% 0.15 50)
   -> Parsed as OKLCH: L=0.60, C=0.15, H=50
@@ -43,11 +43,11 @@ Large text:  AA ✓
 Currently errors only say `Error: Invalid color: "xyz"`. Add context-aware hints.
 
 ```text
-$ contrast 'rgb(300, 0, 0)' '#fff'
+$ ccr 'rgb(300, 0, 0)' '#fff'
 Error: Invalid color: "rgb(300, 0, 0)"
   RGB channel values must be 0-255.
 
-$ contrast '#gg0000' '#fff'
+$ ccr '#gg0000' '#fff'
 Error: Invalid color: "#gg0000"
   Hex colors use characters 0-9 and a-f.
   Example: #ff0000
@@ -58,8 +58,8 @@ Error: Invalid color: "#gg0000"
 Currently `--level` checks against normal text only. Add `--size large` to check against large text thresholds.
 
 ```bash
-contrast '#777' '#fff' --level AA --size large   # passes (ratio 4.48 >= 3)
-contrast '#777' '#fff' --level AA                 # fails  (ratio 4.48 < 4.5)
+ccr '#777' '#fff' --level AA --size large   # passes (ratio 4.48 >= 3)
+ccr '#777' '#fff' --level AA                 # fails  (ratio 4.48 < 4.5)
 ```
 
 ## 6. Batch Input Support
@@ -67,9 +67,9 @@ contrast '#777' '#fff' --level AA                 # fails  (ratio 4.48 < 4.5)
 Process multiple color pairs at once via stdin, useful for design system palette audits.
 
 ```bash
-echo "#000 #fff\n#333 #ccc\n#666 #999" | contrast --batch
-echo "#000 #fff\n#333 #ccc" | contrast --batch -o csv
-contrast --file palette-pairs.txt -o csv
+echo "#000 #fff\n#333 #ccc\n#666 #999" | ccr --batch
+echo "#000 #fff\n#333 #ccc" | ccr --batch -o csv
+ccr --file palette-pairs.txt -o csv
 ```
 
 ## 7. Output Format Expansion
@@ -85,8 +85,8 @@ Add more output formats beyond human-readable text and JSON.
 Generate shell completion scripts for Bash/Zsh/Fish.
 
 ```bash
-contrast --completions bash > /etc/bash_completion.d/contrast
-contrast --completions zsh > ~/.zsh/completions/_contrast
+ccr --completions bash > /etc/bash_completion.d/ccr
+ccr --completions zsh > ~/.zsh/completions/_ccr
 ```
 
 The 148 CSS named colors could be offered as completion candidates.
@@ -95,27 +95,9 @@ The 148 CSS named colors could be offered as completion candidates.
 
 When a color pair fails a target level, suggest the closest alternative that passes. This is a high-effort, high-impact feature for future consideration.
 
-## 10. Rename CLI Command: `contrast` -> `wcr`
+## ~~10. Rename CLI Command: `contrast` -> `ccr`~~
 
-The current bin name `contrast` is a generic English word. This causes potential bin name collisions, poor searchability, and no brand identity.
-
-Rename to `wcr` (**W**CAG **C**ontrast **R**atio):
-
-- 3 characters — fast to type
-- Unique — no known bin name conflicts
-- Searchable — "wcr cli" returns specific results
-- Meaningful — directly references the WCAG standard this tool implements
-
-Transition strategy using dual bin registration in package.json:
-
-```json
-"bin": {
-  "wcr": "./dist/cli.js",
-  "contrast": "./dist/cli.js"
-}
-```
-
-Keep both during a minor version cycle, then drop `contrast` in the next major version.
+Done. The CLI command is now `ccr` (**C**olor **C**ontrast **R**atio).
 
 ## 11. Public `parseColor` API
 
@@ -136,7 +118,7 @@ Publish an installable Skill that teaches AI agents (Claude Code, Cursor, etc.) 
 
 | Priority | Idea | Effort | Impact |
 |----------|------|--------|--------|
-| P0 | Rename bin to `wcr` | Low | High |
+| ~~P0~~ | ~~Rename bin to `ccr`~~ | ~~Low~~ | ~~Done~~ |
 | P0 | `--help` / `--version` | Low | High |
 | P0 | `--level` + `--json` together | Low | Medium |
 | P1 | `--verbose` conversion trace | Medium | High |

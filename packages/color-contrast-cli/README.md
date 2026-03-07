@@ -1,6 +1,6 @@
 # @siluat/color-contrast-cli
 
-WCAG 2.1 color contrast checker for the command line. Also usable as a library.
+WCAG Color Contrast Ratio Checker for the command line. Also usable as a library.
 
 ## Quick Start
 
@@ -16,10 +16,10 @@ For regular use, install globally:
 npm install -g @siluat/color-contrast-cli
 ```
 
-Then use the short `contrast` command:
+Then use the short `ccr` command:
 
 ```bash
-contrast '#000' '#fff'
+ccr '#000' '#fff'
 ```
 
 ```text
@@ -33,7 +33,7 @@ Large text:  AAA ✓
 ### JSON Output
 
 ```bash
-contrast '#333' '#fff' --json
+ccr '#333' '#fff' --json
 ```
 
 ```json
@@ -45,14 +45,14 @@ contrast '#333' '#fff' --json
 Exit 0 on pass, exit 1 on fail. Checks against normal text:
 
 ```bash
-contrast '#333' '#fff' --level AA
-contrast '#333' '#fff' --level AAA
+ccr '#333' '#fff' --level AA
+ccr '#333' '#fff' --level AAA
 ```
 
 ### Failure Case
 
 ```bash
-contrast '#999' '#fff'
+ccr '#999' '#fff'
 ```
 
 ```text
@@ -66,7 +66,7 @@ Large text:  Fail ✗
 The CLI prints error messages to stderr and exits with code 2 (distinguishing from `--level` failure which exits with code 1):
 
 ```bash
-contrast 'not-a-color' '#fff'
+ccr 'not-a-color' '#fff'
 # stderr: Error: Invalid color: "not-a-color"
 # exit code: 2
 ```
@@ -81,7 +81,7 @@ With `--json`, errors are also printed to stderr as plain text, not JSON.
 npm install -g @siluat/color-contrast-cli
 ```
 
-This registers the `contrast` command globally.
+This registers the `ccr` command globally.
 
 ### Local (library or project-scoped CLI)
 

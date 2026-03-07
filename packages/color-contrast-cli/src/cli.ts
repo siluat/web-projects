@@ -2,8 +2,7 @@
 import { checkContrast } from './index';
 import type { ComplianceLevel, ContrastResult } from './types';
 
-const USAGE =
-  'Usage: contrast <foreground> <background> [--json] [--level AA|AAA]';
+const USAGE = 'Usage: ccr <foreground> <background> [--json] [--level AA|AAA]';
 
 function formatLevel(level: ComplianceLevel): string {
   return level === 'Fail' ? 'Fail \u2717' : `${level} \u2713`;
