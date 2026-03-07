@@ -122,6 +122,59 @@ describe('CLI', () => {
     });
   });
 
+  describe('--level + --json combined', () => {
+    it('outputs JSON and exits 0 when level passes', async () => {
+      const { stdout, stderr, exitCode } = await run([
+        '#333',
+        '#fff',
+        '--level',
+        'AA',
+        '--json',
+      ]);
+      const result = JSON.parse(stdout);
+      expect(result).toEqual({
+        ratio: 12.63,
+        normalText: 'AAA',
+        largeText: 'AAA',
+      });
+      expect(stderr).toBe('');
+      expect(exitCode).toBe(0);
+    });
+
+    it('outputs JSON and exits 1 when level fails', async () => {
+      const { stdout, stderr, exitCode } = await run([
+        '#999',
+        '#fff',
+        '--level',
+        'AA',
+        '--json',
+      ]);
+      const result = JSON.parse(stdout);
+      expect(result).toHaveProperty('ratio');
+      expect(result).toHaveProperty('normalText');
+      expect(result).toHaveProperty('largeText');
+      expect(stderr).toBe('');
+      expect(exitCode).toBe(1);
+    });
+
+    it('works regardless of flag order', async () => {
+      const { stdout, exitCode } = await run([
+        '#333',
+        '#fff',
+        '--json',
+        '--level',
+        'AA',
+      ]);
+      const result = JSON.parse(stdout);
+      expect(result).toEqual({
+        ratio: 12.63,
+        normalText: 'AAA',
+        largeText: 'AAA',
+      });
+      expect(exitCode).toBe(0);
+    });
+  });
+
   describe('error handling', () => {
     it('prints error to stderr for invalid color', async () => {
       const { stderr, stdout, exitCode } = await run(['not-a-color', '#fff']);
@@ -133,18 +186,6 @@ describe('CLI', () => {
     it('prints help hint to stderr when arguments are missing', async () => {
       const { stderr, exitCode } = await run([]);
       expect(stderr).toContain("Try 'ccr --help' for more information.");
-      expect(exitCode).toBe(2);
-    });
-
-    it('rejects --json and --level together', async () => {
-      const { stderr, exitCode } = await run([
-        '#333',
-        '#fff',
-        '--json',
-        '--level',
-        'AA',
-      ]);
-      expect(stderr).toContain('--json and --level cannot be used together');
       expect(exitCode).toBe(2);
     });
 
