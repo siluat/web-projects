@@ -28,6 +28,8 @@ Normal text: AAA ✓
 Large text:  AAA ✓
 ```
 
+Run `ccr --help` to see all options and supported color formats.
+
 ## CLI
 
 ### JSON Output
@@ -47,6 +49,14 @@ Exit 0 on pass, exit 1 on fail. Checks against normal text:
 ```bash
 ccr '#333' '#fff' --level AA
 ccr '#333' '#fff' --level AAA
+```
+
+Combine with `--json` to get structured output alongside the exit code:
+
+```bash
+ccr '#333' '#fff' --level AA --json
+# stdout: {"ratio":12.63,"normalText":"AAA","largeText":"AAA"}
+# exit code: 0
 ```
 
 ### Failure Case
