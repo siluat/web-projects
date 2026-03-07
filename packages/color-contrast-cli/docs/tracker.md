@@ -2,12 +2,13 @@
 
 ## Next Release
 
-### v0.5.0
+### v0.6.0
 
 Selected from [cli-improvement-ideas.md](cli-improvement-ideas.md):
 
-- [x] `--help` / `--version` flags
-- [x] Allow `--level` + `--json` together
+- [ ] `--verbose` conversion trace
+- [ ] Actionable error messages
+- [ ] `--size normal|large` option
 
 **Release checklist:**
 
@@ -16,7 +17,12 @@ Selected from [cli-improvement-ideas.md](cli-improvement-ideas.md):
 
 ## Released
 
-See [CHANGELOG.md](../CHANGELOG.md) for release history.
+### v0.5.0
+
+- [x] `--help` / `--version` flags
+- [x] Allow `--level` + `--json` together
+
+See [CHANGELOG.md](../CHANGELOG.md) for full release history.
 
 ## Spec References
 

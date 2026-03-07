@@ -2,24 +2,7 @@
 
 Ideas for improving the CLI's usability, inspired by [@googleworkspace/cli](https://github.com/googleworkspace/cli) and [CLI for Microsoft 365](https://github.com/pnp/cli-microsoft365).
 
-## 1. `--help` / `--version` Flags
-
-Currently no `--help` or `--version` flag exists. Invalid arguments only show a one-line usage string.
-
-- `ccr --help`: Show supported color formats, options, and usage examples
-- `ccr --version`: Show package version
-- Include color format examples in help output since color syntax is complex
-
-## 2. Allow `--level` + `--json` Together
-
-Currently `--level` and `--json` are mutually exclusive. In CI pipelines, it's common to want both: exit code for pass/fail AND JSON stdout for parsing.
-
-```bash
-result=$(ccr '#333' '#fff' --level AA --json)
-# exit code 0 or 1 + JSON stdout
-```
-
-## 3. `--verbose` Mode
+## `--verbose` Mode
 
 Show the internal conversion pipeline for transparency and education, especially useful for wide-gamut colors and alpha compositing.
 
@@ -38,7 +21,7 @@ Normal text: AA ✗
 Large text:  AA ✓
 ```
 
-## 4. Actionable Error Messages
+## Actionable Error Messages
 
 Currently errors only say `Error: Invalid color: "xyz"`. Add context-aware hints.
 
@@ -53,7 +36,7 @@ Error: Invalid color: "#gg0000"
   Example: #ff0000
 ```
 
-## 5. `--size normal|large` Option
+## `--size normal|large` Option
 
 Currently `--level` checks against normal text only. Add `--size large` to check against large text thresholds.
 
@@ -62,7 +45,7 @@ ccr '#777' '#fff' --level AA --size large   # passes (ratio 4.48 >= 3)
 ccr '#777' '#fff' --level AA                 # fails  (ratio 4.48 < 4.5)
 ```
 
-## 6. Batch Input Support
+## Batch Input Support
 
 Process multiple color pairs at once via stdin, useful for design system palette audits.
 
@@ -72,7 +55,7 @@ echo "#000 #fff\n#333 #ccc" | ccr --batch -o csv
 ccr --file palette-pairs.txt -o csv
 ```
 
-## 7. Output Format Expansion
+## Output Format Expansion
 
 Add more output formats beyond human-readable text and JSON.
 
@@ -80,7 +63,7 @@ Add more output formats beyond human-readable text and JSON.
 - `--output markdown` (or `-o markdown`): Embed in accessibility audit reports
 - Keep `--json` as shorthand for `--output json`
 
-## 8. Shell Completion
+## Shell Completion
 
 Generate shell completion scripts for Bash/Zsh/Fish.
 
@@ -91,15 +74,11 @@ ccr --completions zsh > ~/.zsh/completions/_ccr
 
 The 148 CSS named colors could be offered as completion candidates.
 
-## 9. Color Suggestion (Advanced)
+## Color Suggestion (Advanced)
 
 When a color pair fails a target level, suggest the closest alternative that passes. This is a high-effort, high-impact feature for future consideration.
 
-## ~~10. Rename CLI Command: `contrast` -> `ccr`~~
-
-Done. The CLI command is now `ccr` (**C**olor **C**ontrast **R**atio).
-
-## 11. Public `parseColor` API
+## Public `parseColor` API
 
 Expose the internal color parser as a public API for color string validation use cases.
 
@@ -110,7 +89,7 @@ parseColor('#ff0000'); // { space: 'srgb', r: 1, g: 0, b: 0, alpha: 1 }
 parseColor('not-a-color'); // null
 ```
 
-## 12. Distributable Skill
+## Distributable Skill
 
 Publish an installable Skill that teaches AI agents (Claude Code, Cursor, etc.) to check contrast when color values change. A well-designed CLI is itself an AI interface — a Skill makes it discoverable.
 
@@ -118,9 +97,6 @@ Publish an installable Skill that teaches AI agents (Claude Code, Cursor, etc.) 
 
 | Priority | Idea | Effort | Impact |
 |----------|------|--------|--------|
-| ~~P0~~ | ~~Rename bin to `ccr`~~ | ~~Low~~ | ~~Done~~ |
-| P0 | `--help` / `--version` | Low | High |
-| P0 | `--level` + `--json` together | Low | Medium |
 | P1 | `--verbose` conversion trace | Medium | High |
 | P1 | Actionable error messages | Medium | High |
 | P1 | `--size normal\|large` option | Low | Medium |
