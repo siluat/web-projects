@@ -1,5 +1,11 @@
 # @siluat/color-contrast-cli
 
+## 0.4.0
+
+### Minor Changes
+
+- [`5c3bba8`](https://github.com/siluat/web-projects/commit/5c3bba838407c0ed05d396a2860b3a697b96a74a) - Rename CLI command from `contrast` to `ccr` (Color Contrast Ratio)
+
 ## 0.3.0
 
 ### Minor Changes
