@@ -78,6 +78,50 @@ describe('CLI', () => {
     });
   });
 
+  describe('--help', () => {
+    it('prints help text to stdout and exits 0', async () => {
+      const { stdout, stderr, exitCode } = await run(['--help']);
+      expect(stdout).toContain('Usage:');
+      expect(stdout).toContain('Options:');
+      expect(stdout).toContain('Supported color formats:');
+      expect(stdout).toContain('Examples:');
+      expect(stderr).toBe('');
+      expect(exitCode).toBe(0);
+    });
+
+    it('takes priority over --json', async () => {
+      const { stdout, exitCode } = await run(['--help', '--json']);
+      expect(stdout).toContain('Usage:');
+      expect(exitCode).toBe(0);
+    });
+
+    it('takes priority over --version', async () => {
+      const { stdout, exitCode } = await run(['--help', '--version']);
+      expect(stdout).toContain('Usage:');
+      expect(exitCode).toBe(0);
+    });
+
+    it('takes priority over invalid --level', async () => {
+      const { stdout, stderr, exitCode } = await run([
+        '--level',
+        'invalid',
+        '--help',
+      ]);
+      expect(stdout).toContain('Usage:');
+      expect(stderr).toBe('');
+      expect(exitCode).toBe(0);
+    });
+  });
+
+  describe('--version', () => {
+    it('prints version to stdout and exits 0', async () => {
+      const { stdout, stderr, exitCode } = await run(['--version']);
+      expect(stdout.trim()).not.toBe('');
+      expect(stderr).toBe('');
+      expect(exitCode).toBe(0);
+    });
+  });
+
   describe('error handling', () => {
     it('prints error to stderr for invalid color', async () => {
       const { stderr, stdout, exitCode } = await run(['not-a-color', '#fff']);
@@ -86,9 +130,9 @@ describe('CLI', () => {
       expect(exitCode).toBe(2);
     });
 
-    it('prints usage to stderr when arguments are missing', async () => {
+    it('prints help hint to stderr when arguments are missing', async () => {
       const { stderr, exitCode } = await run([]);
-      expect(stderr).toContain('Usage:');
+      expect(stderr).toContain("Try 'ccr --help' for more information.");
       expect(exitCode).toBe(2);
     });
 
