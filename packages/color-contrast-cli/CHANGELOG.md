@@ -1,5 +1,13 @@
 # @siluat/color-contrast-cli
 
+## 0.5.0
+
+### Minor Changes
+
+- [#84](https://github.com/siluat/web-projects/pull/84) [`49693e2`](https://github.com/siluat/web-projects/commit/49693e2ca7d4b73d875f73f54cddfd98c93cab4d) - Add `--help` and `--version` flags to the CLI
+
+- [#86](https://github.com/siluat/web-projects/pull/86) [`23ce19b`](https://github.com/siluat/web-projects/commit/23ce19b379a77f85570afa1c8571b86aba16d0b3) - Allow `--level` and `--json` flags to be used together
+
 ## 0.4.0
 
 ### Minor Changes
