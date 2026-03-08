@@ -1,6 +1,12 @@
 #!/usr/bin/env node
-import { checkContrast, validateColors } from './index';
-import type { ComplianceLevel, ContrastResult } from './types';
+import { checkContrast, checkContrastVerbose, validateColors } from './index';
+import type {
+  ColorTrace,
+  ComplianceLevel,
+  ContrastResult,
+  SRGBColor,
+  VerboseResult,
+} from './types';
 
 declare const __VERSION__: string | undefined;
 
@@ -14,6 +20,7 @@ type ParseResult =
       foreground: string;
       background: string;
       json: boolean;
+      verbose: boolean;
       level: 'AA' | 'AAA' | null;
       size: 'normal' | 'large';
     };
@@ -43,6 +50,161 @@ function passesLevel(
   return compliance === 'AAA';
 }
 
+/**
+ * Format an sRGB color as rgb(R, G, B) or rgba(R, G, B, alpha).
+ */
+function formatSrgbAsRgb(color: SRGBColor): string {
+  const r = Math.round(color.r * 255);
+  const g = Math.round(color.g * 255);
+  const b = Math.round(color.b * 255);
+  if (color.alpha < 1) {
+    return `rgba(${r}, ${g}, ${b}, ${formatNumber(color.alpha)})`;
+  }
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+/**
+ * Format a number with up to 4 decimal places, removing trailing zeros.
+ */
+function formatNumber(n: number): string {
+  if (Number.isInteger(n)) return String(n);
+  return String(parseFloat(n.toFixed(4)));
+}
+
+/**
+ * Display parsed values based on the color format.
+ */
+function formatParsedValues(trace: ColorTrace): string {
+  const { parsed, format } = trace;
+  const alpha = parsed.alpha < 1 ? `, alpha=${formatNumber(parsed.alpha)}` : '';
+
+  switch (format) {
+    case 'hex':
+      return `${formatSrgbAsRgb(trace.srgb)}`;
+    case 'named':
+      return `${formatSrgbAsRgb(trace.srgb)}`;
+    case 'rgb': {
+      if (parsed.space !== 'srgb') break;
+      const r = Math.round(parsed.r * 255);
+      const g = Math.round(parsed.g * 255);
+      const b = Math.round(parsed.b * 255);
+      return `R=${r}, G=${g}, B=${b}${alpha}`;
+    }
+    case 'hsl': {
+      if (parsed.space !== 'hsl') break;
+      const h = formatNumber(parsed.h * 360);
+      const s = formatNumber(parsed.s * 100);
+      const l = formatNumber(parsed.l * 100);
+      return `H=${h}, S=${s}%, L=${l}%${alpha}`;
+    }
+    case 'hwb': {
+      if (parsed.space !== 'hwb') break;
+      const h = formatNumber(parsed.h * 360);
+      const w = formatNumber(parsed.w * 100);
+      const b = formatNumber(parsed.b * 100);
+      return `H=${h}, W=${w}%, B=${b}%${alpha}`;
+    }
+    case 'lab': {
+      if (parsed.space !== 'lab') break;
+      const l = formatNumber(parsed.l);
+      const a = formatNumber(parsed.a);
+      const b = formatNumber(parsed.b);
+      return `L=${l}, a=${a}, b=${b}${alpha}`;
+    }
+    case 'lch': {
+      if (parsed.space !== 'lch') break;
+      const l = formatNumber(parsed.l);
+      const c = formatNumber(parsed.c);
+      const h = formatNumber(parsed.h);
+      return `L=${l}, C=${c}, H=${h}${alpha}`;
+    }
+    case 'oklab': {
+      if (parsed.space !== 'oklab') break;
+      const l = formatNumber(parsed.l);
+      const a = formatNumber(parsed.a);
+      const b = formatNumber(parsed.b);
+      return `L=${l}, a=${a}, b=${b}${alpha}`;
+    }
+    case 'oklch': {
+      if (parsed.space !== 'oklch') break;
+      const l = formatNumber(parsed.l);
+      const c = formatNumber(parsed.c);
+      const h = formatNumber(parsed.h);
+      return `L=${l}, C=${c}, H=${h}${alpha}`;
+    }
+  }
+  // Fallback (should not reach here with valid data)
+  return formatSrgbAsRgb(trace.srgb);
+}
+
+/**
+ * Return conversion step description, or null if already sRGB-native.
+ */
+function formatConversionStep(trace: ColorTrace): string | null {
+  switch (trace.format) {
+    case 'hex':
+    case 'named':
+    case 'rgb':
+      return null;
+    case 'hsl':
+    case 'hwb':
+      return `Converted to sRGB: ${formatSrgbAsRgb(trace.srgb)}`;
+    case 'lab':
+    case 'lch':
+    case 'oklab':
+    case 'oklch':
+      return `Gamut mapped to sRGB: ${formatSrgbAsRgb(trace.srgb)}`;
+  }
+}
+
+/**
+ * Format the full verbose output text.
+ */
+function formatVerbose(verbose: VerboseResult): string {
+  const lines: string[] = [];
+
+  // Foreground section
+  const fgFormatLabel = verbose.foreground.format.toUpperCase();
+  lines.push(`Foreground: ${verbose.foreground.input}`);
+  lines.push(
+    `  -> Parsed as ${fgFormatLabel}: ${formatParsedValues(verbose.foreground)}`,
+  );
+  const fgConversion = formatConversionStep(verbose.foreground);
+  if (fgConversion !== null) {
+    lines.push(`  -> ${fgConversion}`);
+  }
+
+  // Background section
+  const bgFormatLabel = verbose.background.format.toUpperCase();
+  lines.push(`Background: ${verbose.background.input}`);
+  lines.push(
+    `  -> Parsed as ${bgFormatLabel}: ${formatParsedValues(verbose.background)}`,
+  );
+  const bgConversion = formatConversionStep(verbose.background);
+  if (bgConversion !== null) {
+    lines.push(`  -> ${bgConversion}`);
+  }
+
+  // Alpha compositing
+  if (verbose.alphaComposited) {
+    lines.push('Alpha compositing: applied');
+  } else {
+    lines.push('Alpha compositing: not needed (both opaque)');
+  }
+
+  // Luminance
+  const fgLum = formatNumber(Math.round(verbose.fgLuminance * 10000) / 10000);
+  const bgLum = formatNumber(Math.round(verbose.bgLuminance * 10000) / 10000);
+  lines.push(`Relative luminance: fg=${fgLum}, bg=${bgLum}`);
+
+  // Contrast result
+  lines.push(`Contrast ratio: ${verbose.result.ratio}:1`);
+  lines.push(`Normal text: ${formatLevel(verbose.result.normalText)}`);
+  lines.push(`Large text:  ${formatLevel(verbose.result.largeText)}`);
+
+  return lines.join('\n');
+}
+
 function buildHelpText(): string {
   const lines = [
     `@siluat/color-contrast-cli v${VERSION}`,
@@ -51,6 +213,7 @@ function buildHelpText(): string {
     '',
     'Options:',
     '  --json               Output result as JSON',
+    '  --verbose            Show detailed conversion trace',
     '  --level AA|AAA       Exit 0 if contrast passes the level, 1 if not',
     '  --size normal|large  Text size for --level check (default: normal)',
     '  --help               Show this help message',
@@ -73,6 +236,7 @@ function buildHelpText(): string {
     "  ccr 'rgb(0,0,0)' 'hsl(0 0% 100%)' --level AA",
     "  ccr '#777' '#fff' --level AA --size large",
     "  ccr '#333' '#fff' --level AA --json",
+    "  ccr 'oklch(60% 0.15 50)' white --verbose",
     '',
   ];
   return lines.join('\n');
@@ -81,6 +245,7 @@ function buildHelpText(): string {
 function parseArgs(argv: string[]): ParseResult {
   const positional: string[] = [];
   let json = false;
+  let verbose = false;
   let hasLevel = false;
   let levelValue: string | undefined;
   let hasSize = false;
@@ -92,6 +257,8 @@ function parseArgs(argv: string[]): ParseResult {
     const arg = argv[i];
     if (arg === '--json') {
       json = true;
+    } else if (arg === '--verbose') {
+      verbose = true;
     } else if (arg === '--level') {
       hasLevel = true;
       i++;
@@ -142,6 +309,10 @@ function parseArgs(argv: string[]): ParseResult {
     size = sizeValue;
   }
 
+  if (verbose && json) {
+    throw new Error('--verbose and --json cannot be combined.');
+  }
+
   const [foreground, background] = positional;
   if (positional.length === 0 || foreground === undefined) {
     throw new Error(
@@ -159,7 +330,7 @@ function parseArgs(argv: string[]): ParseResult {
     );
   }
 
-  return { kind: 'run', foreground, background, json, level, size };
+  return { kind: 'run', foreground, background, json, verbose, level, size };
 }
 
 function main(): void {
@@ -181,6 +352,26 @@ function main(): void {
           process.exitCode = 2;
           return;
         }
+
+        if (parsed.verbose) {
+          const verbose = checkContrastVerbose(
+            parsed.foreground,
+            parsed.background,
+          );
+          process.stdout.write(`${formatVerbose(verbose)}\n`);
+
+          if (parsed.level !== null) {
+            process.exitCode = passesLevel(
+              verbose.result,
+              parsed.level,
+              parsed.size,
+            )
+              ? 0
+              : 1;
+          }
+          return;
+        }
+
         const result = checkContrast(parsed.foreground, parsed.background);
 
         if (parsed.json) {
