@@ -48,6 +48,11 @@ describe('diagnoseColorError', () => {
       const msg = diagnoseColorError('rgba(255, 0)');
       expect(msg).toContain('rgba() requires 3 color channels');
     });
+
+    it('falls back to example when tokens are not valid numbers or percentages', () => {
+      const msg = diagnoseColorError('rgb(abc def ghi)');
+      expect(msg).toContain('Could not parse rgb() values');
+    });
   });
 
   describe('HSL diagnostics', () => {
@@ -72,6 +77,11 @@ describe('diagnoseColorError', () => {
       const msg = diagnoseColorError('hsla(120 100%)');
       expect(msg).toContain('hsla() requires 3 values');
     });
+
+    it('falls back to example when hue is not a valid token', () => {
+      const msg = diagnoseColorError('hsl(abc 100% 50%)');
+      expect(msg).toContain('Could not parse hsl() values');
+    });
   });
 
   describe('space-only format diagnostics', () => {
@@ -83,6 +93,11 @@ describe('diagnoseColorError', () => {
     it('reports missing percentage in hwb() whiteness/blackness', () => {
       const msg = diagnoseColorError('hwb(0 0 100)');
       expect(msg).toContain('Whiteness and blackness must be percentages');
+    });
+
+    it('falls back to example when hwb() hue is invalid but W/B have %', () => {
+      const msg = diagnoseColorError('hwb(abc 50% 100%)');
+      expect(msg).toContain('Could not parse hwb() values');
     });
 
     it('reports comma usage in lab()', () => {
