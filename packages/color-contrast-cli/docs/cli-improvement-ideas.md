@@ -36,15 +36,6 @@ Error: Invalid color: "#gg0000"
   Example: #ff0000
 ```
 
-## `--size normal|large` Option
-
-Currently `--level` checks against normal text only. Add `--size large` to check against large text thresholds.
-
-```bash
-ccr '#777' '#fff' --level AA --size large   # passes (ratio 4.48 >= 3)
-ccr '#777' '#fff' --level AA                 # fails  (ratio 4.48 < 4.5)
-```
-
 ## Batch Input Support
 
 Process multiple color pairs at once via stdin, useful for design system palette audits.
@@ -99,7 +90,6 @@ Publish an installable Skill that teaches AI agents (Claude Code, Cursor, etc.) 
 |----------|------|--------|--------|
 | P1 | `--verbose` conversion trace | Medium | High |
 | P1 | Actionable error messages | Medium | High |
-| P1 | `--size normal\|large` option | Low | Medium |
 | P2 | Batch input (`--batch`, stdin) | Medium | High |
 | P2 | Output format expansion (`-o csv\|markdown`) | Medium | Medium |
 | P3 | Shell completion | Medium | Medium |

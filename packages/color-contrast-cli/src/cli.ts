@@ -15,6 +15,7 @@ type ParseResult =
       background: string;
       json: boolean;
       level: 'AA' | 'AAA' | null;
+      size: 'normal' | 'large';
     };
 
 function formatLevel(level: ComplianceLevel): string {
@@ -31,13 +32,15 @@ function formatHumanReadable(result: ContrastResult): string {
 }
 
 function passesLevel(
-  normalText: ComplianceLevel,
+  result: ContrastResult,
   level: 'AA' | 'AAA',
+  size: 'normal' | 'large',
 ): boolean {
+  const compliance = size === 'large' ? result.largeText : result.normalText;
   if (level === 'AA') {
-    return normalText === 'AA' || normalText === 'AAA';
+    return compliance === 'AA' || compliance === 'AAA';
   }
-  return normalText === 'AAA';
+  return compliance === 'AAA';
 }
 
 function buildHelpText(): string {
@@ -49,6 +52,7 @@ function buildHelpText(): string {
     'Options:',
     '  --json               Output result as JSON',
     '  --level AA|AAA       Exit 0 if contrast passes the level, 1 if not',
+    '  --size normal|large  Text size for --level check (default: normal)',
     '  --help               Show this help message',
     '  --version            Show version number',
     '',
@@ -67,6 +71,7 @@ function buildHelpText(): string {
     "  ccr '#333' '#fff'",
     '  ccr black white --json',
     "  ccr 'rgb(0,0,0)' 'hsl(0 0% 100%)' --level AA",
+    "  ccr '#777' '#fff' --level AA --size large",
     "  ccr '#333' '#fff' --level AA --json",
     '',
   ];
@@ -78,6 +83,8 @@ function parseArgs(argv: string[]): ParseResult {
   let json = false;
   let hasLevel = false;
   let levelValue: string | undefined;
+  let hasSize = false;
+  let sizeValue: string | undefined;
   let help = false;
   let version = false;
 
@@ -89,6 +96,10 @@ function parseArgs(argv: string[]): ParseResult {
       hasLevel = true;
       i++;
       levelValue = argv[i];
+    } else if (arg === '--size') {
+      hasSize = true;
+      i++;
+      sizeValue = argv[i];
     } else if (arg === '--help') {
       help = true;
     } else if (arg === '--version') {
@@ -116,6 +127,21 @@ function parseArgs(argv: string[]): ParseResult {
     level = levelValue;
   }
 
+  let size: 'normal' | 'large' = 'normal';
+  if (hasSize) {
+    if (sizeValue !== 'normal' && sizeValue !== 'large') {
+      throw new Error(
+        `Invalid --size value: "${sizeValue ?? ''}". Use normal or large`,
+      );
+    }
+    if (!hasLevel) {
+      throw new Error(
+        "--size requires --level. Try 'ccr --help' for more information.",
+      );
+    }
+    size = sizeValue;
+  }
+
   const [foreground, background] = positional;
   if (
     positional.length !== 2 ||
@@ -125,7 +151,7 @@ function parseArgs(argv: string[]): ParseResult {
     throw new Error("Try 'ccr --help' for more information.");
   }
 
-  return { kind: 'run', foreground, background, json, level };
+  return { kind: 'run', foreground, background, json, level, size };
 }
 
 function main(): void {
@@ -148,7 +174,7 @@ function main(): void {
         }
 
         if (parsed.level !== null) {
-          process.exitCode = passesLevel(result.normalText, parsed.level)
+          process.exitCode = passesLevel(result, parsed.level, parsed.size)
             ? 0
             : 1;
         }

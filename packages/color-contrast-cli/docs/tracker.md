@@ -8,7 +8,7 @@ Selected from [cli-improvement-ideas.md](cli-improvement-ideas.md):
 
 - [ ] `--verbose` conversion trace
 - [ ] Actionable error messages
-- [ ] `--size normal|large` option
+- [x] `--size normal|large` option
 
 **Release checklist:**
 
