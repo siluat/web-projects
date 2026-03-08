@@ -178,7 +178,8 @@ function main(): void {
           for (const error of errors) {
             process.stderr.write(`Error: ${error}\n`);
           }
-          process.exit(2);
+          process.exitCode = 2;
+          return;
         }
         const result = checkContrast(parsed.foreground, parsed.background);
 
