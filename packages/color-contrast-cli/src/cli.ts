@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { checkContrast } from './index';
+import { checkContrast, validateColors } from './index';
 import type { ComplianceLevel, ContrastResult } from './types';
 
 declare const __VERSION__: string | undefined;
@@ -173,6 +173,13 @@ function main(): void {
         process.stdout.write(`${VERSION}\n`);
         return;
       case 'run': {
+        const errors = validateColors(parsed.foreground, parsed.background);
+        if (errors.length > 0) {
+          for (const error of errors) {
+            process.stderr.write(`Error: ${error}\n`);
+          }
+          process.exit(2);
+        }
         const result = checkContrast(parsed.foreground, parsed.background);
 
         if (parsed.json) {

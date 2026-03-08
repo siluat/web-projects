@@ -167,6 +167,21 @@ checkContrast('#999', '#fff');
 // { ratio: 2.85, normalText: 'Fail', largeText: 'Fail' }
 ```
 
+### Color Validation
+
+Validate both colors upfront and collect all errors at once, instead of failing on the first invalid color:
+
+```typescript
+import { validateColors } from '@siluat/color-contrast-cli';
+
+validateColors('#000', '#fff'); // []
+validateColors('#gg0000', '#zz0000');
+// [
+//   'Invalid color: "#gg0000"\n  Hex colors use characters 0-9 and a-f. Example: #ff0000',
+//   'Invalid color: "#zz0000"\n  Hex colors use characters 0-9 and a-f. Example: #ff0000',
+// ]
+```
+
 ### Error Handling
 
 Both `contrastRatio` and `checkContrast` throw an `Error` for invalid color strings:
@@ -194,6 +209,7 @@ interface ContrastResult {
 
 function contrastRatio(foreground: string, background: string): number;
 function checkContrast(foreground: string, background: string): ContrastResult;
+function validateColors(foreground: string, background: string): string[];
 ```
 
 `ratio` is rounded to 2 decimal places. Range is 1 to 21.

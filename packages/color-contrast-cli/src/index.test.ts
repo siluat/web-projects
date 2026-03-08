@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { checkContrast, contrastRatio } from './index';
+import { checkContrast, contrastRatio, validateColors } from './index';
 
 describe('contrastRatio', () => {
   it('returns 21 for black vs white', () => {
@@ -77,6 +77,31 @@ describe('contrastRatio', () => {
     const labRatio = contrastRatio('lab(50 25 -25)', '#fff');
     const lchRatio = contrastRatio('lch(50 35.3553 315)', '#fff');
     expect(labRatio).toBe(lchRatio);
+  });
+});
+
+describe('validateColors', () => {
+  it('returns empty array when both colors are valid', () => {
+    expect(validateColors('#000', '#fff')).toEqual([]);
+  });
+
+  it('returns one error when only foreground is invalid', () => {
+    const errors = validateColors('not-a-color', '#fff');
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toContain('not-a-color');
+  });
+
+  it('returns one error when only background is invalid', () => {
+    const errors = validateColors('#000', 'not-a-color');
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toContain('not-a-color');
+  });
+
+  it('returns two errors when both colors are invalid', () => {
+    const errors = validateColors('#gg0000', '#zz0000');
+    expect(errors).toHaveLength(2);
+    expect(errors[0]).toContain('#gg0000');
+    expect(errors[1]).toContain('#zz0000');
   });
 });
 
