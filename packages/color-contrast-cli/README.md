@@ -44,11 +44,18 @@ ccr '#333' '#fff' --json
 
 ### CI Exit Code Check
 
-Exit 0 on pass, exit 1 on fail. Checks against normal text:
+Exit 0 on pass, exit 1 on fail. Checks against normal text by default:
 
 ```bash
 ccr '#333' '#fff' --level AA
 ccr '#333' '#fff' --level AAA
+```
+
+Use `--size large` to check against large text thresholds (AA >= 3, AAA >= 4.5). WCAG defines "large text" as 18pt (24px) or above, or 14pt (18.66px) bold or above:
+
+```bash
+ccr '#777' '#fff' --level AA --size large
+# exit code: 0 (ratio 4.48 >= 3)
 ```
 
 Combine with `--json` to get structured output alongside the exit code:

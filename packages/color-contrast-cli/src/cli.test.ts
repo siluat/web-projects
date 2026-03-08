@@ -78,6 +78,142 @@ describe('CLI', () => {
     });
   });
 
+  describe('--size mode', () => {
+    it('exits 0 when --level AA --size large passes', async () => {
+      // #777 vs #fff = 4.48:1, large text AA threshold = 3
+      const { stdout, exitCode } = await run([
+        '#777',
+        '#fff',
+        '--level',
+        'AA',
+        '--size',
+        'large',
+      ]);
+      expect(stdout).toBe('');
+      expect(exitCode).toBe(0);
+    });
+
+    it('exits 1 when --level AA --size large fails', async () => {
+      // #999 vs #fff = 2.85:1, large text AA threshold = 3
+      const { exitCode } = await run([
+        '#999',
+        '#fff',
+        '--level',
+        'AA',
+        '--size',
+        'large',
+      ]);
+      expect(exitCode).toBe(1);
+    });
+
+    it('exits 0 when --level AAA --size large passes', async () => {
+      // #333 vs #fff = 12.63:1, large text AAA threshold = 4.5
+      const { exitCode } = await run([
+        '#333',
+        '#fff',
+        '--level',
+        'AAA',
+        '--size',
+        'large',
+      ]);
+      expect(exitCode).toBe(0);
+    });
+
+    it('exits 1 when --level AAA --size large fails', async () => {
+      // #777 vs #fff = 4.48:1, large text AAA threshold = 4.5
+      const { exitCode } = await run([
+        '#777',
+        '#fff',
+        '--level',
+        'AAA',
+        '--size',
+        'large',
+      ]);
+      expect(exitCode).toBe(1);
+    });
+
+    it('defaults to normal text (existing behavior unchanged)', async () => {
+      // #777 vs #fff = 4.48:1, normal text AA threshold = 4.5 → fail
+      const { exitCode } = await run(['#777', '#fff', '--level', 'AA']);
+      expect(exitCode).toBe(1);
+    });
+
+    it('--size normal behaves same as default', async () => {
+      const { exitCode } = await run([
+        '#777',
+        '#fff',
+        '--level',
+        'AA',
+        '--size',
+        'normal',
+      ]);
+      expect(exitCode).toBe(1);
+    });
+
+    it('errors when --size is used without --level', async () => {
+      const { stderr, exitCode } = await run([
+        '#000',
+        '#fff',
+        '--size',
+        'large',
+      ]);
+      expect(stderr).toContain('--size requires --level');
+      expect(exitCode).toBe(2);
+    });
+
+    it('errors when --size value is missing', async () => {
+      const { stderr, exitCode } = await run([
+        '#000',
+        '#fff',
+        '--level',
+        'AA',
+        '--size',
+      ]);
+      expect(stderr).toContain('Invalid --size value');
+      expect(exitCode).toBe(2);
+    });
+
+    it('errors for invalid --size value', async () => {
+      const { stderr, exitCode } = await run([
+        '#000',
+        '#fff',
+        '--level',
+        'AA',
+        '--size',
+        'medium',
+      ]);
+      expect(stderr).toContain('Invalid --size value: "medium"');
+      expect(exitCode).toBe(2);
+    });
+
+    it('works with --json + --level + --size', async () => {
+      const { stdout, exitCode } = await run([
+        '#777',
+        '#fff',
+        '--level',
+        'AA',
+        '--size',
+        'large',
+        '--json',
+      ]);
+      const result = JSON.parse(stdout);
+      expect(result).toHaveProperty('ratio');
+      expect(exitCode).toBe(0);
+    });
+
+    it('works regardless of flag order', async () => {
+      const { exitCode } = await run([
+        '#777',
+        '#fff',
+        '--size',
+        'large',
+        '--level',
+        'AA',
+      ]);
+      expect(exitCode).toBe(0);
+    });
+  });
+
   describe('--help', () => {
     it('prints help text to stdout and exits 0', async () => {
       const { stdout, stderr, exitCode } = await run(['--help']);
@@ -106,6 +242,22 @@ describe('CLI', () => {
         '--level',
         'invalid',
         '--help',
+      ]);
+      expect(stdout).toContain('Usage:');
+      expect(stderr).toBe('');
+      expect(exitCode).toBe(0);
+    });
+
+    it('includes --size in help text', async () => {
+      const { stdout } = await run(['--help']);
+      expect(stdout).toContain('--size');
+    });
+
+    it('takes priority over invalid --size', async () => {
+      const { stdout, stderr, exitCode } = await run([
+        '--help',
+        '--size',
+        'invalid',
       ]);
       expect(stdout).toContain('Usage:');
       expect(stderr).toBe('');
