@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'bun:test';
-import { checkContrast, contrastRatio, validateColors } from './index';
+import {
+  checkContrast,
+  checkContrastVerbose,
+  contrastRatio,
+  validateColors,
+} from './index';
 
 describe('contrastRatio', () => {
   it('returns 21 for black vs white', () => {
@@ -152,5 +157,58 @@ describe('checkContrast', () => {
       normalText: 'AAA',
       largeText: 'AAA',
     });
+  });
+});
+
+describe('checkContrastVerbose', () => {
+  it('returns format traces for hex colors', () => {
+    const verbose = checkContrastVerbose('#000', '#fff');
+    expect(verbose.foreground.format).toBe('hex');
+    expect(verbose.background.format).toBe('hex');
+    expect(verbose.foreground.input).toBe('#000');
+    expect(verbose.background.input).toBe('#fff');
+    expect(verbose.result.ratio).toBe(21);
+  });
+
+  it('returns format traces for named colors', () => {
+    const verbose = checkContrastVerbose('black', 'white');
+    expect(verbose.foreground.format).toBe('named');
+    expect(verbose.background.format).toBe('named');
+  });
+
+  it('returns format trace for OKLCH', () => {
+    const verbose = checkContrastVerbose('oklch(0.6 0.15 50)', 'white');
+    expect(verbose.foreground.format).toBe('oklch');
+    expect(verbose.foreground.parsed.space).toBe('oklch');
+    expect(verbose.foreground.srgb.space).toBe('srgb');
+    expect(verbose.background.format).toBe('named');
+  });
+
+  it('detects alpha compositing when foreground has alpha', () => {
+    const verbose = checkContrastVerbose('#00000080', '#ffffff');
+    expect(verbose.alphaComposited).toBe(true);
+  });
+
+  it('detects no alpha compositing when both opaque', () => {
+    const verbose = checkContrastVerbose('#000', '#fff');
+    expect(verbose.alphaComposited).toBe(false);
+  });
+
+  it('includes luminance values', () => {
+    const verbose = checkContrastVerbose('#000', '#fff');
+    expect(verbose.fgLuminance).toBe(0);
+    expect(verbose.bgLuminance).toBe(1);
+  });
+
+  it('result matches checkContrast', () => {
+    const verbose = checkContrastVerbose('#333', '#fff');
+    const result = checkContrast('#333', '#fff');
+    expect(verbose.result).toEqual(result);
+  });
+
+  it('throws for invalid color', () => {
+    expect(() => checkContrastVerbose('not-a-color', '#fff')).toThrow(
+      'Invalid color: "not-a-color"',
+    );
   });
 });

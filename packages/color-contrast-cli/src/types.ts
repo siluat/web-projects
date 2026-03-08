@@ -105,3 +105,21 @@ export interface ParseDetail {
   parsed: ParsedColor;
   format: ColorFormat;
 }
+
+/** Verbose trace of a single color through the pipeline. */
+export interface ColorTrace {
+  input: string;
+  format: ColorFormat;
+  parsed: ParsedColor;
+  srgb: SRGBColor;
+}
+
+/** Full verbose result including both colors and pipeline data. */
+export interface VerboseResult {
+  foreground: ColorTrace;
+  background: ColorTrace;
+  alphaComposited: boolean;
+  fgLuminance: number;
+  bgLuminance: number;
+  result: ContrastResult;
+}
