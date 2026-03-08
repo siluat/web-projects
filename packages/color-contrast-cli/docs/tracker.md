@@ -8,7 +8,7 @@ Selected from [cli-improvement-ideas.md](cli-improvement-ideas.md):
 
 - [ ] `--verbose` conversion trace
 - [x] Actionable error messages
-- [ ] Dual color validation
+- [x] Dual color validation
 - [x] `--size normal|large` option
 
 **Release checklist:**

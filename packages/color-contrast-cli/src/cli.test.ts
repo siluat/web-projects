@@ -353,6 +353,14 @@ describe('CLI', () => {
       expect(exitCode).toBe(2);
     });
 
+    it('reports both errors when both colors are invalid', async () => {
+      const { stderr, stdout, exitCode } = await run(['#gg0000', '#zz0000']);
+      expect(stderr).toContain('Error: Invalid color: "#gg0000"');
+      expect(stderr).toContain('Error: Invalid color: "#zz0000"');
+      expect(stdout).toBe('');
+      expect(exitCode).toBe(2);
+    });
+
     it('prints error as plain text even with --json flag', async () => {
       const { stderr, stdout, exitCode } = await run([
         'not-a-color',

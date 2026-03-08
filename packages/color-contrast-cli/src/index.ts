@@ -82,6 +82,25 @@ export function contrastRatio(foreground: string, background: string): number {
 }
 
 /**
+ * Validate two color strings and return an array of diagnostic error messages.
+ *
+ * Returns an empty array when both colors are valid.
+ * Useful for CLI pre-validation so that all errors are reported at once,
+ * rather than failing on the first invalid color.
+ */
+export function validateColors(
+  foreground: string,
+  background: string,
+): string[] {
+  const errors: string[] = [];
+  if (parseColor(foreground) === null)
+    errors.push(diagnoseColorError(foreground));
+  if (parseColor(background) === null)
+    errors.push(diagnoseColorError(background));
+  return errors;
+}
+
+/**
  * Evaluate WCAG 2.1 contrast compliance between two CSS colors.
  *
  * Accepts any supported color format (hex, named colors, rgb()/rgba(),
