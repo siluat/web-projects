@@ -184,10 +184,12 @@ function diagnoseOklch(input: string): string {
 /** Split body into channel tokens, handling comma/space separation and alpha slash. */
 function splitTokens(body: string): string[] {
   if (body.includes(',')) {
-    return body
+    const tokens = body
       .split(',')
       .map((t) => t.trim())
       .filter(Boolean);
+    // Strip optional alpha (4th value) to match channel count
+    return tokens.length === 4 ? tokens.slice(0, 3) : tokens;
   }
   return splitChannelTokens(body);
 }
