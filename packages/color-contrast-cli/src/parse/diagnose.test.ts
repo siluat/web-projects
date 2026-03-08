@@ -43,6 +43,11 @@ describe('diagnoseColorError', () => {
       const msg = diagnoseColorError('rgb(255 0 0 0)');
       expect(msg).toContain('rgb() requires 3 color channels');
     });
+
+    it('uses rgba() in message for rgba() input', () => {
+      const msg = diagnoseColorError('rgba(255, 0)');
+      expect(msg).toContain('rgba() requires 3 color channels');
+    });
   });
 
   describe('HSL diagnostics', () => {
@@ -61,6 +66,11 @@ describe('diagnoseColorError', () => {
     it('reports missing closing parenthesis', () => {
       const msg = diagnoseColorError('hsl(120 100% 50%');
       expect(msg).toContain('Missing closing parenthesis');
+    });
+
+    it('uses hsla() in message for hsla() input', () => {
+      const msg = diagnoseColorError('hsla(120 100%)');
+      expect(msg).toContain('hsla() requires 3 values');
     });
   });
 

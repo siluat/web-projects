@@ -68,23 +68,28 @@ function diagnoseHex(input: string): string {
   return 'Hex colors use characters 0-9 and a-f. Example: #ff0000';
 }
 
-function extractBody(input: string): { body: string; closed: boolean } {
+function extractBody(input: string): {
+  funcName: string;
+  body: string;
+  closed: boolean;
+} {
   const openParen = input.indexOf('(');
-  if (openParen === -1) return { body: '', closed: false };
+  if (openParen === -1) return { funcName: '', body: '', closed: false };
+  const funcName = input.slice(0, openParen);
   const closed = input.endsWith(')');
   const body = closed
     ? input.slice(openParen + 1, -1).trim()
     : input.slice(openParen + 1).trim();
-  return { body, closed };
+  return { funcName, body, closed };
 }
 
 function diagnoseRgb(input: string): string {
-  const { body, closed } = extractBody(input);
+  const { funcName, body, closed } = extractBody(input);
   if (!closed) return 'Missing closing parenthesis.';
 
   const tokens = splitTokens(body);
   if (tokens.length !== 3) {
-    return 'rgb() requires 3 color channels.';
+    return `${funcName}() requires 3 color channels.`;
   }
 
   const hasNumber = tokens.some((t) => /^\d/.test(t) && !t.endsWith('%'));
@@ -93,16 +98,16 @@ function diagnoseRgb(input: string): string {
     return "RGB channels must be all numbers (0-255) or all percentages. Don't mix.";
   }
 
-  return 'Could not parse rgb() values. Example: rgb(255 0 0)';
+  return `Could not parse ${funcName}() values. Example: rgb(255 0 0)`;
 }
 
 function diagnoseHsl(input: string): string {
-  const { body, closed } = extractBody(input);
+  const { funcName, body, closed } = extractBody(input);
   if (!closed) return 'Missing closing parenthesis.';
 
   const tokens = splitTokens(body);
   if (tokens.length !== 3) {
-    return 'hsl() requires 3 values (hue, saturation, lightness).';
+    return `${funcName}() requires 3 values (hue, saturation, lightness).`;
   }
 
   // Check if S and L are missing %
@@ -115,7 +120,7 @@ function diagnoseHsl(input: string): string {
     return 'Saturation and lightness must be percentages. Example: hsl(120 100% 50%)';
   }
 
-  return 'Could not parse hsl() values. Example: hsl(120 100% 50%)';
+  return `Could not parse ${funcName}() values. Example: hsl(120 100% 50%)`;
 }
 
 function diagnoseSpaceOnly(
@@ -124,11 +129,11 @@ function diagnoseSpaceOnly(
   example: string,
   extraCheck?: (tokens: string[]) => string | null,
 ): string {
-  const { body, closed } = extractBody(input);
+  const { funcName, body, closed } = extractBody(input);
   if (!closed) return 'Missing closing parenthesis.';
 
   if (body.includes(',')) {
-    return `${format}() uses space-separated values, not commas. Example: ${example}`;
+    return `${funcName}() uses space-separated values, not commas. Example: ${example}`;
   }
 
   const tokens = splitChannelTokens(body);
@@ -139,10 +144,10 @@ function diagnoseSpaceOnly(
   }
 
   if (tokens.length !== 3) {
-    return `${format}() requires 3 values. Example: ${example}`;
+    return `${funcName}() requires 3 values. Example: ${example}`;
   }
 
-  return `Could not parse ${format}() values. Example: ${example}`;
+  return `Could not parse ${funcName}() values. Example: ${example}`;
 }
 
 function diagnoseHwb(input: string): string {
