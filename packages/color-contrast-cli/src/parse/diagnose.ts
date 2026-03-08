@@ -125,7 +125,6 @@ function diagnoseHsl(input: string): string {
 
 function diagnoseSpaceOnly(
   input: string,
-  format: string,
   example: string,
   extraCheck?: (tokens: string[]) => string | null,
 ): string {
@@ -151,7 +150,7 @@ function diagnoseSpaceOnly(
 }
 
 function diagnoseHwb(input: string): string {
-  return diagnoseSpaceOnly(input, 'hwb', 'hwb(0 0% 100%)', (tokens) => {
+  return diagnoseSpaceOnly(input, 'hwb(0 0% 100%)', (tokens) => {
     if (tokens.length === 3) {
       const w = tokens[1];
       const b = tokens[2];
@@ -167,19 +166,19 @@ function diagnoseHwb(input: string): string {
 }
 
 function diagnoseLab(input: string): string {
-  return diagnoseSpaceOnly(input, 'lab', 'lab(50% 40 59.5)');
+  return diagnoseSpaceOnly(input, 'lab(50% 40 59.5)');
 }
 
 function diagnoseLch(input: string): string {
-  return diagnoseSpaceOnly(input, 'lch', 'lch(52.2% 72.2 50)');
+  return diagnoseSpaceOnly(input, 'lch(52.2% 72.2 50)');
 }
 
 function diagnoseOklab(input: string): string {
-  return diagnoseSpaceOnly(input, 'oklab', 'oklab(0.6 0.1 0.1)');
+  return diagnoseSpaceOnly(input, 'oklab(0.6 0.1 0.1)');
 }
 
 function diagnoseOklch(input: string): string {
-  return diagnoseSpaceOnly(input, 'oklch', 'oklch(60% 0.15 50)');
+  return diagnoseSpaceOnly(input, 'oklch(60% 0.15 50)');
 }
 
 /** Split body into channel tokens, handling comma/space separation and alpha slash. */
