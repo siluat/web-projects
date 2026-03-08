@@ -36,6 +36,18 @@ Error: Invalid color: "#gg0000"
   Example: #ff0000
 ```
 
+## Dual Color Validation
+
+When both foreground and background colors are invalid, show errors for both at once instead of failing on the first one. This avoids a double round-trip where the user fixes one color, runs again, and gets the second error.
+
+```text
+$ ccr '#gg0000' '#zz0000'
+Error: Invalid color: "#gg0000"
+  Hex colors use characters 0-9 and a-f. Example: #ff0000
+Error: Invalid color: "#zz0000"
+  Hex colors use characters 0-9 and a-f. Example: #ff0000
+```
+
 ## Batch Input Support
 
 Process multiple color pairs at once via stdin, useful for design system palette audits.
@@ -90,6 +102,7 @@ Publish an installable Skill that teaches AI agents (Claude Code, Cursor, etc.) 
 |----------|------|--------|--------|
 | P1 | `--verbose` conversion trace | Medium | High |
 | P1 | Actionable error messages | Medium | High |
+| P2 | Dual color validation | Low | Medium |
 | P2 | Batch input (`--batch`, stdin) | Medium | High |
 | P2 | Output format expansion (`-o csv\|markdown`) | Medium | Medium |
 | P3 | Shell completion | Medium | Medium |

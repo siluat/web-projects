@@ -85,10 +85,16 @@ The CLI prints error messages to stderr and exits with code 2 (distinguishing fr
 ```bash
 ccr 'not-a-color' '#fff'
 # stderr: Error: Invalid color: "not-a-color"
+#           Supported formats: #hex, named colors (red, blue, ...), rgb(), hsl(), ...
+# exit code: 2
+
+ccr '#gg0000' '#fff'
+# stderr: Error: Invalid color: "#gg0000"
+#           Hex colors use characters 0-9 and a-f. Example: #ff0000
 # exit code: 2
 ```
 
-With `--json`, errors are also printed to stderr as plain text, not JSON.
+Error messages include format-specific hints when the intended format can be detected. With `--json`, errors are also printed to stderr as plain text, not JSON.
 
 ## Installation
 
@@ -168,6 +174,11 @@ Both `contrastRatio` and `checkContrast` throw an `Error` for invalid color stri
 ```typescript
 contrastRatio('not-a-color', '#fff');
 // Error: Invalid color: "not-a-color"
+//   Supported formats: #hex, named colors (red, blue, ...), rgb(), hsl(), ...
+
+contrastRatio('#gg0000', '#fff');
+// Error: Invalid color: "#gg0000"
+//   Hex colors use characters 0-9 and a-f. Example: #ff0000
 ```
 
 ## API Reference

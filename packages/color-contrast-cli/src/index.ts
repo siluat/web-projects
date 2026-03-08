@@ -10,6 +10,7 @@ import { xyzToOklab } from './convert/xyz-to-oklab';
 import { gamutMapOklch } from './gamut-map';
 import { relativeLuminance } from './luminance';
 import { parseColor } from './parse';
+import { diagnoseColorError } from './parse/diagnose';
 import type { ContrastResult, SRGBColor } from './types';
 
 export type { ComplianceLevel, ContrastResult } from './types';
@@ -26,7 +27,7 @@ export type { ComplianceLevel, ContrastResult } from './types';
 function parseOrThrow(input: string): SRGBColor {
   const parsed = parseColor(input);
   if (parsed === null) {
-    throw new Error(`Invalid color: "${input}"`);
+    throw new Error(diagnoseColorError(input));
   }
   switch (parsed.space) {
     case 'srgb':
