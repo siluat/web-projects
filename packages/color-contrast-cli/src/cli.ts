@@ -143,12 +143,20 @@ function parseArgs(argv: string[]): ParseResult {
   }
 
   const [foreground, background] = positional;
-  if (
-    positional.length !== 2 ||
-    foreground === undefined ||
-    background === undefined
-  ) {
-    throw new Error("Try 'ccr --help' for more information.");
+  if (positional.length === 0 || foreground === undefined) {
+    throw new Error(
+      'Missing foreground and background colors. Usage: ccr <foreground> <background>',
+    );
+  }
+  if (positional.length === 1 || background === undefined) {
+    throw new Error(
+      'Missing background color. Usage: ccr <foreground> <background>',
+    );
+  }
+  if (positional.length > 2) {
+    throw new Error(
+      `Expected 2 color arguments, got ${positional.length}. Try 'ccr --help' for more information.`,
+    );
   }
 
   return { kind: 'run', foreground, background, json, level, size };

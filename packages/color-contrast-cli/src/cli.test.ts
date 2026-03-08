@@ -335,9 +335,21 @@ describe('CLI', () => {
       expect(exitCode).toBe(2);
     });
 
-    it('prints help hint to stderr when arguments are missing', async () => {
+    it('prints error when no arguments given', async () => {
       const { stderr, exitCode } = await run([]);
-      expect(stderr).toContain("Try 'ccr --help' for more information.");
+      expect(stderr).toContain('Missing foreground and background colors');
+      expect(exitCode).toBe(2);
+    });
+
+    it('prints error when only one color given', async () => {
+      const { stderr, exitCode } = await run(['#000']);
+      expect(stderr).toContain('Missing background color');
+      expect(exitCode).toBe(2);
+    });
+
+    it('prints error when too many arguments given', async () => {
+      const { stderr, exitCode } = await run(['#000', '#fff', '#aaa']);
+      expect(stderr).toContain('Expected 2 color arguments, got 3');
       expect(exitCode).toBe(2);
     });
 
