@@ -176,12 +176,27 @@ describe('checkContrastVerbose', () => {
     expect(verbose.background.format).toBe('named');
   });
 
-  it('returns format trace for OKLCH', () => {
+  it('returns format trace for OKLCH with correct coordinates', () => {
     const verbose = checkContrastVerbose('oklch(0.6 0.15 50)', 'white');
     expect(verbose.foreground.format).toBe('oklch');
-    expect(verbose.foreground.parsed.space).toBe('oklch');
-    expect(verbose.foreground.srgb.space).toBe('srgb');
     expect(verbose.background.format).toBe('named');
+
+    // Parsed values should match input exactly
+    const parsed = verbose.foreground.parsed;
+    expect(parsed.space).toBe('oklch');
+    if (parsed.space === 'oklch') {
+      expect(parsed.l).toBe(0.6);
+      expect(parsed.c).toBe(0.15);
+      expect(parsed.h).toBe(50);
+    }
+
+    // Gamut-mapped sRGB values (verified against manual computation)
+    const srgb = verbose.foreground.srgb;
+    expect(srgb.space).toBe('srgb');
+    expect(Math.round(srgb.r * 255)).toBe(196);
+    expect(Math.round(srgb.g * 255)).toBe(96);
+    expect(Math.round(srgb.b * 255)).toBe(22);
+    expect(srgb.alpha).toBe(1);
   });
 
   it('detects alpha compositing when foreground has alpha', () => {
