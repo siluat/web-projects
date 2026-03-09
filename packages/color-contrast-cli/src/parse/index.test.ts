@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { parseColor } from './index';
+import { parseColor, parseColorDetailed } from './index';
 
 describe('parseColor', () => {
   it('parses HEX color strings', () => {
@@ -149,5 +149,67 @@ describe('parseColor', () => {
   it('returns null for empty string', () => {
     expect(parseColor('')).toBeNull();
     expect(parseColor('   ')).toBeNull();
+  });
+});
+
+describe('parseColorDetailed', () => {
+  it('tags HEX format', () => {
+    const detail = parseColorDetailed('#ff0000');
+    expect(detail?.format).toBe('hex');
+    expect(detail?.parsed.space).toBe('srgb');
+  });
+
+  it('tags named color format', () => {
+    const detail = parseColorDetailed('red');
+    expect(detail?.format).toBe('named');
+  });
+
+  it('tags transparent as named', () => {
+    const detail = parseColorDetailed('transparent');
+    expect(detail?.format).toBe('named');
+  });
+
+  it('tags RGB format', () => {
+    const detail = parseColorDetailed('rgb(255, 0, 0)');
+    expect(detail?.format).toBe('rgb');
+  });
+
+  it('tags HSL format', () => {
+    const detail = parseColorDetailed('hsl(0, 100%, 50%)');
+    expect(detail?.format).toBe('hsl');
+  });
+
+  it('tags HWB format', () => {
+    const detail = parseColorDetailed('hwb(0 0% 0%)');
+    expect(detail?.format).toBe('hwb');
+  });
+
+  it('tags LAB format', () => {
+    const detail = parseColorDetailed('lab(50 25 -25)');
+    expect(detail?.format).toBe('lab');
+  });
+
+  it('tags LCH format', () => {
+    const detail = parseColorDetailed('lch(50 30 120)');
+    expect(detail?.format).toBe('lch');
+  });
+
+  it('tags OKLAB format', () => {
+    const detail = parseColorDetailed('oklab(0.5 0.1 -0.1)');
+    expect(detail?.format).toBe('oklab');
+  });
+
+  it('tags OKLCH format', () => {
+    const detail = parseColorDetailed('oklch(0.6 0.15 50)');
+    expect(detail?.format).toBe('oklch');
+  });
+
+  it('returns null for invalid input', () => {
+    expect(parseColorDetailed('not-a-color')).toBeNull();
+  });
+
+  it('trims whitespace', () => {
+    const detail = parseColorDetailed('  #ff0000  ');
+    expect(detail?.format).toBe('hex');
   });
 });

@@ -87,3 +87,21 @@ export interface ContrastResult {
   normalText: ComplianceLevel;
   largeText: ComplianceLevel;
 }
+
+/** CSS color format identifier for verbose output. */
+export type ColorFormat =
+  | 'hex'
+  | 'named'
+  | 'rgb'
+  | 'hsl'
+  | 'hwb'
+  | 'lab'
+  | 'lch'
+  | 'oklab'
+  | 'oklch';
+
+/** Parsing result with format metadata. */
+export interface ParseDetail {
+  parsed: ParsedColor;
+  format: ColorFormat;
+}
