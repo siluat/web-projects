@@ -327,6 +327,101 @@ describe('CLI', () => {
     });
   });
 
+  describe('--verbose mode', () => {
+    it('shows verbose trace for hex colors', async () => {
+      const { stdout, exitCode } = await run(['#000', '#fff', '--verbose']);
+      expect(stdout).toContain('Foreground: #000');
+      expect(stdout).toContain('Parsed as HEX');
+      expect(stdout).toContain('Background: #fff');
+      expect(stdout).toContain('Contrast ratio:');
+      expect(exitCode).toBe(0);
+    });
+
+    it('shows verbose trace for OKLCH with gamut mapping', async () => {
+      const { stdout, exitCode } = await run([
+        'oklch(0.6 0.15 50)',
+        'white',
+        '--verbose',
+      ]);
+      expect(stdout).toContain('Parsed as OKLCH');
+      expect(stdout).toContain('Gamut mapped');
+      expect(stdout).toContain('Parsed as NAMED');
+      expect(exitCode).toBe(0);
+    });
+
+    it('shows alpha compositing applied for transparent colors', async () => {
+      const { stdout, exitCode } = await run([
+        '#00000080',
+        '#ffffff',
+        '--verbose',
+      ]);
+      expect(stdout).toContain('Alpha compositing: applied');
+      expect(exitCode).toBe(0);
+    });
+
+    it('shows alpha compositing not needed for opaque colors', async () => {
+      const { stdout } = await run(['#000', '#fff', '--verbose']);
+      expect(stdout).toContain('Alpha compositing: not needed (both opaque)');
+    });
+
+    it('errors when combined with --json', async () => {
+      const { stderr, stdout, exitCode } = await run([
+        '#000',
+        '#fff',
+        '--verbose',
+        '--json',
+      ]);
+      expect(stderr).toContain('--verbose and --json cannot be combined');
+      expect(stdout).toBe('');
+      expect(exitCode).toBe(2);
+    });
+
+    it('works with --level and sets exit code', async () => {
+      const { stdout, exitCode } = await run([
+        '#333',
+        '#fff',
+        '--verbose',
+        '--level',
+        'AA',
+      ]);
+      expect(stdout).toContain('Foreground:');
+      expect(stdout).toContain('Contrast ratio:');
+      expect(exitCode).toBe(0);
+    });
+
+    it('works with --level and exits 1 on failure', async () => {
+      const { stdout, exitCode } = await run([
+        '#999',
+        '#fff',
+        '--verbose',
+        '--level',
+        'AA',
+      ]);
+      expect(stdout).toContain('Foreground:');
+      expect(exitCode).toBe(1);
+    });
+
+    it('shows HSL conversion step', async () => {
+      const { stdout } = await run(['hsl(120 100% 50%)', '#000', '--verbose']);
+      expect(stdout).toContain('Parsed as HSL');
+      expect(stdout).toContain('Converted to sRGB');
+    });
+
+    it('shows relative luminance values', async () => {
+      const { stdout } = await run(['#000', '#fff', '--verbose']);
+      expect(stdout).toContain('Relative luminance:');
+      expect(stdout).toContain('fg=0');
+      expect(stdout).toContain('bg=1');
+    });
+  });
+
+  describe('--help includes --verbose', () => {
+    it('includes --verbose in help text', async () => {
+      const { stdout } = await run(['--help']);
+      expect(stdout).toContain('--verbose');
+    });
+  });
+
   describe('error handling', () => {
     it('prints error to stderr for invalid color', async () => {
       const { stderr, stdout, exitCode } = await run(['not-a-color', '#fff']);

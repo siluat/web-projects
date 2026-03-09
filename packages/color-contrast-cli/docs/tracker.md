@@ -6,14 +6,14 @@
 
 Selected from [cli-improvement-ideas.md](cli-improvement-ideas.md):
 
-- [ ] `--verbose` conversion trace
+- [x] `--verbose` conversion trace
 - [x] Actionable error messages
 - [x] Dual color validation
 - [x] `--size normal|large` option
 
 **Release checklist:**
 
-- [ ] All items implemented
+- [x] All items implemented
 - [ ] Add changeset → release
 
 ## Released

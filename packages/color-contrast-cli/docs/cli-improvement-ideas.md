@@ -7,17 +7,17 @@ Ideas for improving the CLI's usability, inspired by [@googleworkspace/cli](http
 Show the internal conversion pipeline for transparency and education, especially useful for wide-gamut colors and alpha compositing.
 
 ```text
-$ ccr 'oklch(60% 0.15 50)' 'white' --verbose
+$ ccr 'oklch(0.6 0.15 50)' 'white' --verbose
 
-Foreground: oklch(60% 0.15 50)
-  -> Parsed as OKLCH: L=0.60, C=0.15, H=50
-  -> Gamut mapped to sRGB: rgb(186, 113, 67)
+Foreground: oklch(0.6 0.15 50)
+  -> Parsed as OKLCH: L=0.6, C=0.15, H=50
+  -> Gamut mapped to sRGB: rgb(196, 96, 22)
 Background: white
-  -> Parsed as named color: rgb(255, 255, 255)
+  -> Parsed as NAMED: rgb(255, 255, 255)
 Alpha compositing: not needed (both opaque)
-Relative luminance: fg=0.1984, bg=1.0000
-Contrast ratio: 4.28:1
-Normal text: AA ✗
+Relative luminance: fg=0.2017, bg=1
+Contrast ratio: 4.17:1
+Normal text: Fail ✗
 Large text:  AA ✓
 ```
 
