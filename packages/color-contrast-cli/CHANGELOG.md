@@ -1,5 +1,11 @@
 # @siluat/color-contrast-cli
 
+## 0.6.1
+
+### Patch Changes
+
+- [#96](https://github.com/siluat/web-projects/pull/96) [`3cda95e`](https://github.com/siluat/web-projects/commit/3cda95e87008bc4b767322477356467233cedddb) - Fix `npx @siluat/color-contrast-cli` failing with "command not found" by adding a bin entry matching the package name
+
 ## 0.6.0
 
 ### Minor Changes
