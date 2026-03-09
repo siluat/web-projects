@@ -2,52 +2,6 @@
 
 Ideas for improving the CLI's usability, inspired by [@googleworkspace/cli](https://github.com/googleworkspace/cli) and [CLI for Microsoft 365](https://github.com/pnp/cli-microsoft365).
 
-## `--verbose` Mode
-
-Show the internal conversion pipeline for transparency and education, especially useful for wide-gamut colors and alpha compositing.
-
-```text
-$ ccr 'oklch(0.6 0.15 50)' 'white' --verbose
-
-Foreground: oklch(0.6 0.15 50)
-  -> Parsed as OKLCH: L=0.6, C=0.15, H=50
-  -> Gamut mapped to sRGB: rgb(196, 96, 22)
-Background: white
-  -> Parsed as NAMED: rgb(255, 255, 255)
-Alpha compositing: not needed (both opaque)
-Relative luminance: fg=0.2017, bg=1
-Contrast ratio: 4.17:1
-Normal text: Fail ✗
-Large text:  AA ✓
-```
-
-## Actionable Error Messages
-
-Currently errors only say `Error: Invalid color: "xyz"`. Add context-aware hints.
-
-```text
-$ ccr 'rgb(300, 0, 0)' '#fff'
-Error: Invalid color: "rgb(300, 0, 0)"
-  RGB channel values must be 0-255.
-
-$ ccr '#gg0000' '#fff'
-Error: Invalid color: "#gg0000"
-  Hex colors use characters 0-9 and a-f.
-  Example: #ff0000
-```
-
-## Dual Color Validation
-
-When both foreground and background colors are invalid, show errors for both at once instead of failing on the first one. This avoids a double round-trip where the user fixes one color, runs again, and gets the second error.
-
-```text
-$ ccr '#gg0000' '#zz0000'
-Error: Invalid color: "#gg0000"
-  Hex colors use characters 0-9 and a-f. Example: #ff0000
-Error: Invalid color: "#zz0000"
-  Hex colors use characters 0-9 and a-f. Example: #ff0000
-```
-
 ## Batch Input Support
 
 Process multiple color pairs at once via stdin, useful for design system palette audits.
@@ -100,9 +54,6 @@ Publish an installable Skill that teaches AI agents (Claude Code, Cursor, etc.) 
 
 | Priority | Idea | Effort | Impact |
 |----------|------|--------|--------|
-| P1 | `--verbose` conversion trace | Medium | High |
-| P1 | Actionable error messages | Medium | High |
-| P2 | Dual color validation | Low | Medium |
 | P2 | Batch input (`--batch`, stdin) | Medium | High |
 | P2 | Output format expansion (`-o csv\|markdown`) | Medium | Medium |
 | P3 | Shell completion | Medium | Medium |

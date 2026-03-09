@@ -2,26 +2,18 @@
 
 ## Next Release
 
-### v0.6.0
+### v0.7.0
 
 Selected from [cli-improvement-ideas.md](cli-improvement-ideas.md):
 
-- [x] `--verbose` conversion trace
-- [x] Actionable error messages
-- [x] Dual color validation
-- [x] `--size normal|large` option
+- [ ] Color suggestion (`--suggest`)
 
 **Release checklist:**
 
-- [x] All items implemented
+- [ ] All items implemented
 - [ ] Add changeset → release
 
 ## Released
-
-### v0.5.0
-
-- [x] `--help` / `--version` flags
-- [x] Allow `--level` + `--json` together
 
 See [CHANGELOG.md](../CHANGELOG.md) for full release history.
 
