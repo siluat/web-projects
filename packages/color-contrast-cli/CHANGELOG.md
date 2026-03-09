@@ -1,5 +1,17 @@
 # @siluat/color-contrast-cli
 
+## 0.6.0
+
+### Minor Changes
+
+- [#91](https://github.com/siluat/web-projects/pull/91) [`20baf0c`](https://github.com/siluat/web-projects/commit/20baf0c875d8c6eefdb2a90f8b7af9a8ba5a3fed) - Add actionable error messages with format-specific hints for invalid color inputs and argument count errors
+
+- [#89](https://github.com/siluat/web-projects/pull/89) [`0832068`](https://github.com/siluat/web-projects/commit/0832068089947af0509aaddc84342e1536d87374) - Add `--size normal|large` option for large text WCAG threshold checks
+
+- [#92](https://github.com/siluat/web-projects/pull/92) [`48772bc`](https://github.com/siluat/web-projects/commit/48772bce4e6a37e307b134b2fdb06a0447d8ba78) - Add `validateColors` function that checks both foreground and background colors upfront and reports all errors at once, instead of failing on the first invalid color
+
+- [#95](https://github.com/siluat/web-projects/pull/95) [`267cf3d`](https://github.com/siluat/web-projects/commit/267cf3dbcdad9683cc43ad99bfa273a687c1d9ea) - Add `--verbose` flag that shows the full color conversion pipeline trace: format detection, parsed values, sRGB conversion, alpha compositing, luminance, and contrast evaluation
+
 ## 0.5.0
 
 ### Minor Changes
