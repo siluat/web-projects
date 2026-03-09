@@ -190,7 +190,7 @@ describe('checkContrastVerbose', () => {
       expect(parsed.h).toBe(50);
     }
 
-    // Gamut-mapped sRGB values (verified against manual computation)
+    // Gamut-mapped sRGB 8-bit channels, verified against Color.js 0.6.1
     const srgb = verbose.foreground.srgb;
     expect(srgb.space).toBe('srgb');
     expect(Math.round(srgb.r * 255)).toBe(196);
