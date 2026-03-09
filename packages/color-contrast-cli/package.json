@@ -30,6 +30,7 @@
     }
   },
   "bin": {
+    "color-contrast-cli": "./dist/cli.js",
     "ccr": "./dist/cli.js"
   },
   "files": [
