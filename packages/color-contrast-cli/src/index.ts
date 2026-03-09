@@ -9,26 +9,22 @@ import { srgbToLinear } from './convert/srgb-linear';
 import { xyzToOklab } from './convert/xyz-to-oklab';
 import { gamutMapOklch } from './gamut-map';
 import { relativeLuminance } from './luminance';
-import { parseColor } from './parse';
+import { parseColor, parseColorDetailed } from './parse';
 import { diagnoseColorError } from './parse/diagnose';
-import type { ContrastResult, SRGBColor } from './types';
+import type {
+  ColorTrace,
+  ContrastResult,
+  ParsedColor,
+  SRGBColor,
+  VerboseResult,
+} from './types';
 
-export type { ComplianceLevel, ContrastResult } from './types';
+export type { ComplianceLevel, ContrastResult, VerboseResult } from './types';
 
 /**
- * Parse a color string or throw a descriptive error.
- *
- * Supports sRGB hex strings, CSS named colors, RGB functional notation
- * (rgb(), rgba()), HSL functional notation (hsl(), hsla()),
- * HWB functional notation (hwb()), LAB/LCH (lab(), lch()),
- * and OKLAB/OKLCH (oklab(), oklch()).
- * Non-sRGB inputs are converted to sRGB via the appropriate pipeline.
+ * Convert a ParsedColor to sRGB via the appropriate pipeline.
  */
-function parseOrThrow(input: string): SRGBColor {
-  const parsed = parseColor(input);
-  if (parsed === null) {
-    throw new Error(diagnoseColorError(input));
-  }
+function toSrgb(parsed: ParsedColor): SRGBColor {
   switch (parsed.space) {
     case 'srgb':
       return parsed;
@@ -50,6 +46,39 @@ function parseOrThrow(input: string): SRGBColor {
       return gamutMapOklch(oklabToOklch(xyzToOklab(xyz, lab.alpha)));
     }
   }
+}
+
+/**
+ * Parse a color string or throw a descriptive error.
+ *
+ * Supports sRGB hex strings, CSS named colors, RGB functional notation
+ * (rgb(), rgba()), HSL functional notation (hsl(), hsla()),
+ * HWB functional notation (hwb()), LAB/LCH (lab(), lch()),
+ * and OKLAB/OKLCH (oklab(), oklch()).
+ * Non-sRGB inputs are converted to sRGB via the appropriate pipeline.
+ */
+function parseOrThrow(input: string): SRGBColor {
+  const parsed = parseColor(input);
+  if (parsed === null) {
+    throw new Error(diagnoseColorError(input));
+  }
+  return toSrgb(parsed);
+}
+
+/**
+ * Parse a color string and return a full trace, or throw a descriptive error.
+ */
+function parseOrThrowDetailed(input: string): ColorTrace {
+  const detail = parseColorDetailed(input);
+  if (detail === null) {
+    throw new Error(diagnoseColorError(input));
+  }
+  return {
+    input,
+    format: detail.format,
+    parsed: detail.parsed,
+    srgb: toSrgb(detail.parsed),
+  };
 }
 
 /**
@@ -116,4 +145,33 @@ export function checkContrast(
   const bg = parseOrThrow(background);
   const [fgLum, bgLum] = colorToLuminance(fg, bg);
   return evaluateContrast(fgLum, bgLum);
+}
+
+/**
+ * Evaluate WCAG 2.1 contrast with full pipeline trace.
+ *
+ * Returns intermediate values at each step for verbose/debug output:
+ * format detection, parsed values, sRGB conversion, alpha compositing,
+ * luminance calculation, and contrast evaluation.
+ */
+export function checkContrastVerbose(
+  foreground: string,
+  background: string,
+): VerboseResult {
+  const fgTrace = parseOrThrowDetailed(foreground);
+  const bgTrace = parseOrThrowDetailed(background);
+
+  const alphaComposited = fgTrace.srgb.alpha < 1 || bgTrace.srgb.alpha < 1;
+
+  const [fgLum, bgLum] = colorToLuminance(fgTrace.srgb, bgTrace.srgb);
+  const result = evaluateContrast(fgLum, bgLum);
+
+  return {
+    foreground: fgTrace,
+    background: bgTrace,
+    alphaComposited,
+    fgLuminance: fgLum,
+    bgLuminance: bgLum,
+    result,
+  };
 }
