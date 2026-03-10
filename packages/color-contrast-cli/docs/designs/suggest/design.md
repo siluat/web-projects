@@ -112,7 +112,6 @@ The binary search assumes that OkLCH L → WCAG luminance is monotonic (increasi
 
 - 7 of 14 colors showed violations, all caused by `gamutMapOklch()` chroma clipping
 - Largest luminance drop: ~4.6e-5 (at extreme green, L ≈ 0.859)
-- Contrast ratio impact: < 0.001 in all cases
 - Most violations occur at L < 0.03 where luminance is near zero
 
 Binary search convergence is not affected at these magnitudes. The non-monotonicity is a numerical artifact of gamut mapping's own binary search, not a systematic trend.
