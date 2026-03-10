@@ -6,7 +6,11 @@
 
 Selected from [cli-improvement-ideas.md](cli-improvement-ideas.md):
 
-- [ ] Color suggestion (`--suggest`)
+- [ ] Color suggestion (`--suggest`) — [design doc](designs/suggest/design.md)
+  - [ ] sRGB → OkLCH conversion (extract from gamut-map.ts)
+  - [ ] Core suggestion algorithm (suggest.ts)
+  - [ ] CLI integration (--suggest flag)
+  - [ ] Verbose mode and documentation
 
 **Release checklist:**
 
