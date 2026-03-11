@@ -114,6 +114,12 @@ export interface ColorTrace {
   srgb: SRGBColor;
 }
 
+/** Result of a color suggestion for improved contrast. */
+export interface SuggestResult {
+  suggested: string | null;
+  result: ContrastResult | null;
+}
+
 /** Full verbose result including both colors and pipeline data. */
 export interface VerboseResult {
   foreground: ColorTrace;
