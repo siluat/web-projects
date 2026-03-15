@@ -579,7 +579,7 @@ describe('CLI', () => {
         expect(stdout).toContain('--suggest');
       });
 
-      it('--suggest takes priority over --verbose', async () => {
+      it('--suggest --verbose shows verbose trace with suggestion', async () => {
         const { stdout, exitCode } = await run([
           '#777',
           '#fff',
@@ -588,9 +588,48 @@ describe('CLI', () => {
           'AA',
           '--verbose',
         ]);
+        expect(stdout).toContain('Foreground: #777');
+        expect(stdout).toContain('Background: #fff');
+        expect(stdout).toContain('Relative luminance:');
+        expect(stdout).toContain('Suggestion:');
+        expect(stdout).toContain('Original OkLCH:');
+        expect(stdout).toContain('Suggested OkLCH:');
+        expect(stdout).toContain('Direction:');
         expect(stdout).toContain('Suggested foreground:');
-        expect(stdout).not.toContain('Foreground:');
+        expect(stdout).toContain('Contrast ratio:');
         expect(exitCode).toBe(0);
+      });
+
+      it('--suggest --verbose shows already passing message', async () => {
+        const { stdout, exitCode } = await run([
+          '#333',
+          '#fff',
+          '--suggest',
+          '--level',
+          'AA',
+          '--verbose',
+        ]);
+        expect(stdout).toContain('Foreground: #333');
+        expect(stdout).toContain('Background: #fff');
+        expect(stdout).toContain('Already passes AA for normal text');
+        expect(stdout).not.toContain('Suggestion:');
+        expect(exitCode).toBe(0);
+      });
+
+      it('--suggest --verbose shows impossible message', async () => {
+        const { stdout, exitCode } = await run([
+          '#808080',
+          '#808080',
+          '--suggest',
+          '--level',
+          'AAA',
+          '--verbose',
+        ]);
+        expect(stdout).toContain('Foreground: #808080');
+        expect(stdout).toContain('Background: #808080');
+        expect(stdout).toContain('No suggestion available');
+        expect(stdout).not.toContain('Suggestion:');
+        expect(exitCode).toBe(1);
       });
     });
   });

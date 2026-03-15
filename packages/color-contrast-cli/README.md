@@ -91,6 +91,53 @@ ccr '#777' '#fff' --suggest --level AA --json
 
 If the pair already passes, no suggestion is made. If the target cannot be met, the CLI reports this and exits with code 1.
 
+### Verbose Mode
+
+Use `--verbose` to see the full conversion trace — parsed values, color space conversions, alpha compositing, luminance, and contrast evaluation:
+
+```bash
+ccr 'oklch(60% 0.15 50)' white --verbose
+```
+
+```text
+Foreground: oklch(60% 0.15 50)
+  -> Parsed as OKLCH: L=0.6, C=0.15, H=50
+  -> Gamut mapped to sRGB: rgb(196, 96, 22)
+Background: white
+  -> Parsed as NAMED: rgb(255, 255, 255)
+Alpha compositing: not needed (both opaque)
+Relative luminance: fg=0.2017, bg=1
+Contrast ratio: 4.17:1
+Normal text: Fail ✗
+Large text:  AA ✓
+```
+
+Combine `--suggest` with `--verbose` to see both the conversion trace and the OkLCH adjustment details:
+
+```bash
+ccr '#777' '#fff' --suggest --level AA --verbose
+```
+
+```text
+Foreground: #777
+  -> Parsed as HEX: rgb(119, 119, 119)
+Background: #fff
+  -> Parsed as HEX: rgb(255, 255, 255)
+Alpha compositing: not needed (both opaque)
+Relative luminance: fg=0.1845, bg=1
+Contrast ratio: 4.48:1
+Normal text: Fail ✗
+Large text:  AA ✓
+Suggestion:
+  Original OkLCH: L=0.5693, C=0, H=180
+  Suggested OkLCH: L=0.5658, C=0, H=180
+  Direction: darker
+  Suggested foreground: #767676
+  Contrast ratio: 4.54:1 (AA)
+```
+
+Note: `--verbose` cannot be combined with `--json`.
+
 ### Failure Case
 
 ```bash

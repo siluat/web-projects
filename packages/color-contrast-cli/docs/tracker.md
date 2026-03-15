@@ -10,11 +10,11 @@ Selected from [cli-improvement-ideas.md](cli-improvement-ideas.md):
   - [x] sRGB → OkLCH conversion (extract from gamut-map.ts)
   - [x] Core suggestion algorithm (suggest.ts)
   - [x] CLI integration (--suggest flag)
-  - [ ] Verbose mode and documentation
+  - [x] Verbose mode and documentation
 
 **Release checklist:**
 
-- [ ] All items implemented
+- [x] All items implemented
 - [x] Add changeset → release
 
 ## Released

@@ -1,14 +1,17 @@
 #!/usr/bin/env node
+import { srgbToOklch } from './convert';
 import {
   checkContrast,
   checkContrastVerbose,
   suggestForeground,
   validateColors,
 } from './index';
+import { parseHex } from './parse/hex';
 import type {
   ColorTrace,
   ComplianceLevel,
   ContrastResult,
+  OKLCHColor,
   SRGBColor,
   VerboseResult,
 } from './types';
@@ -219,6 +222,47 @@ function formatVerbose(verbose: VerboseResult): string {
   return lines.join('\n');
 }
 
+/**
+ * Format an OkLCH color as a trace string for verbose output.
+ * Shows alpha only when < 1, consistent with existing verbose patterns.
+ */
+function formatOklchTrace(oklch: OKLCHColor): string {
+  const l = formatNumber(oklch.l);
+  const c = formatNumber(oklch.c);
+  const h = formatNumber(oklch.h);
+  const alpha = oklch.alpha < 1 ? `, alpha=${formatNumber(oklch.alpha)}` : '';
+  return `L=${l}, C=${c}, H=${h}${alpha}`;
+}
+
+/**
+ * Format the suggest + verbose output.
+ * Appends suggestion details (OkLCH trace, direction, suggested color) to the verbose trace.
+ */
+function formatSuggestVerbose(
+  verbose: VerboseResult,
+  suggestion: {
+    suggested: string;
+    ratio: number;
+    compliance: ComplianceLevel;
+    originalOklch: OKLCHColor;
+    suggestedOklch: OKLCHColor;
+    direction: 'darker' | 'lighter';
+  },
+): string {
+  const lines: string[] = [formatVerbose(verbose)];
+  lines.push('Suggestion:');
+  lines.push(`  Original OkLCH: ${formatOklchTrace(suggestion.originalOklch)}`);
+  lines.push(
+    `  Suggested OkLCH: ${formatOklchTrace(suggestion.suggestedOklch)}`,
+  );
+  lines.push(`  Direction: ${suggestion.direction}`);
+  lines.push(`  Suggested foreground: ${suggestion.suggested}`);
+  lines.push(
+    `  Contrast ratio: ${suggestion.ratio}:1 (${suggestion.compliance})`,
+  );
+  return lines.join('\n');
+}
+
 function buildHelpText(): string {
   const lines = [
     `@siluat/color-contrast-cli v${VERSION}`,
@@ -389,6 +433,62 @@ function main(): void {
 
         if (parsed.suggest && parsed.level !== null) {
           const targetRatio = getTargetRatio(parsed.level, parsed.size);
+
+          if (parsed.verbose) {
+            const verbose = checkContrastVerbose(
+              parsed.foreground,
+              parsed.background,
+            );
+
+            if (passesLevel(verbose.result, parsed.level, parsed.size)) {
+              process.stdout.write(
+                `${formatVerbose(verbose)}\nAlready passes ${parsed.level} for ${parsed.size} text.\n`,
+              );
+              return;
+            }
+
+            const suggestion = suggestForeground(
+              parsed.foreground,
+              parsed.background,
+              targetRatio,
+            );
+
+            if (suggestion.suggested !== null && suggestion.result !== null) {
+              const compliance =
+                parsed.size === 'large'
+                  ? suggestion.result.largeText
+                  : suggestion.result.normalText;
+              const originalOklch = srgbToOklch(verbose.foreground.srgb);
+              const suggestedSrgb = parseHex(suggestion.suggested);
+              if (suggestedSrgb !== null) {
+                const suggestedOklch = srgbToOklch(suggestedSrgb);
+                const direction =
+                  suggestedOklch.l < originalOklch.l ? 'darker' : 'lighter';
+                process.stdout.write(
+                  `${formatSuggestVerbose(verbose, {
+                    suggested: suggestion.suggested,
+                    ratio: suggestion.result.ratio,
+                    compliance,
+                    originalOklch,
+                    suggestedOklch,
+                    direction,
+                  })}\n`,
+                );
+              } else {
+                process.stdout.write(
+                  `${formatVerbose(verbose)}\nSuggested foreground: ${suggestion.suggested}\nContrast ratio: ${suggestion.result.ratio}:1 (${compliance})\n`,
+                );
+              }
+              return;
+            }
+
+            process.stdout.write(
+              `${formatVerbose(verbose)}\nNo suggestion available.\nThe target cannot be met by adjusting foreground lightness alone.\n`,
+            );
+            process.exitCode = 1;
+            return;
+          }
+
           const original = checkContrast(parsed.foreground, parsed.background);
 
           if (passesLevel(original, parsed.level, parsed.size)) {
