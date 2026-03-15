@@ -1,5 +1,13 @@
 # @siluat/color-contrast-cli
 
+## 0.7.0
+
+### Minor Changes
+
+- [`986a23c`](https://github.com/siluat/web-projects/commit/986a23cbbe1ea42fe55b7ea7cb2a1336442811fb) - Add `--suggest` flag that recommends an accessible foreground color meeting a target WCAG contrast ratio. The algorithm adjusts only OkLCH lightness to preserve hue and saturation, then verifies the hex output passes the target after quantization.
+
+  Related PRs: [#100](https://github.com/siluat/web-projects/issues/100), [#101](https://github.com/siluat/web-projects/issues/101)
+
 ## 0.6.0
 
 ### Minor Changes
