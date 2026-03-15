@@ -204,7 +204,7 @@ suggestForeground('#333', '#fff', 4.5);
 // { suggested: null, result: null }  (already passes)
 ```
 
-Returns the closest foreground color meeting the target contrast ratio, or `null` if already passing or impossible.
+Returns a `SuggestResult` with the closest foreground color meeting the target ratio. The `suggested` and `result` fields are `null` when the pair already passes or no solution exists.
 
 ### Color Validation
 

@@ -59,6 +59,9 @@ function generateRow(tc: TestCase): string {
   const suggestedRatio = suggestion.result?.ratio ?? '—';
   const suggestedLevel = suggestion.result?.normalText ?? '';
 
+  const passesTarget = (level: string) =>
+    tc.level === 'AAA' ? level === 'AAA' : level === 'AA' || level === 'AAA';
+
   const afterSwatch = suggestion.suggested
     ? `<div class="swatch" style="background:${tc.bg};color:${suggestion.suggested}">
         <span class="text-normal">The quick brown fox jumps over the lazy dog</span>
@@ -83,7 +86,7 @@ function generateRow(tc: TestCase): string {
           <span class="text-large">Large Text Sample</span>
           <span class="text-small">14px body text for readability check</span>
         </div>
-        <div class="ratio ${original.normalText === 'Fail' ? 'fail' : 'pass'}">
+        <div class="ratio ${passesTarget(original.normalText) ? 'pass' : 'fail'}">
           ${original.ratio}:1 (${original.normalText})
         </div>
       </td>
@@ -93,7 +96,7 @@ function generateRow(tc: TestCase): string {
           <code>${suggestedColor}</code> on <code>${tc.bg}</code>
         </div>
         ${afterSwatch}
-        <div class="ratio ${suggestedLevel === 'Fail' ? 'fail' : 'pass'}">
+        <div class="ratio ${suggestedLevel && passesTarget(suggestedLevel) ? 'pass' : 'fail'}">
           ${suggestedRatio !== '—' ? `${suggestedRatio}:1 (${suggestedLevel})` : '—'}
         </div>
       </td>
