@@ -29,7 +29,7 @@ The core requirement of the suggest feature is **"match the contrast ratio while
 
 ### Why direct adjustment in sRGB does not work
 
-The R, G, and B channels of sRGB **entangle brightness and hue**. Scaling all three channels equally moves the color toward gray, while scaling them unequally shifts the hue. There is no way to change "just the brightness" in sRGB.
+sRGB **lacks an independent lightness axis**. Scaling all three channels equally preserves channel ratios but moves the color toward black, and perceptual saturation changes along the way. Scaling channels unequally shifts the hue. Either way, there is no way to change "just the brightness" in sRGB.
 
 ### Why HSL is also inadequate
 
