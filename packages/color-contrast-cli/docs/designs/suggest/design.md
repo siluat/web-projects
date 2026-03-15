@@ -59,13 +59,13 @@ Without a target level, there is no threshold to suggest toward. The `--size` op
 
 If the color pair already passes the specified level, no suggestion is needed — the CLI reports this and exits normally.
 
-### D6: Safety margin
+### D6: Post-quantization verification
 
-**Decision: Add a small margin above the target ratio.**
+**Decision: Verify the actual contrast ratio after hex quantization instead of adding a safety margin.**
 
-Chrome DevTools adds +0.1 to WCAG target ratios; Leonardo adds +0.005. A margin prevents the suggested color from landing exactly on the threshold, where rounding or rendering differences could cause a failure.
+Chrome DevTools adds +0.1 to WCAG target ratios; Leonardo adds +0.005. Instead of a fixed margin, this implementation converts the binary search result to hex (quantizing each channel to 1/255), then re-computes the contrast ratio. If quantization pushes the ratio below the target, the algorithm nudges OkLCH lightness further in the contrast-increasing direction and re-verifies.
 
-The specific margin value will be determined during implementation and testing.
+This approach minimizes perceptual distance from the original color (no unnecessary over-adjustment) while guaranteeing the hex output meets the target ratio.
 
 ### D7: Alpha preservation
 

@@ -55,7 +55,7 @@ function gradeLevel(
  *
  * @see https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio
  */
-function rawContrastRatio(l1: number, l2: number): number {
+export function rawContrastRatio(l1: number, l2: number): number {
   const lighter = Math.max(l1, l2);
   const darker = Math.min(l1, l2);
   return (lighter + 0.05) / (darker + 0.05);
