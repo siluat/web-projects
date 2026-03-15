@@ -155,13 +155,6 @@ export function checkContrast(
 }
 
 /**
- * Evaluate WCAG 2.1 contrast with full pipeline trace.
- *
- * Returns intermediate values at each step for verbose/debug output:
- * format detection, parsed values, sRGB conversion, alpha compositing,
- * luminance calculation, and contrast evaluation.
- */
-/**
  * Suggest a foreground color that meets the target WCAG contrast ratio.
  *
  * Adjusts only the OkLCH lightness of the foreground, preserving
@@ -179,6 +172,13 @@ export function suggestForeground(
   return suggestForegroundCore(fg, bg, targetRatio);
 }
 
+/**
+ * Evaluate WCAG 2.1 contrast with full pipeline trace.
+ *
+ * Returns intermediate values at each step for verbose/debug output:
+ * format detection, parsed values, sRGB conversion, alpha compositing,
+ * luminance calculation, and contrast evaluation.
+ */
 export function checkContrastVerbose(
   foreground: string,
   background: string,

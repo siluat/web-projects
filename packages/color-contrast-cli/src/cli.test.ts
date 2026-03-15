@@ -570,6 +570,7 @@ describe('CLI', () => {
       it('--help takes priority over --suggest', async () => {
         const { stdout, exitCode } = await run(['--help', '--suggest']);
         expect(stdout).toContain('Usage:');
+        expect(stdout).not.toContain('Suggested foreground:');
         expect(exitCode).toBe(0);
       });
 
@@ -588,6 +589,7 @@ describe('CLI', () => {
           '--verbose',
         ]);
         expect(stdout).toContain('Suggested foreground:');
+        expect(stdout).not.toContain('Foreground:');
         expect(exitCode).toBe(0);
       });
     });

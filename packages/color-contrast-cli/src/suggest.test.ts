@@ -58,10 +58,8 @@ describe('suggestForeground', () => {
       const ratio = rawRatioFromHex(result.suggested, WHITE);
       expect(ratio).toBeGreaterThanOrEqual(4.5);
 
-      // Should be near Chrome DevTools reference #767676
-      const suggestedR = Number.parseInt(result.suggested.slice(1, 3), 16);
-      expect(suggestedR).toBeGreaterThanOrEqual(0x73);
-      expect(suggestedR).toBeLessThanOrEqual(0x79);
+      // Should match Chrome DevTools reference #767676
+      expect(result.suggested).toBe('#767676');
     });
   });
 
@@ -184,10 +182,10 @@ describe('suggestForeground', () => {
     for (const { fg, bg, target, label } of testCases) {
       it(`produces valid suggestion for ${label}`, () => {
         const result = suggestForeground(fg, bg, target);
-        if (result.suggested !== null) {
-          const ratio = rawRatioFromHex(result.suggested, bg);
-          expect(ratio).toBeGreaterThanOrEqual(target);
-        }
+        expect(result.suggested).not.toBeNull();
+        if (result.suggested === null) return;
+        const ratio = rawRatioFromHex(result.suggested, bg);
+        expect(ratio).toBeGreaterThanOrEqual(target);
       });
     }
   });
