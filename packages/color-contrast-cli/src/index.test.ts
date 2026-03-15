@@ -234,7 +234,7 @@ describe('suggestForeground', () => {
     const result = suggestForeground('#777', '#fff', 4.5);
     expect(result.suggested).not.toBeNull();
     expect(result.result).not.toBeNull();
-    expect(result.result!.ratio).toBeGreaterThanOrEqual(4.5);
+    expect(result.result?.ratio).toBeGreaterThanOrEqual(4.5);
   });
 
   it('returns null when already passing', () => {
