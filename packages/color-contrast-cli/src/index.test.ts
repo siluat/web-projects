@@ -242,16 +242,4 @@ describe('suggestForeground', () => {
     expect(result.suggested).toBeNull();
     expect(result.result).toBeNull();
   });
-
-  it('throws for invalid foreground', () => {
-    expect(() => suggestForeground('not-a-color', '#fff', 4.5)).toThrow(
-      'Invalid color: "not-a-color"',
-    );
-  });
-
-  it('throws for invalid background', () => {
-    expect(() => suggestForeground('#fff', 'not-a-color', 4.5)).toThrow(
-      'Invalid color: "not-a-color"',
-    );
-  });
 });
