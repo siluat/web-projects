@@ -31,10 +31,6 @@ ccr --completions zsh > ~/.zsh/completions/_ccr
 
 The 148 CSS named colors could be offered as completion candidates.
 
-## Color Suggestion (Advanced)
-
-When a color pair fails a target level, suggest the closest alternative that passes. This is a high-effort, high-impact feature for future consideration.
-
 ## Public `parseColor` API
 
 Expose the internal color parser as a public API for color string validation use cases.
@@ -58,5 +54,4 @@ Publish an installable Skill that teaches AI agents (Claude Code, Cursor, etc.) 
 | P2 | Output format expansion (`-o csv\|markdown`) | Medium | Medium |
 | P3 | Shell completion | Medium | Medium |
 | P3 | Public `parseColor` API | Low | Medium |
-| P4 | Color suggestion (`--suggest`) | High | High |
 | P4 | Distributable Skill | Medium | Medium |

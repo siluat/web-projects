@@ -66,6 +66,31 @@ ccr '#333' '#fff' --level AA --json
 # exit code: 0
 ```
 
+### Color Suggestion
+
+When a color pair fails a target level, suggest the closest accessible foreground color:
+
+```bash
+ccr '#777' '#fff' --suggest --level AA
+```
+
+```text
+Suggested foreground: #767676
+Contrast ratio: 4.54:1 (AA)
+```
+
+The suggested color preserves the original hue and saturation by adjusting only lightness in the OkLCH color space. Use `--size large` for large text thresholds, and `--json` for structured output:
+
+```bash
+ccr '#777' '#fff' --suggest --level AA --json
+```
+
+```json
+{"original":{"ratio":4.48,"normalText":"Fail","largeText":"AA"},"suggested":{"color":"#767676","ratio":4.54,"normalText":"AA","largeText":"AAA"}}
+```
+
+If the pair already passes, no suggestion is made. If the target cannot be met, the CLI reports this and exits with code 1.
+
 ### Failure Case
 
 ```bash
@@ -167,6 +192,20 @@ checkContrast('#999', '#fff');
 // { ratio: 2.85, normalText: 'Fail', largeText: 'Fail' }
 ```
 
+### Color Suggestion
+
+```typescript
+import { suggestForeground } from '@siluat/color-contrast-cli';
+
+suggestForeground('#777', '#fff', 4.5);
+// { suggested: '#767676', result: { ratio: 4.54, normalText: 'AA', largeText: 'AAA' } }
+
+suggestForeground('#333', '#fff', 4.5);
+// { suggested: null, result: null }  (already passes)
+```
+
+Returns the closest foreground color meeting the target contrast ratio, or `null` if already passing or impossible.
+
 ### Color Validation
 
 Validate both colors upfront and collect all errors at once, instead of failing on the first invalid color:
@@ -207,8 +246,14 @@ interface ContrastResult {
   largeText: ComplianceLevel;
 }
 
+interface SuggestResult {
+  suggested: string | null;
+  result: ContrastResult | null;
+}
+
 function contrastRatio(foreground: string, background: string): number;
 function checkContrast(foreground: string, background: string): ContrastResult;
+function suggestForeground(foreground: string, background: string, targetRatio: number): SuggestResult;
 function validateColors(foreground: string, background: string): string[];
 ```
 
