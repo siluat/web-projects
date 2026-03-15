@@ -422,6 +422,179 @@ describe('CLI', () => {
     });
   });
 
+  describe('--suggest mode', () => {
+    describe('human-readable output', () => {
+      it('suggests a foreground color when contrast fails', async () => {
+        const { stdout, exitCode } = await run([
+          '#777',
+          '#fff',
+          '--suggest',
+          '--level',
+          'AA',
+        ]);
+        expect(stdout).toContain('Suggested foreground:');
+        expect(exitCode).toBe(0);
+      });
+
+      it('reports already passing when contrast is sufficient', async () => {
+        const { stdout, exitCode } = await run([
+          '#333',
+          '#fff',
+          '--suggest',
+          '--level',
+          'AA',
+        ]);
+        expect(stdout).toContain('Already passes AA for normal text');
+        expect(exitCode).toBe(0);
+      });
+
+      it('reports already passing for large text', async () => {
+        const { stdout, exitCode } = await run([
+          '#777',
+          '#fff',
+          '--suggest',
+          '--level',
+          'AA',
+          '--size',
+          'large',
+        ]);
+        expect(stdout).toContain('Already passes AA for large text');
+        expect(exitCode).toBe(0);
+      });
+
+      it('suggests for large text when failing', async () => {
+        const { stdout, exitCode } = await run([
+          '#999',
+          '#fff',
+          '--suggest',
+          '--level',
+          'AA',
+          '--size',
+          'large',
+        ]);
+        expect(stdout).toContain('Suggested foreground:');
+        expect(exitCode).toBe(0);
+      });
+
+      it('reports no suggestion when impossible', async () => {
+        const { stdout, exitCode } = await run([
+          '#808080',
+          '#808080',
+          '--suggest',
+          '--level',
+          'AAA',
+        ]);
+        expect(stdout).toContain('No suggestion available');
+        expect(exitCode).toBe(1);
+      });
+    });
+
+    describe('JSON output', () => {
+      it('outputs JSON with suggested color', async () => {
+        const { stdout, exitCode } = await run([
+          '#777',
+          '#fff',
+          '--suggest',
+          '--level',
+          'AA',
+          '--json',
+        ]);
+        const result = JSON.parse(stdout);
+        expect(result.suggested).not.toBeNull();
+        expect(result.suggested.color).toBeDefined();
+        expect(exitCode).toBe(0);
+      });
+
+      it('outputs JSON with null suggested when already passing', async () => {
+        const { stdout, exitCode } = await run([
+          '#333',
+          '#fff',
+          '--suggest',
+          '--level',
+          'AA',
+          '--json',
+        ]);
+        const result = JSON.parse(stdout);
+        expect(result.suggested).toBeNull();
+        expect(result.original).toBeDefined();
+        expect(exitCode).toBe(0);
+      });
+
+      it('outputs JSON with null suggested when impossible', async () => {
+        const { stdout, exitCode } = await run([
+          '#808080',
+          '#808080',
+          '--suggest',
+          '--level',
+          'AAA',
+          '--json',
+        ]);
+        const result = JSON.parse(stdout);
+        expect(result.suggested).toBeNull();
+        expect(result.original).toBeDefined();
+        expect(exitCode).toBe(1);
+      });
+    });
+
+    describe('validation and flag combinations', () => {
+      it('errors when --suggest is used without --level', async () => {
+        const { stderr, exitCode } = await run(['#777', '#fff', '--suggest']);
+        expect(stderr).toContain('--suggest requires --level');
+        expect(exitCode).toBe(2);
+      });
+
+      it('errors for invalid colors', async () => {
+        const { stderr, exitCode } = await run([
+          'xxx',
+          '#fff',
+          '--suggest',
+          '--level',
+          'AA',
+        ]);
+        expect(stderr).toContain('Error:');
+        expect(exitCode).toBe(2);
+      });
+
+      it('works regardless of flag order', async () => {
+        const { stdout, exitCode } = await run([
+          '#777',
+          '#fff',
+          '--level',
+          'AA',
+          '--suggest',
+        ]);
+        expect(stdout).toContain('Suggested foreground:');
+        expect(exitCode).toBe(0);
+      });
+
+      it('--help takes priority over --suggest', async () => {
+        const { stdout, exitCode } = await run(['--help', '--suggest']);
+        expect(stdout).toContain('Usage:');
+        expect(stdout).not.toContain('Suggested foreground:');
+        expect(exitCode).toBe(0);
+      });
+
+      it('help text includes --suggest', async () => {
+        const { stdout } = await run(['--help']);
+        expect(stdout).toContain('--suggest');
+      });
+
+      it('--suggest takes priority over --verbose', async () => {
+        const { stdout, exitCode } = await run([
+          '#777',
+          '#fff',
+          '--suggest',
+          '--level',
+          'AA',
+          '--verbose',
+        ]);
+        expect(stdout).toContain('Suggested foreground:');
+        expect(stdout).not.toContain('Foreground:');
+        expect(exitCode).toBe(0);
+      });
+    });
+  });
+
   describe('error handling', () => {
     it('prints error to stderr for invalid color', async () => {
       const { stderr, stdout, exitCode } = await run(['not-a-color', '#fff']);
