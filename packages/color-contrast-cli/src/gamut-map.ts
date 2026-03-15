@@ -1,5 +1,11 @@
-import { linearToSrgbChannel, oklabToXyz, xyzToLinearRgb } from './convert';
-import type { LinearRGB, OKLCHColor, SRGBColor, XYZColor } from './types';
+import {
+  linearRgbToXyz,
+  linearToSrgbChannel,
+  oklabToXyz,
+  xyzToLinearRgb,
+  xyzToOklab,
+} from './convert';
+import type { LinearRGB, OKLCHColor, SRGBColor } from './types';
 
 /**
  * CSS Color Level 4 Section 13.2 gamut mapping algorithm.
@@ -22,39 +28,6 @@ const GAMUT_EPSILON = 0.000075;
 const MAX_ITERATIONS = 64;
 
 const DEG_TO_RAD = Math.PI / 180;
-
-// --- Inverse matrices (for clipped-color → OKLAB conversion) ---
-
-/**
- * Linear sRGB → XYZ-D65 matrix.
- * Exact rational fractions from CSS Color Level 4 reference implementation.
- * @see https://drafts.csswg.org/css-color-4/conversions.js
- */
-const LINEAR_SRGB_TO_XYZ = [
-  [506752 / 1228815, 87881 / 245763, 12673 / 70218],
-  [87098 / 409605, 175762 / 245763, 12673 / 175545],
-  [7918 / 409605, 87881 / 737289, 1001167 / 1053270],
-] as const;
-
-/**
- * XYZ-D65 → LMS matrix (for OKLAB conversion).
- * @see https://drafts.csswg.org/css-color-4/conversions.js
- */
-const XYZ_TO_LMS = [
-  [0.819022437996703, 0.3619062600528904, -0.1288737815209879],
-  [0.0329836539323885, 0.9292868615863434, 0.0361446663506424],
-  [0.0481771893596242, 0.2642395317527308, 0.6335478284694309],
-] as const;
-
-/**
- * LMS (cube-root domain) → OKLAB matrix.
- * @see https://drafts.csswg.org/css-color-4/conversions.js
- */
-const LMS_TO_OKLAB = [
-  [0.210454268309314, 0.7936177747023054, -0.0040720430116193],
-  [1.9779985324311684, -2.4285922420485799, 0.450593709617411],
-  [0.0259040424655478, 0.7827717124575296, -0.8086757549230774],
-] as const;
 
 // --- Private helpers ---
 
@@ -80,34 +53,6 @@ function clipLinearRgb(rgb: LinearRGB): LinearRGB {
     r: Math.max(0, Math.min(1, rgb.r)),
     g: Math.max(0, Math.min(1, rgb.g)),
     b: Math.max(0, Math.min(1, rgb.b)),
-  };
-}
-
-function linearRgbToXyz(rgb: LinearRGB): XYZColor {
-  const [[m00, m01, m02], [m10, m11, m12], [m20, m21, m22]] =
-    LINEAR_SRGB_TO_XYZ;
-  return {
-    x: m00 * rgb.r + m01 * rgb.g + m02 * rgb.b,
-    y: m10 * rgb.r + m11 * rgb.g + m12 * rgb.b,
-    z: m20 * rgb.r + m21 * rgb.g + m22 * rgb.b,
-  };
-}
-
-function xyzToOklab(xyz: XYZColor): OklabTriplet {
-  const [[a00, a01, a02], [a10, a11, a12], [a20, a21, a22]] = XYZ_TO_LMS;
-  const lLinear = a00 * xyz.x + a01 * xyz.y + a02 * xyz.z;
-  const mLinear = a10 * xyz.x + a11 * xyz.y + a12 * xyz.z;
-  const sLinear = a20 * xyz.x + a21 * xyz.y + a22 * xyz.z;
-
-  const lCbrt = Math.cbrt(lLinear);
-  const mCbrt = Math.cbrt(mLinear);
-  const sCbrt = Math.cbrt(sLinear);
-
-  const [[b00, b01, b02], [b10, b11, b12], [b20, b21, b22]] = LMS_TO_OKLAB;
-  return {
-    l: b00 * lCbrt + b01 * mCbrt + b02 * sCbrt,
-    a: b10 * lCbrt + b11 * mCbrt + b12 * sCbrt,
-    b: b20 * lCbrt + b21 * mCbrt + b22 * sCbrt,
   };
 }
 
@@ -167,7 +112,7 @@ export function gamutMapOklch(color: OKLCHColor): SRGBColor {
   // Step 3: Initial clip check — if close enough, return clipped
   let clipped = clipLinearRgb(linearRgb);
   const originOklab = oklchToOklabTriplet(color.l, color.c, color.h);
-  let clippedOklab = xyzToOklab(linearRgbToXyz(clipped));
+  let clippedOklab = xyzToOklab(linearRgbToXyz(clipped), 1);
 
   if (deltaEOK(originOklab, clippedOklab) < JND) {
     return gammaEncode(clipped, color.alpha);
@@ -191,7 +136,7 @@ export function gamutMapOklch(color: OKLCHColor): SRGBColor {
 
     clipped = clipLinearRgb(currentLinear);
     bestClip = clipped;
-    clippedOklab = xyzToOklab(linearRgbToXyz(clipped));
+    clippedOklab = xyzToOklab(linearRgbToXyz(clipped), 1);
     const dE = deltaEOK(currentOklab, clippedOklab);
 
     if (Math.abs(dE - JND) < GAMUT_EPSILON) {
