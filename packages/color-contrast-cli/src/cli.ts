@@ -1,5 +1,10 @@
 #!/usr/bin/env node
-import { checkContrast, checkContrastVerbose, validateColors } from './index';
+import {
+  checkContrast,
+  checkContrastVerbose,
+  suggestForeground,
+  validateColors,
+} from './index';
 import type {
   ColorTrace,
   ComplianceLevel,
@@ -21,6 +26,7 @@ type ParseResult =
       background: string;
       json: boolean;
       verbose: boolean;
+      suggest: boolean;
       level: 'AA' | 'AAA' | null;
       size: 'normal' | 'large';
     };
@@ -48,6 +54,14 @@ function passesLevel(
     return compliance === 'AA' || compliance === 'AAA';
   }
   return compliance === 'AAA';
+}
+
+function getTargetRatio(level: 'AA' | 'AAA', size: 'normal' | 'large'): number {
+  const ratios = {
+    AA: { normal: 4.5, large: 3 },
+    AAA: { normal: 7, large: 4.5 },
+  } as const;
+  return ratios[level][size];
 }
 
 /**
@@ -216,6 +230,7 @@ function buildHelpText(): string {
     '  --verbose            Show detailed conversion trace',
     '  --level AA|AAA       Exit 0 if contrast passes the level, 1 if not',
     '  --size normal|large  Text size for --level check (default: normal)',
+    '  --suggest            Suggest a foreground color that meets --level',
     '  --help               Show this help message',
     '  --version            Show version number',
     '',
@@ -236,6 +251,7 @@ function buildHelpText(): string {
     "  ccr 'rgb(0,0,0)' 'hsl(0 0% 100%)' --level AA",
     "  ccr '#777' '#fff' --level AA --size large",
     "  ccr '#333' '#fff' --level AA --json",
+    "  ccr '#777' '#fff' --suggest --level AA",
     "  ccr 'oklch(60% 0.15 50)' white --verbose",
     '',
   ];
@@ -246,6 +262,7 @@ function parseArgs(argv: string[]): ParseResult {
   const positional: string[] = [];
   let json = false;
   let verbose = false;
+  let suggest = false;
   let hasLevel = false;
   let levelValue: string | undefined;
   let hasSize = false;
@@ -259,6 +276,8 @@ function parseArgs(argv: string[]): ParseResult {
       json = true;
     } else if (arg === '--verbose') {
       verbose = true;
+    } else if (arg === '--suggest') {
+      suggest = true;
     } else if (arg === '--level') {
       hasLevel = true;
       i++;
@@ -309,6 +328,12 @@ function parseArgs(argv: string[]): ParseResult {
     size = sizeValue;
   }
 
+  if (suggest && !hasLevel) {
+    throw new Error(
+      "--suggest requires --level. Try 'ccr --help' for more information.",
+    );
+  }
+
   if (verbose && json) {
     throw new Error('--verbose and --json cannot be combined.');
   }
@@ -330,7 +355,16 @@ function parseArgs(argv: string[]): ParseResult {
     );
   }
 
-  return { kind: 'run', foreground, background, json, verbose, level, size };
+  return {
+    kind: 'run',
+    foreground,
+    background,
+    json,
+    verbose,
+    suggest,
+    level,
+    size,
+  };
 }
 
 function main(): void {
@@ -350,6 +384,67 @@ function main(): void {
             process.stderr.write(`Error: ${error}\n`);
           }
           process.exitCode = 2;
+          return;
+        }
+
+        if (parsed.suggest && parsed.level !== null) {
+          const targetRatio = getTargetRatio(parsed.level, parsed.size);
+          const original = checkContrast(parsed.foreground, parsed.background);
+
+          if (passesLevel(original, parsed.level, parsed.size)) {
+            if (parsed.json) {
+              process.stdout.write(
+                `${JSON.stringify({ original, suggested: null })}\n`,
+              );
+            } else {
+              process.stdout.write(
+                `Contrast ratio: ${original.ratio}:1\nAlready passes ${parsed.level} for ${parsed.size} text.\n`,
+              );
+            }
+            return;
+          }
+
+          const suggestion = suggestForeground(
+            parsed.foreground,
+            parsed.background,
+            targetRatio,
+          );
+
+          if (suggestion.suggested !== null && suggestion.result !== null) {
+            if (parsed.json) {
+              process.stdout.write(
+                `${JSON.stringify({
+                  original,
+                  suggested: {
+                    color: suggestion.suggested,
+                    ratio: suggestion.result.ratio,
+                    normalText: suggestion.result.normalText,
+                    largeText: suggestion.result.largeText,
+                  },
+                })}\n`,
+              );
+            } else {
+              const compliance =
+                parsed.size === 'large'
+                  ? suggestion.result.largeText
+                  : suggestion.result.normalText;
+              process.stdout.write(
+                `Suggested foreground: ${suggestion.suggested}\nContrast ratio: ${suggestion.result.ratio}:1 (${compliance})\n`,
+              );
+            }
+            return;
+          }
+
+          if (parsed.json) {
+            process.stdout.write(
+              `${JSON.stringify({ original, suggested: null })}\n`,
+            );
+          } else {
+            process.stdout.write(
+              'No suggestion available.\nThe target cannot be met by adjusting foreground lightness alone.\n',
+            );
+          }
+          process.exitCode = 1;
           return;
         }
 

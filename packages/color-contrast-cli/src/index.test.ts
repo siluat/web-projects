@@ -3,6 +3,7 @@ import {
   checkContrast,
   checkContrastVerbose,
   contrastRatio,
+  suggestForeground,
   validateColors,
 } from './index';
 
@@ -225,5 +226,20 @@ describe('checkContrastVerbose', () => {
     expect(() => checkContrastVerbose('not-a-color', '#fff')).toThrow(
       'Invalid color: "not-a-color"',
     );
+  });
+});
+
+describe('suggestForeground', () => {
+  it('suggests a passing color for a failing pair', () => {
+    const result = suggestForeground('#777', '#fff', 4.5);
+    expect(result.suggested).not.toBeNull();
+    expect(result.result).not.toBeNull();
+    expect(result.result?.ratio).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('returns null when already passing', () => {
+    const result = suggestForeground('#333', '#fff', 4.5);
+    expect(result.suggested).toBeNull();
+    expect(result.result).toBeNull();
   });
 });

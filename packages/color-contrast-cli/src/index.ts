@@ -11,15 +11,22 @@ import { gamutMapOklch } from './gamut-map';
 import { relativeLuminance } from './luminance';
 import { parseColor, parseColorDetailed } from './parse';
 import { diagnoseColorError } from './parse/diagnose';
+import { suggestForeground as suggestForegroundCore } from './suggest';
 import type {
   ColorTrace,
   ContrastResult,
   ParsedColor,
   SRGBColor,
+  SuggestResult,
   VerboseResult,
 } from './types';
 
-export type { ComplianceLevel, ContrastResult, VerboseResult } from './types';
+export type {
+  ComplianceLevel,
+  ContrastResult,
+  SuggestResult,
+  VerboseResult,
+} from './types';
 
 /**
  * Convert a ParsedColor to sRGB via the appropriate pipeline.
@@ -145,6 +152,24 @@ export function checkContrast(
   const bg = parseOrThrow(background);
   const [fgLum, bgLum] = colorToLuminance(fg, bg);
   return evaluateContrast(fgLum, bgLum);
+}
+
+/**
+ * Suggest a foreground color that meets the target WCAG contrast ratio.
+ *
+ * Adjusts only the OkLCH lightness of the foreground, preserving
+ * its chroma and hue to minimize perceptual distance from the original.
+ *
+ * @returns Suggested hex color and its ContrastResult, or nulls if already passing or impossible
+ */
+export function suggestForeground(
+  foreground: string,
+  background: string,
+  targetRatio: number,
+): SuggestResult {
+  const fg = parseOrThrow(foreground);
+  const bg = parseOrThrow(background);
+  return suggestForegroundCore(fg, bg, targetRatio);
 }
 
 /**
