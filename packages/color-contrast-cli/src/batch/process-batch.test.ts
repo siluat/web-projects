@@ -110,7 +110,7 @@ describe('processBatch', () => {
 });
 
 describe('processBatchSuggest', () => {
-  it('marks already-passing pairs with null suggested', () => {
+  it('marks already-passing pairs with alreadyPasses: true', () => {
     const lines = ['#000 #fff'];
     const result = processBatchSuggest(lines, {
       level: 'AA',
@@ -121,6 +121,7 @@ describe('processBatchSuggest', () => {
     const first = result.results[0];
     expect(first?.kind).toBe('ok');
     if (first?.kind === 'ok') {
+      expect(first.alreadyPasses).toBe(true);
       expect(first.suggested).toBeNull();
     }
   });
@@ -136,9 +137,26 @@ describe('processBatchSuggest', () => {
     const first = result.results[0];
     expect(first?.kind).toBe('ok');
     if (first?.kind === 'ok') {
+      expect(first.alreadyPasses).toBe(false);
       expect(first.suggested).not.toBeNull();
       expect(first.suggested?.color).toMatch(/^#[0-9a-f]{6}$/);
     }
+  });
+
+  it('sets alreadyPasses: false when suggestion is impossible', () => {
+    const lines = ['#808080 #808080'];
+    const result = processBatchSuggest(lines, {
+      level: 'AAA',
+      size: 'normal',
+      suggest: true,
+    });
+    const first = result.results[0];
+    expect(first?.kind).toBe('ok');
+    if (first?.kind === 'ok') {
+      expect(first.alreadyPasses).toBe(false);
+      expect(first.suggested).toBeNull();
+    }
+    expect(result.exitCode).toBe(1);
   });
 
   it('records errors for invalid colors', () => {

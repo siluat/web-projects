@@ -150,6 +150,7 @@ export function processBatchSuggest(
         foreground: parsed.foreground,
         background: parsed.background,
         original,
+        alreadyPasses: true,
         suggested: null,
       });
       continue;
@@ -167,6 +168,7 @@ export function processBatchSuggest(
         foreground: parsed.foreground,
         background: parsed.background,
         original,
+        alreadyPasses: false,
         suggested: {
           color: suggestion.suggested,
           ratio: suggestion.result.ratio,
@@ -180,6 +182,7 @@ export function processBatchSuggest(
         foreground: parsed.foreground,
         background: parsed.background,
         original,
+        alreadyPasses: false,
         suggested: null,
       });
       hasFailure = true;

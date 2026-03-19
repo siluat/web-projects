@@ -64,6 +64,7 @@ export function formatBatchJson(results: BatchLineResult[]): string {
 export function formatBatchSuggestHuman(
   results: BatchSuggestLineResult[],
   level: 'AA' | 'AAA',
+  size: 'normal' | 'large',
 ): string {
   const lines: string[] = [];
   for (const entry of results) {
@@ -75,15 +76,19 @@ export function formatBatchSuggestHuman(
       lines.push(`${label} → Error: ${entry.message}`);
     } else if (entry.suggested !== null) {
       const compliance =
-        entry.suggested.normalText === 'Fail'
+        size === 'large'
           ? entry.suggested.largeText
           : entry.suggested.normalText;
       lines.push(
         `${entry.foreground} ${entry.background} → Suggested: ${entry.suggested.color} ${entry.suggested.ratio}:1 (${compliance})`,
       );
-    } else {
+    } else if (entry.alreadyPasses) {
       lines.push(
         `${entry.foreground} ${entry.background} → Already passes ${level}`,
+      );
+    } else {
+      lines.push(
+        `${entry.foreground} ${entry.background} → No suggestion available`,
       );
     }
   }

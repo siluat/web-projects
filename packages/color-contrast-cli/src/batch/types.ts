@@ -22,6 +22,7 @@ export type BatchSuggestLineResult =
       foreground: string;
       background: string;
       original: ContrastResult;
+      alreadyPasses: boolean;
       suggested: {
         color: string;
         ratio: number;

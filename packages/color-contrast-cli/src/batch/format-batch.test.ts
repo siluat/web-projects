@@ -106,10 +106,11 @@ describe('formatBatchSuggestHuman', () => {
         foreground: '#333',
         background: '#fff',
         original: { ratio: 12.63, normalText: 'AAA', largeText: 'AAA' },
+        alreadyPasses: true,
         suggested: null,
       },
     ];
-    const output = formatBatchSuggestHuman(results, 'AA');
+    const output = formatBatchSuggestHuman(results, 'AA', 'normal');
     expect(output).toBe('#333 #fff → Already passes AA');
   });
 
@@ -120,6 +121,7 @@ describe('formatBatchSuggestHuman', () => {
         foreground: '#777',
         background: '#fff',
         original: { ratio: 4.48, normalText: 'Fail', largeText: 'AA' },
+        alreadyPasses: false,
         suggested: {
           color: '#767676',
           ratio: 4.54,
@@ -128,8 +130,43 @@ describe('formatBatchSuggestHuman', () => {
         },
       },
     ];
-    const output = formatBatchSuggestHuman(results, 'AA');
+    const output = formatBatchSuggestHuman(results, 'AA', 'normal');
     expect(output).toBe('#777 #fff → Suggested: #767676 4.54:1 (AA)');
+  });
+
+  it('uses largeText compliance when size is large', () => {
+    const results: BatchSuggestLineResult[] = [
+      {
+        kind: 'ok',
+        foreground: '#777',
+        background: '#fff',
+        original: { ratio: 4.48, normalText: 'Fail', largeText: 'AA' },
+        alreadyPasses: false,
+        suggested: {
+          color: '#767676',
+          ratio: 4.54,
+          normalText: 'AA',
+          largeText: 'AAA',
+        },
+      },
+    ];
+    const output = formatBatchSuggestHuman(results, 'AAA', 'large');
+    expect(output).toBe('#777 #fff → Suggested: #767676 4.54:1 (AAA)');
+  });
+
+  it('formats impossible suggestion as "No suggestion available"', () => {
+    const results: BatchSuggestLineResult[] = [
+      {
+        kind: 'ok',
+        foreground: '#808080',
+        background: '#808080',
+        original: { ratio: 1, normalText: 'Fail', largeText: 'Fail' },
+        alreadyPasses: false,
+        suggested: null,
+      },
+    ];
+    const output = formatBatchSuggestHuman(results, 'AAA', 'normal');
+    expect(output).toBe('#808080 #808080 → No suggestion available');
   });
 });
 
@@ -141,6 +178,7 @@ describe('formatBatchSuggestJson', () => {
         foreground: '#333',
         background: '#fff',
         original: { ratio: 12.63, normalText: 'AAA', largeText: 'AAA' },
+        alreadyPasses: true,
         suggested: null,
       },
       {
@@ -148,6 +186,7 @@ describe('formatBatchSuggestJson', () => {
         foreground: '#777',
         background: '#fff',
         original: { ratio: 4.48, normalText: 'Fail', largeText: 'AA' },
+        alreadyPasses: false,
         suggested: {
           color: '#767676',
           ratio: 4.54,
