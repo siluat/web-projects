@@ -1,4 +1,5 @@
 import { checkContrast, suggestForeground, validateColors } from '../index';
+import type { ContrastResult } from '../types';
 import { parseBatchLine } from './parse-line';
 import type {
   BatchLineResult,
@@ -54,7 +55,7 @@ function validateLine(line: string): ValidatedLine {
  * Determine whether a ContrastResult passes the given level and size.
  */
 function passesLevel(
-  result: { normalText: string; largeText: string },
+  result: ContrastResult,
   level: 'AA' | 'AAA',
   size: 'normal' | 'large',
 ): boolean {
