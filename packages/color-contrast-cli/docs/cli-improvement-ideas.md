@@ -2,16 +2,6 @@
 
 Ideas for improving the CLI's usability, inspired by [@googleworkspace/cli](https://github.com/googleworkspace/cli) and [CLI for Microsoft 365](https://github.com/pnp/cli-microsoft365).
 
-## Batch Input Support
-
-Process multiple color pairs at once via stdin, useful for design system palette audits.
-
-```bash
-echo "#000 #fff\n#333 #ccc\n#666 #999" | ccr --batch
-echo "#000 #fff\n#333 #ccc" | ccr --batch -o csv
-ccr --file palette-pairs.txt -o csv
-```
-
 ## Output Format Expansion
 
 Add more output formats beyond human-readable text and JSON.
@@ -50,7 +40,6 @@ Publish an installable Skill that teaches AI agents (Claude Code, Cursor, etc.) 
 
 | Priority | Idea | Effort | Impact |
 |----------|------|--------|--------|
-| P2 | Batch input (`--batch`, stdin) | Medium | High |
 | P2 | Output format expansion (`-o csv\|markdown`) | Medium | Medium |
 | P3 | Shell completion | Medium | Medium |
 | P3 | Public `parseColor` API | Low | Medium |

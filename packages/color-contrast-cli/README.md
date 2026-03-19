@@ -91,6 +91,59 @@ ccr '#777' '#fff' --suggest --level AA --json
 
 If the pair already passes, no suggestion is made. If the target cannot be met, the CLI reports this and exits with code 1.
 
+### Batch Mode
+
+Process multiple color pairs at once via stdin — useful for design system palette audits:
+
+```bash
+echo -e "#000 #fff\n#333 #ccc\n#666 #999" | ccr --batch
+```
+
+```text
+#000 #fff → 21:1 AAA / AAA
+#333 #ccc → 7.87:1 AAA / AAA
+#666 #999 → 2.02:1 Fail / Fail
+```
+
+Use `--json` for structured output:
+
+```bash
+echo -e "#000 #fff\n#333 #ccc" | ccr --batch --json
+```
+
+```json
+[{"foreground":"#000","background":"#fff","ratio":21,"normalText":"AAA","largeText":"AAA"},{"foreground":"#333","background":"#ccc","ratio":7.87,"normalText":"AAA","largeText":"AAA"}]
+```
+
+Use `--level` to check all pairs and get a single exit code (0 if all pass, 1 if any fail):
+
+```bash
+echo -e "#000 #fff\n#666 #999" | ccr --batch --level AA
+# exit code: 1 (second pair fails)
+```
+
+Combine with `--suggest` to get suggestions for failing pairs:
+
+```bash
+echo -e "#777 #fff\n#333 #fff" | ccr --batch --suggest --level AA
+```
+
+```text
+#777 #fff → Suggested: #767676 4.54:1 (AA)
+#333 #fff → Already passes AA
+```
+
+Input format supports comments (`//`), blank lines, tab-separated or space-separated pairs. Functional colors like `rgb()` and `oklch()` are handled by bracket-aware splitting:
+
+```text
+// Design system palette audit
+#000 #fff
+rgb(255, 0, 0) white
+oklch(60% 0.15 50)	#ffffff
+```
+
+Invalid lines are reported as errors and processing continues. Exit code 2 indicates at least one error (takes priority over level failure). Note: `--verbose` cannot be combined with `--batch`.
+
 ### Verbose Mode
 
 Use `--verbose` to see the full conversion trace — parsed values, color space conversions, alpha compositing, luminance, and contrast evaluation:

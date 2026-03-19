@@ -2,20 +2,11 @@
 
 ## Next Release
 
-### v0.7.0
-
-Selected from [cli-improvement-ideas.md](cli-improvement-ideas.md):
-
-- [x] Color suggestion (`--suggest`) — [design doc](designs/suggest/design.md)
-  - [x] sRGB → OkLCH conversion (extract from gamut-map.ts)
-  - [x] Core suggestion algorithm (suggest.ts)
-  - [x] CLI integration (--suggest flag)
-  - [x] Verbose mode and documentation
-
-**Release checklist:**
-
-- [x] All items implemented
-- [x] Add changeset → release
+- [x] Batch input (`--batch`) — [design doc](designs/batch/design.md)
+  - [x] Batch line parser (bracket-aware splitting)
+  - [x] Batch processing and formatters
+  - [x] CLI integration (--batch flag)
+  - [x] README and tracker update
 
 ## Released
 
