@@ -7,6 +7,49 @@ import type {
   BatchSuggestLineResult,
 } from './types';
 
+type ValidatedLine =
+  | { kind: 'skip' }
+  | { kind: 'error'; foreground: string; background: string; message: string }
+  | { kind: 'valid'; foreground: string; background: string };
+
+/**
+ * Parse and validate a single batch input line.
+ *
+ * Combines line splitting with color validation into a single step.
+ */
+function validateLine(line: string): ValidatedLine {
+  const parsed = parseBatchLine(line);
+
+  if (parsed.kind === 'skip') {
+    return { kind: 'skip' };
+  }
+
+  if (parsed.kind === 'error') {
+    return {
+      kind: 'error',
+      foreground: '',
+      background: '',
+      message: parsed.message,
+    };
+  }
+
+  const errors = validateColors(parsed.foreground, parsed.background);
+  if (errors.length > 0) {
+    return {
+      kind: 'error',
+      foreground: parsed.foreground,
+      background: parsed.background,
+      message: errors.join('; '),
+    };
+  }
+
+  return {
+    kind: 'valid',
+    foreground: parsed.foreground,
+    background: parsed.background,
+  };
+}
+
 /**
  * Determine whether a ContrastResult passes the given level and size.
  */
@@ -48,40 +91,21 @@ export function processBatch(
   let hasFailure = false;
 
   for (const line of lines) {
-    const parsed = parseBatchLine(line);
+    const validated = validateLine(line);
 
-    if (parsed.kind === 'skip') {
-      continue;
-    }
+    if (validated.kind === 'skip') continue;
 
-    if (parsed.kind === 'error') {
-      results.push({
-        kind: 'error',
-        foreground: '',
-        background: '',
-        message: parsed.message,
-      });
+    if (validated.kind === 'error') {
+      results.push(validated);
       hasError = true;
       continue;
     }
 
-    const errors = validateColors(parsed.foreground, parsed.background);
-    if (errors.length > 0) {
-      results.push({
-        kind: 'error',
-        foreground: parsed.foreground,
-        background: parsed.background,
-        message: errors.join('; '),
-      });
-      hasError = true;
-      continue;
-    }
-
-    const result = checkContrast(parsed.foreground, parsed.background);
+    const result = checkContrast(validated.foreground, validated.background);
     results.push({
       kind: 'ok',
-      foreground: parsed.foreground,
-      background: parsed.background,
+      foreground: validated.foreground,
+      background: validated.background,
       result,
     });
 
@@ -113,42 +137,23 @@ export function processBatchSuggest(
   const targetRatio = getTargetRatio(options.level, options.size);
 
   for (const line of lines) {
-    const parsed = parseBatchLine(line);
+    const validated = validateLine(line);
 
-    if (parsed.kind === 'skip') {
-      continue;
-    }
+    if (validated.kind === 'skip') continue;
 
-    if (parsed.kind === 'error') {
-      results.push({
-        kind: 'error',
-        foreground: '',
-        background: '',
-        message: parsed.message,
-      });
+    if (validated.kind === 'error') {
+      results.push(validated);
       hasError = true;
       continue;
     }
 
-    const errors = validateColors(parsed.foreground, parsed.background);
-    if (errors.length > 0) {
-      results.push({
-        kind: 'error',
-        foreground: parsed.foreground,
-        background: parsed.background,
-        message: errors.join('; '),
-      });
-      hasError = true;
-      continue;
-    }
-
-    const original = checkContrast(parsed.foreground, parsed.background);
+    const original = checkContrast(validated.foreground, validated.background);
 
     if (passesLevel(original, options.level, options.size)) {
       results.push({
         kind: 'ok',
-        foreground: parsed.foreground,
-        background: parsed.background,
+        foreground: validated.foreground,
+        background: validated.background,
         original,
         alreadyPasses: true,
         suggested: null,
@@ -157,16 +162,16 @@ export function processBatchSuggest(
     }
 
     const suggestion = suggestForeground(
-      parsed.foreground,
-      parsed.background,
+      validated.foreground,
+      validated.background,
       targetRatio,
     );
 
     if (suggestion.suggested !== null && suggestion.result !== null) {
       results.push({
         kind: 'ok',
-        foreground: parsed.foreground,
-        background: parsed.background,
+        foreground: validated.foreground,
+        background: validated.background,
         original,
         alreadyPasses: false,
         suggested: {
@@ -179,8 +184,8 @@ export function processBatchSuggest(
     } else {
       results.push({
         kind: 'ok',
-        foreground: parsed.foreground,
-        background: parsed.background,
+        foreground: validated.foreground,
+        background: validated.background,
         original,
         alreadyPasses: false,
         suggested: null,
