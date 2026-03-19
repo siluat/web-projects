@@ -170,6 +170,17 @@ describe('processBatchSuggest', () => {
     expect(result.exitCode).toBe(2);
   });
 
+  it('records errors for unparseable lines', () => {
+    const lines = ['single-value'];
+    const result = processBatchSuggest(lines, {
+      level: 'AA',
+      size: 'normal',
+      suggest: true,
+    });
+    expect(result.results[0]?.kind).toBe('error');
+    expect(result.exitCode).toBe(2);
+  });
+
   it('processes mixed passing and failing pairs', () => {
     const lines = ['#000 #fff', '#999 #fff'];
     const result = processBatchSuggest(lines, {

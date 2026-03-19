@@ -154,6 +154,19 @@ describe('formatBatchSuggestHuman', () => {
     expect(output).toBe('#777 #fff → Suggested: #767676 4.54:1 (AAA)');
   });
 
+  it('formats error entries', () => {
+    const results: BatchSuggestLineResult[] = [
+      {
+        kind: 'error',
+        foreground: 'invalid',
+        background: '#fff',
+        message: 'Invalid color: "invalid"',
+      },
+    ];
+    const output = formatBatchSuggestHuman(results, 'AA', 'normal');
+    expect(output).toBe('invalid #fff → Error: Invalid color: "invalid"');
+  });
+
   it('formats impossible suggestion as "No suggestion available"', () => {
     const results: BatchSuggestLineResult[] = [
       {
@@ -200,5 +213,23 @@ describe('formatBatchSuggestJson', () => {
     expect(parsed).toHaveLength(2);
     expect(parsed[0].suggested).toBeNull();
     expect(parsed[1].suggested.color).toBe('#767676');
+  });
+
+  it('includes error entries in JSON array', () => {
+    const results: BatchSuggestLineResult[] = [
+      {
+        kind: 'error',
+        foreground: 'invalid',
+        background: '#fff',
+        message: 'Invalid color: "invalid"',
+      },
+    ];
+    const output = formatBatchSuggestJson(results);
+    const parsed = JSON.parse(output);
+    expect(parsed[0]).toEqual({
+      foreground: 'invalid',
+      background: '#fff',
+      error: 'Invalid color: "invalid"',
+    });
   });
 });
