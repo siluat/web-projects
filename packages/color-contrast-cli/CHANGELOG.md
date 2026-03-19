@@ -1,5 +1,13 @@
 # @siluat/color-contrast-cli
 
+## 0.8.0
+
+### Minor Changes
+
+- [#108](https://github.com/siluat/web-projects/pull/108) [`2706296`](https://github.com/siluat/web-projects/commit/27062965a3916538dc9125fdd04e3979ad0a37ca) - Add `--batch` flag for processing multiple color pairs from stdin. Supports `--json`, `--level`, and `--suggest` combinations. Input uses bracket-aware splitting to handle functional colors like `rgb()` and `oklch()`.
+
+  Related PRs: [#104](https://github.com/siluat/web-projects/issues/104), [#105](https://github.com/siluat/web-projects/issues/105), [#106](https://github.com/siluat/web-projects/issues/106), [#107](https://github.com/siluat/web-projects/issues/107), [#108](https://github.com/siluat/web-projects/issues/108)
+
 ## 0.7.0
 
 ### Minor Changes
