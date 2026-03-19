@@ -474,7 +474,7 @@ async function main(): Promise<void> {
             process.stdout.write(`${formatBatchSuggestJson(result.results)}\n`);
           } else {
             process.stdout.write(
-              `${formatBatchSuggestHuman(result.results, parsed.level)}\n`,
+              `${formatBatchSuggestHuman(result.results, parsed.level, parsed.size)}\n`,
             );
           }
           process.exitCode = result.exitCode;
