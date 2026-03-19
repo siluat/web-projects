@@ -35,6 +35,7 @@ oklch(60% 0.15 50)	#ffffff
 | `--batch --json` | JSON array output |
 | `--batch --level` | Check each pair, exit 1 if any fail |
 | `--batch --suggest --level` | Suggest for failing pairs |
+| `--batch --suggest` | **Error** (`--suggest` requires `--level`) |
 | `--batch --verbose` | **Error** (multi-line per-pair output is unsuitable for batch) |
 | `--batch` + positional args | **Error** (reads from stdin, no args needed) |
 
