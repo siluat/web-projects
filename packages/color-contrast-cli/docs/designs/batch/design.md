@@ -51,8 +51,8 @@ oklch(60% 0.15 50)	#ffffff
 
 ```text
 #000 #fff → 21:1 AAA / AAA
-#333 #ccc → 8.28:1 AAA / AAA
-#666 #999 → 2.16:1 Fail / Fail
+#333 #ccc → 7.87:1 AAA / AAA
+#666 #999 → 2.02:1 Fail / Fail
 ```
 
 With `--level`, all results are still printed (unlike single mode which suppresses output). The exit code reflects aggregate pass/fail — users need to see which pairs failed.
@@ -69,7 +69,7 @@ With `--level`, all results are still printed (unlike single mode which suppress
 ```json
 [
   {"foreground":"#000","background":"#fff","ratio":21,"normalText":"AAA","largeText":"AAA"},
-  {"foreground":"#666","background":"#999","ratio":2.16,"normalText":"Fail","largeText":"Fail"}
+  {"foreground":"#666","background":"#999","ratio":2.02,"normalText":"Fail","largeText":"Fail"}
 ]
 ```
 
