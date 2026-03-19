@@ -10,14 +10,6 @@
 
 ## Released
 
-### v0.7.0
-
-- [x] Color suggestion (`--suggest`) — [design doc](designs/suggest/design.md)
-  - [x] sRGB → OkLCH conversion (extract from gamut-map.ts)
-  - [x] Core suggestion algorithm (suggest.ts)
-  - [x] CLI integration (--suggest flag)
-  - [x] Verbose mode and documentation
-
 See [CHANGELOG.md](../CHANGELOG.md) for full release history.
 
 ## Spec References
