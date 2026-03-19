@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+import {
+  formatBatchHuman,
+  formatBatchJson,
+  formatBatchSuggestHuman,
+  formatBatchSuggestJson,
+} from './batch/format-batch';
+import { processBatch, processBatchSuggest } from './batch/process-batch';
 import { srgbToOklch } from './convert';
 import {
   checkContrast,
@@ -29,6 +36,13 @@ type ParseResult =
       background: string;
       json: boolean;
       verbose: boolean;
+      suggest: boolean;
+      level: 'AA' | 'AAA' | null;
+      size: 'normal' | 'large';
+    }
+  | {
+      kind: 'batch';
+      json: boolean;
       suggest: boolean;
       level: 'AA' | 'AAA' | null;
       size: 'normal' | 'large';
@@ -268,6 +282,7 @@ function buildHelpText(): string {
     `@siluat/color-contrast-cli v${VERSION}`,
     '',
     'Usage: ccr <foreground> <background> [options]',
+    '       echo "..." | ccr --batch [options]',
     '',
     'Options:',
     '  --json               Output result as JSON',
@@ -275,6 +290,7 @@ function buildHelpText(): string {
     '  --level AA|AAA       Exit 0 if contrast passes the level, 1 if not',
     '  --size normal|large  Text size for --level check (default: normal)',
     '  --suggest            Suggest a foreground color that meets --level',
+    '  --batch              Read color pairs from stdin (one pair per line)',
     '  --help               Show this help message',
     '  --version            Show version number',
     '',
@@ -297,6 +313,8 @@ function buildHelpText(): string {
     "  ccr '#333' '#fff' --level AA --json",
     "  ccr '#777' '#fff' --suggest --level AA",
     "  ccr 'oklch(60% 0.15 50)' white --verbose",
+    "  echo '#000 #fff' | ccr --batch",
+    "  echo '#000 #fff' | ccr --batch --json",
     '',
   ];
   return lines.join('\n');
@@ -307,6 +325,7 @@ function parseArgs(argv: string[]): ParseResult {
   let json = false;
   let verbose = false;
   let suggest = false;
+  let batch = false;
   let hasLevel = false;
   let levelValue: string | undefined;
   let hasSize = false;
@@ -322,6 +341,8 @@ function parseArgs(argv: string[]): ParseResult {
       verbose = true;
     } else if (arg === '--suggest') {
       suggest = true;
+    } else if (arg === '--batch') {
+      batch = true;
     } else if (arg === '--level') {
       hasLevel = true;
       i++;
@@ -378,6 +399,16 @@ function parseArgs(argv: string[]): ParseResult {
     );
   }
 
+  if (batch) {
+    if (verbose) {
+      throw new Error('--batch and --verbose cannot be combined.');
+    }
+    if (positional.length > 0) {
+      throw new Error('--batch reads from stdin. Do not pass color arguments.');
+    }
+    return { kind: 'batch', json, suggest, level, size };
+  }
+
   if (verbose && json) {
     throw new Error('--verbose and --json cannot be combined.');
   }
@@ -411,7 +442,23 @@ function parseArgs(argv: string[]): ParseResult {
   };
 }
 
-function main(): void {
+/**
+ * Read all of stdin as a string.
+ * Uses process.stdin events for Node.js and Bun compatibility.
+ */
+function readStdin(): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let input = '';
+    process.stdin.setEncoding('utf-8');
+    process.stdin.on('data', (chunk) => {
+      input += chunk;
+    });
+    process.stdin.on('end', () => resolve(input));
+    process.stdin.on('error', reject);
+  });
+}
+
+async function main(): Promise<void> {
   try {
     const parsed = parseArgs(process.argv.slice(2));
     switch (parsed.kind) {
@@ -421,6 +468,48 @@ function main(): void {
       case 'version':
         process.stdout.write(`${VERSION}\n`);
         return;
+      case 'batch': {
+        const input = await readStdin();
+        const lines = input.split('\n');
+        const nonEmptyLines = lines.filter(
+          (l) => l.trim() !== '' && !l.trim().startsWith('//'),
+        );
+        if (nonEmptyLines.length === 0) {
+          process.stderr.write('Error: No color pairs provided on stdin.\n');
+          process.exitCode = 2;
+          return;
+        }
+
+        if (parsed.suggest && parsed.level !== null) {
+          const result = processBatchSuggest(lines, {
+            level: parsed.level,
+            size: parsed.size,
+            suggest: true,
+          });
+          if (parsed.json) {
+            process.stdout.write(`${formatBatchSuggestJson(result.results)}\n`);
+          } else {
+            process.stdout.write(
+              `${formatBatchSuggestHuman(result.results, parsed.level, parsed.size)}\n`,
+            );
+          }
+          process.exitCode = result.exitCode;
+          return;
+        }
+
+        const result = processBatch(lines, {
+          level: parsed.level,
+          size: parsed.size,
+          suggest: false,
+        });
+        if (parsed.json) {
+          process.stdout.write(`${formatBatchJson(result.results)}\n`);
+        } else {
+          process.stdout.write(`${formatBatchHuman(result.results)}\n`);
+        }
+        process.exitCode = result.exitCode;
+        return;
+      }
       case 'run': {
         const errors = validateColors(parsed.foreground, parsed.background);
         if (errors.length > 0) {
@@ -589,4 +678,8 @@ function main(): void {
   }
 }
 
-main();
+main().catch((error) => {
+  const message = error instanceof Error ? error.message : String(error);
+  process.stderr.write(`Error: ${message}\n`);
+  process.exit(2);
+});

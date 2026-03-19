@@ -5,10 +5,12 @@ const CLI_PATH = resolve(import.meta.dirname, 'cli.ts');
 
 async function run(
   args: string[],
+  options?: { stdin?: string },
 ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
   const proc = Bun.spawn(['bun', 'run', CLI_PATH, ...args], {
     stdout: 'pipe',
     stderr: 'pipe',
+    stdin: options?.stdin !== undefined ? new Blob([options.stdin]) : undefined,
   });
   const [stdout, stderr] = await Promise.all([
     new Response(proc.stdout).text(),
@@ -679,6 +681,174 @@ describe('CLI', () => {
       expect(exitCode).toBe(2);
       // Verify it's not JSON
       expect(() => JSON.parse(stderr)).toThrow();
+    });
+  });
+
+  describe('--batch mode', () => {
+    describe('human-readable output', () => {
+      it('processes multiple pairs from stdin', async () => {
+        const { stdout, exitCode } = await run(['--batch'], {
+          stdin: '#000 #fff\n#333 #ccc\n',
+        });
+        expect(stdout).toContain('#000 #fff');
+        expect(stdout).toContain('21:1');
+        expect(stdout).toContain('#333 #ccc');
+        expect(exitCode).toBe(0);
+      });
+
+      it('skips blank lines and comments', async () => {
+        const { stdout, exitCode } = await run(['--batch'], {
+          stdin: '// comment\n#000 #fff\n\n#333 #ccc\n',
+        });
+        const lines = stdout.trim().split('\n');
+        expect(lines).toHaveLength(2);
+        expect(exitCode).toBe(0);
+      });
+
+      it('handles functional colors with spaces', async () => {
+        const { stdout, exitCode } = await run(['--batch'], {
+          stdin: 'rgb(255, 0, 0) white\n',
+        });
+        expect(stdout).toContain('rgb(255, 0, 0) white');
+        expect(exitCode).toBe(0);
+      });
+    });
+
+    describe('JSON output', () => {
+      it('outputs JSON array', async () => {
+        const { stdout, exitCode } = await run(['--batch', '--json'], {
+          stdin: '#000 #fff\n#333 #ccc\n',
+        });
+        const result = JSON.parse(stdout);
+        expect(result).toHaveLength(2);
+        expect(result[0].ratio).toBe(21);
+        expect(result[0].foreground).toBe('#000');
+        expect(exitCode).toBe(0);
+      });
+
+      it('includes error entries in JSON', async () => {
+        const { stdout, exitCode } = await run(['--batch', '--json'], {
+          stdin: '#000 #fff\ninvalid color\n',
+        });
+        const result = JSON.parse(stdout);
+        expect(result).toHaveLength(2);
+        expect(result[1].error).toBeDefined();
+        expect(exitCode).toBe(2);
+      });
+    });
+
+    describe('--level mode', () => {
+      it('exits 0 when all pairs pass', async () => {
+        const { stdout, exitCode } = await run(['--batch', '--level', 'AA'], {
+          stdin: '#000 #fff\n#333 #ccc\n',
+        });
+        expect(stdout).toContain('#000 #fff');
+        expect(exitCode).toBe(0);
+      });
+
+      it('exits 1 when any pair fails', async () => {
+        const { stdout, exitCode } = await run(['--batch', '--level', 'AA'], {
+          stdin: '#000 #fff\n#999 #fff\n',
+        });
+        expect(stdout).toContain('#999 #fff');
+        expect(exitCode).toBe(1);
+      });
+
+      it('exit 2 takes priority over exit 1', async () => {
+        const { exitCode } = await run(['--batch', '--level', 'AA'], {
+          stdin: 'invalid color\n#999 #fff\n',
+        });
+        expect(exitCode).toBe(2);
+      });
+    });
+
+    describe('--suggest mode', () => {
+      it('suggests for failing pairs', async () => {
+        const { stdout, exitCode } = await run(
+          ['--batch', '--suggest', '--level', 'AA'],
+          { stdin: '#777 #fff\n' },
+        );
+        expect(stdout).toContain('Suggested:');
+        expect(exitCode).toBe(0);
+      });
+
+      it('reports already-passing pairs', async () => {
+        const { stdout, exitCode } = await run(
+          ['--batch', '--suggest', '--level', 'AA'],
+          { stdin: '#333 #fff\n' },
+        );
+        expect(stdout).toContain('Already passes AA');
+        expect(exitCode).toBe(0);
+      });
+
+      it('outputs suggest JSON', async () => {
+        const { stdout, exitCode } = await run(
+          ['--batch', '--suggest', '--level', 'AA', '--json'],
+          { stdin: '#777 #fff\n#333 #fff\n' },
+        );
+        const result = JSON.parse(stdout);
+        expect(result).toHaveLength(2);
+        expect(result[0].suggested).not.toBeNull();
+        expect(result[1].suggested).toBeNull();
+        expect(exitCode).toBe(0);
+      });
+    });
+
+    describe('error handling', () => {
+      it('errors on empty stdin', async () => {
+        const { stderr, exitCode } = await run(['--batch'], { stdin: '' });
+        expect(stderr).toContain('No color pairs provided');
+        expect(exitCode).toBe(2);
+      });
+
+      it('errors on stdin with only comments', async () => {
+        const { stderr, exitCode } = await run(['--batch'], {
+          stdin: '// comment\n\n',
+        });
+        expect(stderr).toContain('No color pairs provided');
+        expect(exitCode).toBe(2);
+      });
+
+      it('errors when combined with --verbose', async () => {
+        const { stderr, exitCode } = await run(['--batch', '--verbose'], {
+          stdin: '#000 #fff\n',
+        });
+        expect(stderr).toContain('--batch and --verbose cannot be combined');
+        expect(exitCode).toBe(2);
+      });
+
+      it('errors when positional args are given with --batch', async () => {
+        const { stderr, exitCode } = await run(['--batch', '#000', '#fff'], {
+          stdin: '#000 #fff\n',
+        });
+        expect(stderr).toContain(
+          '--batch reads from stdin. Do not pass color arguments',
+        );
+        expect(exitCode).toBe(2);
+      });
+
+      it('continues processing after invalid line', async () => {
+        const { stdout, exitCode } = await run(['--batch'], {
+          stdin: '#000 #fff\ninvalid-color #fff\n#333 #ccc\n',
+        });
+        expect(stdout).toContain('#000 #fff');
+        expect(stdout).toContain('Error:');
+        expect(stdout).toContain('#333 #ccc');
+        expect(exitCode).toBe(2);
+      });
+    });
+
+    describe('--help', () => {
+      it('includes --batch in help text', async () => {
+        const { stdout } = await run(['--help']);
+        expect(stdout).toContain('--batch');
+      });
+
+      it('--help takes priority over --batch', async () => {
+        const { stdout, exitCode } = await run(['--help', '--batch']);
+        expect(stdout).toContain('Usage:');
+        expect(exitCode).toBe(0);
+      });
     });
   });
 });
