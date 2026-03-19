@@ -101,8 +101,8 @@ echo -e "#000 #fff\n#333 #ccc\n#666 #999" | ccr --batch
 
 ```text
 #000 #fff → 21:1 AAA / AAA
-#333 #ccc → 8.28:1 AAA / AAA
-#666 #999 → 2.16:1 Fail / Fail
+#333 #ccc → 7.87:1 AAA / AAA
+#666 #999 → 2.02:1 Fail / Fail
 ```
 
 Use `--json` for structured output:
@@ -112,7 +112,7 @@ echo -e "#000 #fff\n#333 #ccc" | ccr --batch --json
 ```
 
 ```json
-[{"foreground":"#000","background":"#fff","ratio":21,"normalText":"AAA","largeText":"AAA"},{"foreground":"#333","background":"#ccc","ratio":8.28,"normalText":"AAA","largeText":"AAA"}]
+[{"foreground":"#000","background":"#fff","ratio":21,"normalText":"AAA","largeText":"AAA"},{"foreground":"#333","background":"#ccc","ratio":7.87,"normalText":"AAA","largeText":"AAA"}]
 ```
 
 Use `--level` to check all pairs and get a single exit code (0 if all pass, 1 if any fail):
