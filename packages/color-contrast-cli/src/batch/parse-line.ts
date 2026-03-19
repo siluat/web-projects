@@ -2,11 +2,11 @@
  * Parse a single batch input line into a foreground/background color pair.
  *
  * Splitting strategy:
- * - If a tab character exists, split on the first tab
+ * - If a tab character exists, split on the first tab at parenthesis depth 0
  * - Otherwise, split on the first space at parenthesis depth 0
  *
- * Returns null for blank lines and comment lines (starting with //).
- * Returns an error message string when the line cannot be split into two parts.
+ * Returns `{ kind: 'skip' }` for blank lines and comment lines (starting with //).
+ * Returns `{ kind: 'error', message }` when the line cannot be split into two parts.
  */
 
 export type ParseLineResult =
@@ -21,8 +21,8 @@ export function parseBatchLine(line: string): ParseLineResult {
     return { kind: 'skip' };
   }
 
-  // Tab-separated: split on first tab
-  const tabIndex = trimmed.indexOf('\t');
+  // Tab-separated: split on first tab at parenthesis depth 0
+  const tabIndex = findSplitIndex(trimmed, '\t');
   if (tabIndex !== -1) {
     const foreground = trimmed.slice(0, tabIndex).trim();
     const background = trimmed.slice(tabIndex + 1).trim();
@@ -32,8 +32,8 @@ export function parseBatchLine(line: string): ParseLineResult {
     return { kind: 'pair', foreground, background };
   }
 
-  // Space-separated: split on first space at bracket depth 0
-  const splitIndex = findSplitIndex(trimmed);
+  // Space-separated: split on first space at parenthesis depth 0
+  const splitIndex = findSplitIndex(trimmed, ' ');
   if (splitIndex === -1) {
     return {
       kind: 'error',
@@ -50,10 +50,10 @@ export function parseBatchLine(line: string): ParseLineResult {
 }
 
 /**
- * Find the index of the first space at parenthesis depth 0.
+ * Find the index of the first delimiter at parenthesis depth 0.
  * Returns -1 if no valid split point is found.
  */
-function findSplitIndex(input: string): number {
+function findSplitIndex(input: string, delimiter: string): number {
   let depth = 0;
   for (let i = 0; i < input.length; i++) {
     const ch = input.charAt(i);
@@ -61,7 +61,7 @@ function findSplitIndex(input: string): number {
       depth++;
     } else if (ch === ')') {
       depth--;
-    } else if (ch === ' ' && depth === 0) {
+    } else if (ch === delimiter && depth === 0) {
       return i;
     }
   }

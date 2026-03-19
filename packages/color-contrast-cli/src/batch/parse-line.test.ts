@@ -102,6 +102,14 @@ describe('parseBatchLine', () => {
         background: '#ffffff',
       });
     });
+
+    it('ignores tabs inside parentheses', () => {
+      expect(parseBatchLine('rgb(255,\t0,\t0)\t#fff')).toEqual({
+        kind: 'pair',
+        foreground: 'rgb(255,\t0,\t0)',
+        background: '#fff',
+      });
+    });
   });
 
   describe('skip lines', () => {
