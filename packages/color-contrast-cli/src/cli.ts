@@ -442,6 +442,22 @@ function parseArgs(argv: string[]): ParseResult {
   };
 }
 
+/**
+ * Read all of stdin as a string.
+ * Uses process.stdin events for Node.js and Bun compatibility.
+ */
+function readStdin(): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let input = '';
+    process.stdin.setEncoding('utf-8');
+    process.stdin.on('data', (chunk) => {
+      input += chunk;
+    });
+    process.stdin.on('end', () => resolve(input));
+    process.stdin.on('error', reject);
+  });
+}
+
 async function main(): Promise<void> {
   try {
     const parsed = parseArgs(process.argv.slice(2));
@@ -453,7 +469,7 @@ async function main(): Promise<void> {
         process.stdout.write(`${VERSION}\n`);
         return;
       case 'batch': {
-        const input = await Bun.stdin.text();
+        const input = await readStdin();
         const lines = input.split('\n');
         const nonEmptyLines = lines.filter(
           (l) => l.trim() !== '' && !l.trim().startsWith('//'),
