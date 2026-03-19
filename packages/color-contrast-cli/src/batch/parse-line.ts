@@ -41,11 +41,8 @@ export function parseBatchLine(line: string): ParseLineResult {
     };
   }
 
-  const foreground = trimmed.slice(0, splitIndex).trim();
+  const foreground = trimmed.slice(0, splitIndex);
   const background = trimmed.slice(splitIndex + 1).trim();
-  if (foreground === '' || background === '') {
-    return { kind: 'error', message: `Cannot parse line: "${trimmed}"` };
-  }
   return { kind: 'pair', foreground, background };
 }
 
