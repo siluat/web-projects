@@ -2,11 +2,50 @@
 
 ## Next Release
 
-- [x] Batch input (`--batch`) — [design doc](designs/batch/design.md)
-  - [x] Batch line parser (bracket-aware splitting)
-  - [x] Batch processing and formatters
-  - [x] CLI integration (--batch flag)
-  - [x] README and tracker update
+(No items scheduled)
+
+## Package Split (`@siluat/color-contrast`)
+
+Prerequisite for AI Agent Skill and Website work streams.
+
+- [ ] Scaffold `packages/color-contrast/` (package.json, tsconfig, tsdown config)
+- [ ] Move pure computation code to library package (types, parse/, convert/, contrast, luminance, alpha-composite, suggest, gamut-map)
+- [ ] Move test files alongside source
+- [ ] Update CLI imports to use `@siluat/color-contrast`
+- [ ] Convert CLI `src/index.ts` to library re-export
+- [ ] Publish library v1.0.0 (npm + JSR)
+- [ ] Republish CLI (internal dependency changed from relative paths to `@siluat/color-contrast` package)
+
+Key decisions:
+
+- Batch module stays in CLI (text parsing/formatting is I/O layer)
+- Re-export preserves backward compatibility for existing users
+- Library targets zero runtime deps + browser compatibility
+
+## AI Agent Skill
+
+Depends on: Package Split
+
+- [ ] Package skill based on skills.sh (Agent Skills standard)
+  - [ ] `SKILL.md` skill file (YAML frontmatter + guide)
+  - [ ] Reference docs (WCAG criteria table, API reference, usage patterns)
+- [ ] Write SKILL.md (WCAG criteria, CLI/library API reference, workflow guide)
+- [ ] Write reference docs (WCAG criteria table, API reference, design system audit guide)
+- [ ] Deploy to skills.sh
+- [ ] Installation test (`npx skills add`)
+
+## Website (`apps/color-contrast-web/`)
+
+Depends on: Package Split
+
+- [ ] Scaffold Starlight (Astro-based docs framework) app
+- [ ] Interactive Color Checker (React Island)
+- [ ] Interactive Color Suggester (React Island)
+- [ ] Batch Palette Audit tool (React Island)
+- [ ] Library API docs page
+- [ ] CLI docs page
+- [ ] Skill installation/usage guide page
+- [ ] Vercel deployment setup
 
 ## Released
 
