@@ -1,0 +1,34 @@
+---
+title: Getting Started
+description: Install and start using @siluat/color-contrast for WCAG contrast ratio computation.
+---
+
+## Installation
+
+```bash
+npm install @siluat/color-contrast
+```
+
+## Quick Example
+
+```typescript
+import { contrastRatio, meetsWCAG } from '@siluat/color-contrast';
+
+const ratio = contrastRatio('#ffffff', '#000000');
+// 21
+
+const result = meetsWCAG('#333333', '#ffffff');
+// { AA: true, AAA: true, AALarge: true, AAALarge: true }
+```
+
+## CLI
+
+A command-line interface is also available:
+
+```bash
+npm install -g @siluat/color-contrast-cli
+```
+
+```bash
+ccr "#ffffff" "#000000"
+```
