@@ -12,13 +12,13 @@ npm install @siluat/color-contrast
 ## Quick Example
 
 ```typescript
-import { contrastRatio, meetsWCAG } from '@siluat/color-contrast';
+import { contrastRatio, checkContrast } from '@siluat/color-contrast';
 
 const ratio = contrastRatio('#ffffff', '#000000');
 // 21
 
-const result = meetsWCAG('#333333', '#ffffff');
-// { AA: true, AAA: true, AALarge: true, AAALarge: true }
+const result = checkContrast('#333333', '#ffffff');
+// { ratio: 12.63, normalText: 'AAA', largeText: 'AAA' }
 ```
 
 ## CLI
