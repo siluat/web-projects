@@ -55,6 +55,13 @@ jobs:
         run: npx jsr publish --allow-dirty
         working-directory: packages/color-contrast
 
+      - name: Resolve workspace deps for CLI JSR publish
+        if: steps.changesets.outputs.published == 'true' && contains(steps.changesets.outputs.publishedPackages, '"name":"@siluat/color-contrast-cli"')
+        run: |
+          VERSION=$(node -p "require('../color-contrast/package.json').version")
+          sed -i "s/\"workspace:\\*\"/\"^$VERSION\"/" package.json
+        working-directory: packages/color-contrast-cli
+
       - name: Publish @siluat/color-contrast-cli to JSR
         if: steps.changesets.outputs.published == 'true' && contains(steps.changesets.outputs.publishedPackages, '"name":"@siluat/color-contrast-cli"')
         run: npx jsr publish --allow-dirty

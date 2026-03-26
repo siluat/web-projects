@@ -110,6 +110,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Resolve workspace deps for JSR
+        run: |
+          VERSION=$(node -p "require('../color-contrast/package.json').version")
+          sed -i "s/\"workspace:\\*\"/\"^$VERSION\"/" package.json
+
       - name: Publish to JSR
         run: npx jsr publish --allow-dirty
 
