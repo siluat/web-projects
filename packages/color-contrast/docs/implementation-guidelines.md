@@ -1,6 +1,6 @@
 # Implementation Guidelines
 
-Principles to follow when implementing `@siluat/color-contrast-cli`. Add new principles as needed during development.
+Principles to follow when implementing `@siluat/color-contrast` and `@siluat/color-contrast-cli`. Add new principles as needed during development.
 
 ## 1. Reviewable PR Units
 

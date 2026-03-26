@@ -1,4 +1,4 @@
-import type { ComplianceLevel, ContrastResult } from '../types';
+import type { ComplianceLevel, ContrastResult } from '@siluat/color-contrast';
 
 /** Result of processing a single batch line — either a successful contrast check or an error. */
 export type BatchLineResult =

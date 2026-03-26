@@ -1,5 +1,9 @@
-import { checkContrast, suggestForeground, validateColors } from '../index';
-import type { ContrastResult } from '../types';
+import type { ContrastResult } from '@siluat/color-contrast';
+import {
+  checkContrast,
+  suggestForeground,
+  validateColors,
+} from '@siluat/color-contrast';
 import { parseBatchLine } from './parse-line';
 import type {
   BatchLineResult,

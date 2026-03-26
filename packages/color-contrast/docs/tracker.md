@@ -8,11 +8,6 @@
 
 Prerequisite for AI Agent Skill and Website work streams.
 
-- [ ] Scaffold `packages/color-contrast/` (package.json, tsconfig, tsdown config)
-- [ ] Move pure computation code to library package (types, parse/, convert/, contrast, luminance, alpha-composite, suggest, gamut-map)
-- [ ] Move test files alongside source
-- [ ] Update CLI imports to use `@siluat/color-contrast`
-- [ ] Convert CLI `src/index.ts` to library re-export
 - [ ] Publish library v1.0.0 (npm + JSR)
 - [ ] Republish CLI (internal dependency changed from relative paths to `@siluat/color-contrast` package)
 
@@ -49,7 +44,7 @@ Depends on: Package Split
 
 ## Released
 
-See [CHANGELOG.md](../CHANGELOG.md) for full release history.
+See [CLI CHANGELOG.md](../../color-contrast-cli/CHANGELOG.md) for full release history.
 
 ## Spec References
 

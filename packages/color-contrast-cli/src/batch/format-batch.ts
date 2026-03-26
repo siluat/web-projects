@@ -1,4 +1,4 @@
-import type { ComplianceLevel, ContrastResult } from '../types';
+import type { ComplianceLevel, ContrastResult } from '@siluat/color-contrast';
 import type { BatchLineResult, BatchSuggestLineResult } from './types';
 
 function formatCompliancePair(result: ContrastResult): string {

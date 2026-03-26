@@ -26,7 +26,7 @@ The 148 CSS named colors could be offered as completion candidates.
 Expose the internal color parser as a public API for color string validation use cases.
 
 ```typescript
-import { parseColor } from '@siluat/color-contrast-cli';
+import { parseColor } from '@siluat/color-contrast';
 
 parseColor('#ff0000'); // { space: 'srgb', r: 1, g: 0, b: 0, alpha: 1 }
 parseColor('not-a-color'); // null
