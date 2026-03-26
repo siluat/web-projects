@@ -2,17 +2,7 @@
 
 ## Next
 
-- [ ] Scaffold Starlight (Astro-based docs framework) app
-- [ ] Interactive Color Checker (React Island) (depends on: Scaffold Starlight)
-- [ ] Interactive Color Suggester (React Island) (depends on: Scaffold Starlight)
-- [ ] Batch Palette Audit tool (React Island) (depends on: Scaffold Starlight)
-- [ ] Library API docs page (depends on: Scaffold Starlight)
-- [ ] CLI docs page (depends on: Scaffold Starlight)
-- [ ] Skill installation/usage guide page (depends on: Scaffold Starlight)
-  - [ ] What the skill does and supported agent list
-  - [ ] Installation command (`npx skills add siluat/skills --skill color-contrast`)
-  - [ ] `/color-contrast` slash command usage examples
-- [ ] Vercel deployment setup (depends on: Scaffold Starlight)
+(No items)
 
 ## In Progress
 
