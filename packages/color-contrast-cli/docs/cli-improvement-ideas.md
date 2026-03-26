@@ -21,17 +21,6 @@ ccr --completions zsh > ~/.zsh/completions/_ccr
 
 The 148 CSS named colors could be offered as completion candidates.
 
-## Public `parseColor` API
-
-Expose the internal color parser as a public API for color string validation use cases.
-
-```typescript
-import { parseColor } from '@siluat/color-contrast';
-
-parseColor('#ff0000'); // { space: 'srgb', r: 1, g: 0, b: 0, alpha: 1 }
-parseColor('not-a-color'); // null
-```
-
 ## Distributable Skill
 
 Publish an installable Skill that teaches AI agents (Claude Code, Cursor, etc.) to check contrast when color values change. A well-designed CLI is itself an AI interface — a Skill makes it discoverable.
@@ -42,5 +31,4 @@ Publish an installable Skill that teaches AI agents (Claude Code, Cursor, etc.) 
 |----------|------|--------|--------|
 | P2 | Output format expansion (`-o csv\|markdown`) | Medium | Medium |
 | P3 | Shell completion | Medium | Medium |
-| P3 | Public `parseColor` API | Low | Medium |
 | P4 | Distributable Skill | Medium | Medium |

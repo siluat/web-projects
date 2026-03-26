@@ -9,7 +9,7 @@
 Prerequisite for AI Agent Skill and Website work streams.
 
 - [ ] Publish library v1.0.0 (npm + JSR)
-- [ ] Republish CLI (internal dependency changed from relative paths to `@siluat/color-contrast` package)
+- [ ] Publish CLI v1.0.0 (internal dependency changed to `@siluat/color-contrast` package)
 
 Key decisions:
 
