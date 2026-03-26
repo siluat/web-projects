@@ -43,7 +43,7 @@
     "prepublishOnly": "bun run build"
   },
   "dependencies": {
-    "@siluat/color-contrast": "workspace:*"
+    "@siluat/color-contrast": "^1.0.0"
   },
   "devDependencies": {
     "@siluat/typescript-config": "workspace:*",
