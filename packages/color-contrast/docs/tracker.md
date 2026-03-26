@@ -17,18 +17,6 @@ Key decisions:
 - Re-export preserves backward compatibility for existing users
 - Library targets zero runtime deps + browser compatibility
 
-## AI Agent Skill
-
-Depends on: Package Split
-
-- [ ] Package skill based on skills.sh (Agent Skills standard)
-  - [ ] `SKILL.md` skill file (YAML frontmatter + guide)
-  - [ ] Reference docs (WCAG criteria table, API reference, usage patterns)
-- [ ] Write SKILL.md (WCAG criteria, CLI/library API reference, workflow guide)
-- [ ] Write reference docs (WCAG criteria table, API reference, design system audit guide)
-- [ ] Deploy to skills.sh
-- [ ] Installation test (`npx skills add`)
-
 ## Website (`apps/color-contrast-web/`)
 
 Depends on: Package Split
@@ -40,7 +28,24 @@ Depends on: Package Split
 - [ ] Library API docs page
 - [ ] CLI docs page
 - [ ] Skill installation/usage guide page
+  - [ ] What the skill does and supported agent list
+  - [ ] Installation command (`npx skills add siluat/skills --skill color-contrast`)
+  - [ ] `/color-contrast` slash command usage examples
 - [ ] Vercel deployment setup
+
+## AI Agent Skill (Completed)
+
+Published at [siluat/skills](https://github.com/siluat/skills) (`skills/color-contrast/`).
+
+Install: `npx skills add siluat/skills --skill color-contrast`
+
+Skill structure:
+
+- `SKILL.md` — WCAG thresholds, decision tree, quick commands, agent patterns
+- `command/color-contrast.md` — `/color-contrast` slash command workflow
+- `references/wcag-criteria.md` — WCAG 2.1 SC 1.4.3, 1.4.6, 1.4.11 deep-dive
+- `references/cli-usage.md` — Full `ccr` CLI reference
+- `references/design-system-audit.md` — Batch palette audit workflow
 
 ## Released
 
