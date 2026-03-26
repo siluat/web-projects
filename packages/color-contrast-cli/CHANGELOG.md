@@ -1,5 +1,15 @@
 # @siluat/color-contrast-cli
 
+## 1.0.1
+
+### Patch Changes
+
+- [`7244597`](https://github.com/siluat/web-projects/commit/7244597f28c8b2e6641f6db20499429fc54b4ac4) - Fix broken npm install: replace workspace:\* with ^1.0.0 in dependencies
+
+  The 1.0.0 release included bun's `workspace:*` protocol in the published
+  package.json, which npm cannot resolve. This patch replaces it with a
+  standard semver range.
+
 ## 1.0.0
 
 ### Major Changes
