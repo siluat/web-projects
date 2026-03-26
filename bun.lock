@@ -42,7 +42,7 @@
     },
     "packages/color-contrast": {
       "name": "@siluat/color-contrast",
-      "version": "0.0.0",
+      "version": "1.0.0",
       "devDependencies": {
         "@siluat/typescript-config": "workspace:*",
         "@types/bun": "catalog:",
@@ -52,7 +52,7 @@
     },
     "packages/color-contrast-cli": {
       "name": "@siluat/color-contrast-cli",
-      "version": "0.8.0",
+      "version": "1.0.0",
       "bin": {
         "ccr": "./dist/cli.js",
       },
