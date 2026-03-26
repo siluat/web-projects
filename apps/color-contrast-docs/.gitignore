@@ -1,1 +1,3 @@
-dist/
+.next/
+.source/
+pnpm-lock.yaml

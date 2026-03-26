@@ -2,9 +2,9 @@
 
 ## Next
 
-- [ ] Interactive Color Checker (React Island)
-- [ ] Interactive Color Suggester (React Island)
-- [ ] Batch Palette Audit tool (React Island)
+- [ ] Interactive Color Checker (React component)
+- [ ] Interactive Color Suggester (React component)
+- [ ] Batch Palette Audit tool (React component)
 - [ ] Library API docs page
 - [ ] CLI docs page
 - [ ] Skill installation/usage guide page
@@ -15,8 +15,8 @@
 
 ## In Progress
 
-- [ ] Scaffold Starlight (Astro-based docs framework) app
+(No items)
 
 ## Done
 
-(No items)
+- [x] Scaffold Fumadocs (Next.js-based docs framework) app
