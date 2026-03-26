@@ -1,6 +1,6 @@
 {
   "name": "@siluat/color-contrast-cli",
-  "version": "0.8.0",
+  "version": "1.0.0",
   "description": "WCAG Color Contrast Ratio Checker",
   "license": "MIT",
   "author": "Kang Myunggil",
