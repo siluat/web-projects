@@ -17,6 +17,13 @@ component_management:
         - type: project
           target: auto
           threshold: 1%
+    - component_id: color-contrast
+      paths:
+        - packages/color-contrast/
+      statuses:
+        - type: project
+          target: auto
+          threshold: 1%
     - component_id: color-contrast-cli
       paths:
         - packages/color-contrast-cli/
