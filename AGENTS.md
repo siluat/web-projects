@@ -107,6 +107,41 @@ Key build dependencies and patterns:
 - Rust packages require `cargo build --release` followed by Node.js postbuild scripts
 - Test tasks depend on build completion
 
+## Task Management
+
+Each package/app can track work items in `docs/TASKS.md` within its directory. Only create this file for packages with active work.
+
+**File location:** `<package-or-app>/docs/TASKS.md`
+
+**Section structure:**
+
+```markdown
+## Next
+
+- [ ] Task description
+- [ ] Task with dependency (depends on: Task X)
+
+## In Progress
+
+- [ ] Currently working task
+
+## Done
+
+- [x] Completed task
+```
+
+**Rules:**
+
+- Use checkbox format (`- [ ]` / `- [x]`) for all tasks
+- Express dependencies inline with `(depends on: ...)` notation
+- Reference sections (e.g., Spec References, Notes) are allowed below Done
+- Sub-tasks use nested checkboxes
+
+**Commands:**
+
+- `/task-start [package-name]` — Pick a task from Next and start working on it
+- `/task-done` — Mark an In Progress task as done
+
 ## Planning & Ideas
 
 - [Automation Ideas](docs/automation-ideas.md) - Ideas and priorities for agents, skills, and commands

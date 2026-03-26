@@ -8,7 +8,7 @@ Before writing or modifying code, read and follow the principles in [docs/implem
 
 ## Task Management
 
-Work items are tracked in [docs/tracker.md](docs/tracker.md), not in external issue trackers.
+Work items are tracked in [docs/TASKS.md](docs/TASKS.md), not in external issue trackers.
 
 ## Architecture
 
