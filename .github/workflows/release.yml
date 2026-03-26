@@ -50,7 +50,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish to JSR
-        if: contains(steps.changesets.outputs.publishedPackages, '@siluat/color-contrast-cli')
+      - name: Publish @siluat/color-contrast to JSR
+        if: steps.changesets.outputs.published == 'true' && contains(steps.changesets.outputs.publishedPackages, '"name":"@siluat/color-contrast"')
+        run: npx jsr publish --allow-dirty
+        working-directory: packages/color-contrast
+
+      - name: Publish @siluat/color-contrast-cli to JSR
+        if: steps.changesets.outputs.published == 'true' && contains(steps.changesets.outputs.publishedPackages, '"name":"@siluat/color-contrast-cli"')
         run: npx jsr publish --allow-dirty
         working-directory: packages/color-contrast-cli

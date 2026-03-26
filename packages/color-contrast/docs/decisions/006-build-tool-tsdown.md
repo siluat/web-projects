@@ -36,7 +36,7 @@ Package characteristics:
 
 ## References
 
-- `packages/color-contrast-cli/tsdown.config.ts` — Build configuration
-- `packages/color-contrast-cli/package.json` — `build` script
+- `packages/color-contrast/tsdown.config.ts` — Build configuration
+- `packages/color-contrast/package.json` — `build` script
 - [tsdown documentation](https://tsdown.dev)
 - [tsup README: migration notice to tsdown](https://github.com/egoist/tsup)

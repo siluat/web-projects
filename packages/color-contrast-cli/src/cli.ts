@@ -1,19 +1,4 @@
 #!/usr/bin/env node
-import {
-  formatBatchHuman,
-  formatBatchJson,
-  formatBatchSuggestHuman,
-  formatBatchSuggestJson,
-} from './batch/format-batch';
-import { processBatch, processBatchSuggest } from './batch/process-batch';
-import { srgbToOklch } from './convert';
-import {
-  checkContrast,
-  checkContrastVerbose,
-  suggestForeground,
-  validateColors,
-} from './index';
-import { parseHex } from './parse/hex';
 import type {
   ColorTrace,
   ComplianceLevel,
@@ -21,7 +6,22 @@ import type {
   OKLCHColor,
   SRGBColor,
   VerboseResult,
-} from './types';
+} from '@siluat/color-contrast';
+import {
+  checkContrast,
+  checkContrastVerbose,
+  parseHex,
+  srgbToOklch,
+  suggestForeground,
+  validateColors,
+} from '@siluat/color-contrast';
+import {
+  formatBatchHuman,
+  formatBatchJson,
+  formatBatchSuggestHuman,
+  formatBatchSuggestJson,
+} from './batch/format-batch';
+import { processBatch, processBatchSuggest } from './batch/process-batch';
 
 declare const __VERSION__: string | undefined;
 

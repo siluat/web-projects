@@ -40,11 +40,24 @@
         "rehype-slug": "^6.0.0",
       },
     },
+    "packages/color-contrast": {
+      "name": "@siluat/color-contrast",
+      "version": "0.0.0",
+      "devDependencies": {
+        "@siluat/typescript-config": "workspace:*",
+        "@types/bun": "catalog:",
+        "tsdown": "^0.20.3",
+        "typescript": "^5.8.3",
+      },
+    },
     "packages/color-contrast-cli": {
       "name": "@siluat/color-contrast-cli",
-      "version": "0.5.0",
+      "version": "0.8.0",
       "bin": {
         "ccr": "./dist/cli.js",
+      },
+      "dependencies": {
+        "@siluat/color-contrast": "workspace:*",
       },
       "devDependencies": {
         "@siluat/typescript-config": "workspace:*",
@@ -766,6 +779,8 @@
     "@shikijs/types": ["@shikijs/types@3.23.0", "", { "dependencies": { "@shikijs/vscode-textmate": "^10.0.2", "@types/hast": "^3.0.4" } }, "sha512-3JZ5HXOZfYjsYSk0yPwBrkupyYSLpAE26Qc0HLghhZNGTZg/SKxXIIgoxOpmmeQP0RRSDJTk1/vPfw9tbw+jSQ=="],
 
     "@shikijs/vscode-textmate": ["@shikijs/vscode-textmate@10.0.2", "", {}, "sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg=="],
+
+    "@siluat/color-contrast": ["@siluat/color-contrast@workspace:packages/color-contrast"],
 
     "@siluat/color-contrast-cli": ["@siluat/color-contrast-cli@workspace:packages/color-contrast-cli"],
 

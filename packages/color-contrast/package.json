@@ -1,15 +1,15 @@
 {
-  "name": "@siluat/color-contrast-cli",
-  "version": "0.8.0",
-  "description": "WCAG Color Contrast Ratio Checker",
+  "name": "@siluat/color-contrast",
+  "version": "0.0.0",
+  "description": "WCAG color contrast ratio computation library",
   "license": "MIT",
   "author": "Kang Myunggil",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/siluat/web-projects.git",
-    "directory": "packages/color-contrast-cli"
+    "directory": "packages/color-contrast"
   },
-  "homepage": "https://github.com/siluat/web-projects/tree/main/packages/color-contrast-cli#readme",
+  "homepage": "https://github.com/siluat/web-projects/tree/main/packages/color-contrast#readme",
   "bugs": {
     "url": "https://github.com/siluat/web-projects/issues"
   },
@@ -19,18 +19,15 @@
     "accessibility",
     "a11y",
     "color",
-    "cli",
-    "ccr"
+    "luminance"
   ],
+  "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     }
-  },
-  "bin": {
-    "ccr": "./dist/cli.js"
   },
   "files": [
     "dist"
@@ -41,9 +38,6 @@
     "test:coverage": "bun test --coverage --coverage-reporter=lcov",
     "check-types": "tsc --noEmit",
     "prepublishOnly": "bun run build"
-  },
-  "dependencies": {
-    "@siluat/color-contrast": "workspace:*"
   },
   "devDependencies": {
     "@siluat/typescript-config": "workspace:*",

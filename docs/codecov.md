@@ -51,7 +51,7 @@ In `.github/workflows/ci.yml`, append the new package's LCOV path to the `files`
   uses: codecov/codecov-action@v5
   with:
     token: ${{ secrets.CODECOV_TOKEN }}
-    files: packages/ui-craft/coverage/lcov.info,packages/color-contrast-cli/coverage/lcov.info,packages/new-package/coverage/lcov.info
+    files: packages/ui-craft/coverage/lcov.info,packages/color-contrast/coverage/lcov.info,packages/color-contrast-cli/coverage/lcov.info,packages/new-package/coverage/lcov.info
     fail_ci_if_error: false
 ```
 
@@ -78,6 +78,12 @@ flag_management:
     - name: ui-craft
       paths:
         - packages/ui-craft/
+      statuses:
+        - type: project
+          target: auto
+    - name: color-contrast
+      paths:
+        - packages/color-contrast/
       statuses:
         - type: project
           target: auto
