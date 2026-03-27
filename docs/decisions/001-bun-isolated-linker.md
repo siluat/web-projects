@@ -1,4 +1,4 @@
-# ADR-001: Switch bun linker to isolated mode
+# 001: Switch bun linker to isolated mode
 
 ## Status
 
