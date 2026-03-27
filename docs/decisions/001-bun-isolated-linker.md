@@ -1,4 +1,4 @@
-# 001: Switch bun linker to isolated mode
+# Switch bun linker to isolated mode
 
 ## Status
 
