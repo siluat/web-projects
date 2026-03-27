@@ -1,1 +1,5 @@
+.next/
+.source/
 dist/
+pnpm-lock.yaml
+tsconfig.tsbuildinfo
