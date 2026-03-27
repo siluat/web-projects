@@ -2,7 +2,6 @@
 
 ## Next
 
-- [ ] Interactive Color Checker (React component)
 - [ ] Interactive Color Suggester (React component)
 - [ ] Batch Palette Audit tool (React component)
 - [ ] Library API docs page
@@ -19,4 +18,5 @@
 
 ## Done
 
+- [x] Interactive Color Checker (React component)
 - [x] Scaffold Fumadocs (Next.js-based docs framework) app
