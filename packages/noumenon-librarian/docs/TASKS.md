@@ -2,7 +2,7 @@
 
 ## Next
 
-- [ ] Fix prepare script failure under bun isolated linker (`@effect/sql` cannot find `@effect/experimental/Reactivity` — phantom dependency exposed by strict isolation)
+(No items)
 
 ## In Progress
 
@@ -10,4 +10,4 @@
 
 ## Done
 
-(No items)
+- [x] Fix prepare script failure under bun isolated linker (`@effect/sql` cannot find `@effect/experimental/Reactivity` — phantom dependency exposed by strict isolation)
