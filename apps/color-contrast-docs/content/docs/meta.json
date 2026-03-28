@@ -1,3 +1,11 @@
 {
-  "pages": ["index", "---Guides---", "guides", "---Reference---", "reference"]
+  "pages": [
+    "index",
+    "---Guides---",
+    "...guides",
+    "---Tools---",
+    "...tools",
+    "---Reference---",
+    "...reference"
+  ]
 }
