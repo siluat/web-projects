@@ -3,6 +3,7 @@
 import {
   checkContrast,
   parseColor,
+  suggestForeground,
   validateColors,
 } from '@siluat/color-contrast';
 import { useState } from 'react';
@@ -15,65 +16,27 @@ interface ContrastResult {
   largeText: ComplianceLevel;
 }
 
-function ComplianceBadge({ level }: { level: ComplianceLevel }) {
+function ComplianceBadge({
+  level,
+  label,
+}: {
+  level: ComplianceLevel;
+  label: string;
+}) {
   const styles: Record<ComplianceLevel, string> = {
-    AAA: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-    AA: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-    Fail: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+    AAA: 'border-green-500/40 bg-green-500/10 text-green-700 dark:text-green-300',
+    AA: 'border-yellow-500/40 bg-yellow-500/10 text-yellow-700 dark:text-yellow-300',
+    Fail: 'border-red-500/40 bg-red-500/10 text-red-700 dark:text-red-300',
   };
 
   return (
-    <span
-      className={`inline-block rounded px-2 py-0.5 text-xs font-semibold ${styles[level]}`}
-    >
-      {level === 'Fail' ? 'Fail' : `Pass ${level}`}
-    </span>
-  );
-}
-
-function PreviewSection({
-  foreground,
-  background,
-}: {
-  foreground: string;
-  background: string;
-}) {
-  return (
     <div
-      className="flex flex-col gap-3 rounded-lg border border-fd-border p-6"
-      style={{ backgroundColor: background }}
+      className={`flex items-center gap-2 rounded-md border px-3 py-2 ${styles[level]}`}
     >
-      <p style={{ color: foreground }} className="text-2xl font-bold">
-        Large Text (24px)
-      </p>
-      <p style={{ color: foreground }} className="text-base">
-        Normal body text at default size. This is what most of your content will
-        look like.
-      </p>
-      <p style={{ color: foreground }} className="text-sm">
-        Small text is harder to read with low contrast.
-      </p>
-    </div>
-  );
-}
-
-function ResultDisplay({ result }: { result: ContrastResult }) {
-  return (
-    <div className="flex flex-col gap-4 rounded-lg border border-fd-border p-4">
-      <div className="text-center">
-        <p className="text-sm text-fd-muted-foreground">Contrast Ratio</p>
-        <p className="text-4xl font-bold">{result.ratio}:1</p>
-      </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div className="flex flex-col items-center gap-1 rounded-md bg-fd-secondary p-3">
-          <span className="text-xs text-fd-muted-foreground">Normal Text</span>
-          <ComplianceBadge level={result.normalText} />
-        </div>
-        <div className="flex flex-col items-center gap-1 rounded-md bg-fd-secondary p-3">
-          <span className="text-xs text-fd-muted-foreground">Large Text</span>
-          <ComplianceBadge level={result.largeText} />
-        </div>
-      </div>
+      <span className="text-xs text-fd-muted-foreground">{label}</span>
+      <span className="text-xs font-semibold">
+        {level === 'Fail' ? 'Fail' : level}
+      </span>
     </div>
   );
 }
@@ -92,27 +55,176 @@ function ColorInput({
   error?: string;
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm font-medium">
+    <div className="flex flex-col gap-2">
+      <label
+        htmlFor={id}
+        className="text-xs font-medium uppercase tracking-wider text-fd-muted-foreground"
+      >
         {label}
       </label>
-      <div className="flex gap-2">
-        <input
-          type="color"
-          value={toHex6(value)}
-          onChange={(e) => onChange(e.target.value)}
-          className="h-10 w-10 shrink-0 cursor-pointer rounded border border-fd-border"
-        />
+      <div className="flex items-stretch gap-3">
+        <label className="block h-12 w-12 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 border-fd-border shadow-sm transition-shadow hover:shadow-md">
+          <input
+            type="color"
+            aria-label={`${label} color picker`}
+            value={toHex6(value)}
+            onChange={(e) => onChange(e.target.value)}
+            className="h-full w-full scale-150 cursor-pointer appearance-none border-none"
+          />
+        </label>
         <input
           id={id}
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="#000000"
-          className="h-10 flex-1 rounded-md border border-fd-border bg-fd-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-fd-ring"
+          className="h-12 flex-1 rounded-lg border border-fd-border bg-fd-background px-3 font-mono text-sm transition-colors focus:border-fd-primary focus:outline-none focus:ring-2 focus:ring-fd-ring"
         />
       </div>
       {error && <p className="text-xs text-red-500">{error}</p>}
+    </div>
+  );
+}
+
+function RatioDisplay({ result }: { result: ContrastResult }) {
+  const passing = result.normalText !== 'Fail';
+
+  return (
+    <div className="flex flex-col gap-4 rounded-xl border border-fd-border p-5">
+      <div className="flex items-baseline justify-between">
+        <span className="text-xs font-medium uppercase tracking-wider text-fd-muted-foreground">
+          Contrast Ratio
+        </span>
+        <div className="flex gap-2">
+          <ComplianceBadge level={result.normalText} label="Normal" />
+          <ComplianceBadge level={result.largeText} label="Large" />
+        </div>
+      </div>
+      <div className="flex items-end gap-2">
+        <span
+          className={`text-5xl font-extrabold tabular-nums leading-none tracking-tight ${
+            passing ? 'text-fd-foreground' : 'text-red-600 dark:text-red-400'
+          }`}
+        >
+          {result.ratio}
+        </span>
+        <span className="mb-1 text-lg font-medium text-fd-muted-foreground">
+          :1
+        </span>
+      </div>
+      <div className="h-1.5 overflow-hidden rounded-full bg-fd-secondary">
+        <div
+          className={`h-full rounded-full transition-all duration-500 ${
+            result.ratio >= 7
+              ? 'bg-green-500'
+              : result.ratio >= 4.5
+                ? 'bg-yellow-500'
+                : result.ratio >= 3
+                  ? 'bg-orange-500'
+                  : 'bg-red-500'
+          }`}
+          style={{ width: `${Math.min((result.ratio / 21) * 100, 100)}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function PreviewSection({
+  foreground,
+  background,
+}: {
+  foreground: string;
+  background: string;
+}) {
+  return (
+    <div
+      className="overflow-hidden rounded-xl border border-fd-border transition-colors duration-300"
+      style={{ backgroundColor: background }}
+    >
+      <div className="flex flex-col gap-2 p-6">
+        <p
+          style={{ color: foreground }}
+          className="text-xl font-bold leading-tight"
+        >
+          The quick brown fox jumps over the lazy dog
+        </p>
+        <p style={{ color: foreground }} className="text-sm leading-relaxed">
+          Normal body text at default size. This is what most of your content
+          will look like to your readers.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SuggestionPanel({
+  original,
+  suggested,
+  suggestedResult,
+  background,
+  onApply,
+}: {
+  original: string;
+  suggested: string;
+  suggestedResult: ContrastResult;
+  background: string;
+  onApply: () => void;
+}) {
+  return (
+    <div className="overflow-hidden rounded-xl border border-fd-border">
+      <div className="border-b border-fd-border bg-fd-secondary/30 px-5 py-3">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium uppercase tracking-wider text-fd-muted-foreground">
+            Suggested Fix
+          </span>
+          <button
+            type="button"
+            onClick={onApply}
+            className="rounded-md bg-fd-primary px-3 py-1 text-xs font-medium text-fd-primary-foreground transition-opacity hover:opacity-90"
+          >
+            Apply
+          </button>
+        </div>
+      </div>
+      <div className="grid sm:grid-cols-2">
+        <div className="border-b border-fd-border p-4 sm:border-b-0 sm:border-r">
+          <p className="mb-2 text-xs text-fd-muted-foreground">Current</p>
+          <div
+            className="mb-2 rounded-lg px-4 py-3"
+            style={{ backgroundColor: background }}
+          >
+            <p style={{ color: original }} className="text-sm font-medium">
+              Sample text
+            </p>
+          </div>
+          <code className="text-xs text-fd-muted-foreground">{original}</code>
+        </div>
+        <div className="p-4">
+          <p className="mb-2 text-xs text-fd-muted-foreground">Suggested</p>
+          <div
+            className="mb-2 rounded-lg px-4 py-3"
+            style={{ backgroundColor: background }}
+          >
+            <p style={{ color: suggested }} className="text-sm font-medium">
+              Sample text
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <code className="text-xs">{suggested}</code>
+            <span className="text-xs text-fd-muted-foreground">
+              {suggestedResult.ratio}:1
+            </span>
+            <ComplianceBadge level={suggestedResult.normalText} label="AA" />
+          </div>
+        </div>
+      </div>
+      <div className="border-t border-fd-border bg-fd-secondary/20 px-5 py-2">
+        <p className="text-xs text-fd-muted-foreground">
+          Closest color meeting AA (4.5:1), preserving hue and chroma via OKLCH
+          lightness adjustment.
+        </p>
+      </div>
     </div>
   );
 }
@@ -143,12 +255,19 @@ export function ColorChecker() {
   const bgError = bgInvalid ? errors[fgInvalid ? 1 : 0] : undefined;
 
   let result: ContrastResult | null = null;
+  let suggestion: {
+    suggested: string | null;
+    result: ContrastResult | null;
+  } | null = null;
   if (isValid) {
     result = checkContrast(foreground, background);
+    if (result.normalText === 'Fail') {
+      suggestion = suggestForeground(foreground, background, 4.5);
+    }
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <ColorInput
           id="color-checker-fg"
@@ -171,23 +290,39 @@ export function ColorChecker() {
         background={isValid ? background : '#ffffff'}
       />
 
-      {result && <ResultDisplay result={result} />}
+      {result && <RatioDisplay result={result} />}
 
-      <div className="text-xs text-fd-muted-foreground">
-        <p>
-          Compliance is based on{' '}
-          <a
-            href="https://www.w3.org/TR/WCAG21/#contrast-minimum"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            WCAG 2.1 Success Criterion 1.4.3
-          </a>
-          . Normal text requires 4.5:1 (AA) or 7:1 (AAA). Large text (18pt+ or
-          14pt+ bold) requires 3:1 (AA) or 4.5:1 (AAA).
-        </p>
-      </div>
+      {suggestion &&
+        (suggestion.suggested && suggestion.result ? (
+          <SuggestionPanel
+            original={foreground}
+            suggested={suggestion.suggested}
+            suggestedResult={suggestion.result}
+            background={background}
+            onApply={() => setForeground(suggestion.suggested as string)}
+          />
+        ) : (
+          <div className="rounded-xl border border-fd-border bg-fd-secondary/20 px-5 py-4">
+            <p className="text-sm text-fd-muted-foreground">
+              No accessible alternative found that preserves the current hue and
+              chroma.
+            </p>
+          </div>
+        ))}
+
+      <p className="text-xs text-fd-muted-foreground">
+        Based on{' '}
+        <a
+          href="https://www.w3.org/TR/WCAG21/#contrast-minimum"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          WCAG 2.1 SC 1.4.3
+        </a>
+        . Normal text: 4.5:1 (AA), 7:1 (AAA). Large text (18pt+): 3:1 (AA),
+        4.5:1 (AAA).
+      </p>
     </div>
   );
 }

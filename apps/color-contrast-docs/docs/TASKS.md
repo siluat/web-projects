@@ -2,7 +2,6 @@
 
 ## Next
 
-- [ ] Interactive Color Suggester (React component)
 - [ ] Batch Palette Audit tool (React component)
 - [ ] Library API docs page
 - [ ] CLI docs page
@@ -14,7 +13,7 @@
 
 ## In Progress
 
-(No items)
+- [ ] Color Checker: suggest accessible foreground when contrast fails
 
 ## Done
 
