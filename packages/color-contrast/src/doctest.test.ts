@@ -43,8 +43,8 @@ function extractTypeScriptBlocks(mdx: string): string[] {
   const blocks: string[] = [];
   const re = /```typescript\n([\s\S]*?)```/g;
   for (const match of mdx.matchAll(re)) {
-    const captured = match[1];
-    if (captured !== undefined) blocks.push(captured.trim());
+    const captured = match[1]?.trim();
+    if (captured) blocks.push(captured);
   }
   return blocks;
 }
