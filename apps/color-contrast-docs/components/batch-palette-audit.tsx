@@ -75,6 +75,7 @@ function PaletteInput({
       </label>
       <input
         type="text"
+        aria-label={`${color.name || 'Color'} name`}
         value={color.name}
         onChange={(e) => onChange({ ...color, name: e.target.value })}
         placeholder="Name"
@@ -82,6 +83,8 @@ function PaletteInput({
       />
       <input
         type="text"
+        aria-label={`${color.name || 'Color'} value`}
+        aria-invalid={!isValid}
         value={color.value}
         onChange={(e) => onChange({ ...color, value: e.target.value })}
         placeholder="#000000"
@@ -242,14 +245,13 @@ export function BatchPaletteAudit() {
     bg: PaletteColor;
     result: ContrastResult;
   }[] = [];
+  const resultByPair: Record<string, ContrastResult> = {};
   for (const fg of validColors) {
     for (const bg of validColors) {
       if (fg.id !== bg.id) {
-        allResults.push({
-          fg,
-          bg,
-          result: checkContrast(fg.value, bg.value),
-        });
+        const result = checkContrast(fg.value, bg.value);
+        allResults.push({ fg, bg, result });
+        resultByPair[`${fg.id}:${bg.id}`] = result;
       }
     }
   }
@@ -270,9 +272,10 @@ export function BatchPaletteAudit() {
   };
 
   const addColor = () => {
+    const id = nextId++;
     setColors((prev) => [
       ...prev,
-      { id: nextId++, name: `Color ${prev.length + 1}`, value: '#6b7280' },
+      { id, name: `Color ${prev.length + 1}`, value: '#6b7280' },
     ]);
   };
 
@@ -319,6 +322,7 @@ export function BatchPaletteAudit() {
                     key={level}
                     type="button"
                     onClick={() => setFilter(level)}
+                    aria-pressed={filter === level}
                     className={`rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors ${
                       filter === level
                         ? 'bg-fd-primary text-fd-primary-foreground shadow-sm'
@@ -344,6 +348,7 @@ export function BatchPaletteAudit() {
                       {validColors.map((bg) => (
                         <th
                           key={bg.id}
+                          scope="col"
                           className="border border-fd-border/40 bg-fd-secondary/30 p-2"
                         >
                           <div className="flex flex-col items-center gap-1">
@@ -362,7 +367,10 @@ export function BatchPaletteAudit() {
                   <tbody>
                     {validColors.map((fg) => (
                       <tr key={fg.id}>
-                        <td className="border border-fd-border/40 bg-fd-secondary/30 p-2">
+                        <th
+                          scope="row"
+                          className="border border-fd-border/40 bg-fd-secondary/30 p-2"
+                        >
                           <div className="flex items-center gap-1.5">
                             <div
                               className="h-4 w-4 shrink-0 rounded-sm border border-fd-border/60 shadow-sm"
@@ -372,12 +380,12 @@ export function BatchPaletteAudit() {
                               {fg.name}
                             </span>
                           </div>
-                        </td>
+                        </th>
                         {validColors.map((bg) => {
                           if (fg.id === bg.id) {
                             return <SameColorCell key={bg.id} />;
                           }
-                          const result = checkContrast(fg.value, bg.value);
+                          const result = resultByPair[`${fg.id}:${bg.id}`];
                           return (
                             <MatrixCell
                               key={bg.id}
