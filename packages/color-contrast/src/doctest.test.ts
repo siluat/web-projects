@@ -43,7 +43,7 @@ function extractTypeScriptBlocks(mdx: string): string[] {
   const blocks: string[] = [];
   const re = /```typescript\n([\s\S]*?)```/g;
   for (const match of mdx.matchAll(re)) {
-    blocks.push(match[1].trim());
+    blocks.push(match[1]!.trim());
   }
   return blocks;
 }
@@ -61,12 +61,12 @@ function extractDocTests(blocks: string[]): DocTestCase[] {
   const cases: DocTestCase[] = [];
 
   for (let bi = 0; bi < blocks.length; bi++) {
-    const lines = blocks[bi].split('\n');
+    const lines = blocks[bi]!.split('\n');
     const setup: string[] = [];
     let i = 0;
 
     while (i < lines.length) {
-      const trimmed = lines[i].trim();
+      const trimmed = lines[i]!.trim();
 
       if (!trimmed || trimmed.startsWith('import ')) {
         i++;
@@ -81,7 +81,7 @@ function extractDocTests(blocks: string[]): DocTestCase[] {
 
       // Count following comment lines
       let j = i + 1;
-      while (j < lines.length && lines[j].trim().startsWith('//')) {
+      while (j < lines.length && lines[j]!.trim().startsWith('//')) {
         j++;
       }
 
