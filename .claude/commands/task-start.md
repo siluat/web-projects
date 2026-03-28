@@ -19,6 +19,7 @@ You are helping the user start working on a task from the task tracker.
 
 4. **When the user selects a task**:
    - Move the selected item from `## Next` to `## In Progress` in the TASKS.md file
+   - Create a work branch from main (e.g., `feat/...`, `fix/...`, `chore/...` depending on the task type)
    - Read the package's CLAUDE.md (if it exists) to understand the package context
    - Read relevant source files to build context for the task
    - Begin working on the task
