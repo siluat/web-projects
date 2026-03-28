@@ -66,6 +66,7 @@ function ColorInput({
         <label className="block h-12 w-12 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 border-fd-border shadow-sm transition-shadow hover:shadow-md">
           <input
             type="color"
+            aria-label={`${label} color picker`}
             value={toHex6(value)}
             onChange={(e) => onChange(e.target.value)}
             className="h-full w-full scale-150 cursor-pointer appearance-none border-none"
@@ -291,20 +292,23 @@ export function ColorChecker() {
 
       {result && <RatioDisplay result={result} />}
 
-      {suggestion?.suggested &&
-        suggestion.result &&
-        (() => {
-          const suggestedColor = suggestion.suggested;
-          return (
-            <SuggestionPanel
-              original={foreground}
-              suggested={suggestedColor}
-              suggestedResult={suggestion.result}
-              background={background}
-              onApply={() => setForeground(suggestedColor)}
-            />
-          );
-        })()}
+      {suggestion &&
+        (suggestion.suggested && suggestion.result ? (
+          <SuggestionPanel
+            original={foreground}
+            suggested={suggestion.suggested}
+            suggestedResult={suggestion.result}
+            background={background}
+            onApply={() => setForeground(suggestion.suggested as string)}
+          />
+        ) : (
+          <div className="rounded-xl border border-fd-border bg-fd-secondary/20 px-5 py-4">
+            <p className="text-sm text-fd-muted-foreground">
+              No accessible alternative found that preserves the current hue and
+              chroma.
+            </p>
+          </div>
+        ))}
 
       <p className="text-xs text-fd-muted-foreground">
         Based on{' '}
