@@ -3,4 +3,399 @@ title: Library API
 description: API reference for @siluat/color-contrast.
 ---
 
-API reference documentation is coming soon.
+## Contrast Evaluation
+
+### `contrastRatio(foreground, background)`
+
+Calculate the WCAG 2.1 contrast ratio between two CSS colors.
+
+```typescript
+import { contrastRatio } from '@siluat/color-contrast';
+
+contrastRatio('#ffffff', '#000000');
+// 21
+
+contrastRatio('rgb(51, 51, 51)', '#ffffff');
+// 12.63
+
+contrastRatio('oklch(60% 0.15 50)', 'hsl(0 0% 100%)');
+// 4.17
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|---|---|---|
+| `foreground` | `string` | CSS color string |
+| `background` | `string` | CSS color string |
+
+**Returns:** `number` — Contrast ratio rounded to two decimal places (range 1–21).
+
+Throws if either color string is invalid.
+
+---
+
+### `checkContrast(foreground, background)`
+
+Evaluate WCAG 2.1 contrast compliance between two CSS colors. Returns the contrast ratio and compliance levels for both normal text and large text.
+
+```typescript
+import { checkContrast } from '@siluat/color-contrast';
+
+checkContrast('#333333', '#ffffff');
+// {
+//   ratio: 12.63,
+//   normalText: 'AAA',
+//   largeText: 'AAA'
+// }
+
+checkContrast('#777777', '#ffffff');
+// {
+//   ratio: 4.48,
+//   normalText: 'Fail',
+//   largeText: 'AA'
+// }
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|---|---|---|
+| `foreground` | `string` | CSS color string |
+| `background` | `string` | CSS color string |
+
+**Returns:** [`ContrastResult`](#contrastresult)
+
+Throws if either color string is invalid.
+
+---
+
+### `checkContrastVerbose(foreground, background)`
+
+Evaluate WCAG 2.1 contrast with full pipeline trace. Returns intermediate values at each step: format detection, parsed values, sRGB conversion, alpha compositing, luminance calculation, and contrast evaluation.
+
+```typescript
+import { checkContrastVerbose } from '@siluat/color-contrast';
+
+const result = checkContrastVerbose('oklch(60% 0.15 50)', '#ffffff');
+// {
+//   foreground: {
+//     input: 'oklch(60% 0.15 50)',
+//     format: 'oklch',
+//     parsed: { space: 'oklch', l: 0.6, c: 0.15, h: 50, alpha: 1 },
+//     srgb: { space: 'srgb', r: ..., g: ..., b: ..., alpha: 1 }
+//   },
+//   background: {
+//     input: '#ffffff',
+//     format: 'hex',
+//     parsed: { space: 'srgb', r: 1, g: 1, b: 1, alpha: 1 },
+//     srgb: { space: 'srgb', r: 1, g: 1, b: 1, alpha: 1 }
+//   },
+//   alphaComposited: false,
+//   fgLuminance: 0.2017...,
+//   bgLuminance: 1,
+//   result: { ratio: 4.17, normalText: 'Fail', largeText: 'AA' }
+// }
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|---|---|---|
+| `foreground` | `string` | CSS color string |
+| `background` | `string` | CSS color string |
+
+**Returns:** [`VerboseResult`](#verboseresult)
+
+Throws if either color string is invalid.
+
+---
+
+### `suggestForeground(foreground, background, targetRatio)`
+
+Suggest a foreground color that meets the target WCAG contrast ratio. Adjusts only the OkLCH lightness of the foreground, preserving its chroma and hue to minimize perceptual distance from the original.
+
+```typescript
+import { suggestForeground } from '@siluat/color-contrast';
+
+suggestForeground('#777777', '#ffffff', 4.5);
+// {
+//   suggested: '#767676',
+//   result: { ratio: 4.54, normalText: 'AA', largeText: 'AAA' }
+// }
+
+// Already passing — no suggestion needed
+suggestForeground('#333333', '#ffffff', 4.5);
+// { suggested: null, result: null }
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|---|---|---|
+| `foreground` | `string` | CSS color string |
+| `background` | `string` | CSS color string |
+| `targetRatio` | `number` | Minimum WCAG contrast ratio (e.g., `4.5` for AA normal text) |
+
+**Returns:** [`SuggestResult`](#suggestresult) — Returns `{ suggested: null, result: null }` if the pair already passes or if no accessible color can be found.
+
+Throws if either color string is invalid.
+
+---
+
+## Validation
+
+### `validateColors(foreground, background)`
+
+Validate two color strings and return an array of diagnostic error messages. Returns an empty array when both colors are valid. Reports all errors at once rather than failing on the first invalid color.
+
+```typescript
+import { validateColors } from '@siluat/color-contrast';
+
+validateColors('#ffffff', '#000000');
+// []
+
+validateColors('not-a-color', '#gg0000');
+// [
+//   'Invalid color: "not-a-color"\n  Supported formats: ...',
+//   'Invalid color: "#gg0000"\n  Hex colors use characters 0-9 and a-f. ...'
+// ]
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|---|---|---|
+| `foreground` | `string` | CSS color string to validate |
+| `background` | `string` | CSS color string to validate |
+
+**Returns:** `string[]` — Array of error messages (empty if both valid).
+
+---
+
+## Color Parsing
+
+### `parseColor(input)`
+
+Parse a CSS color string into a `ParsedColor`. Returns `null` if the input cannot be parsed.
+
+```typescript
+import { parseColor } from '@siluat/color-contrast';
+
+parseColor('#ff0000');
+// { space: 'srgb', r: 1, g: 0, b: 0, alpha: 1 }
+
+parseColor('hsl(120 100% 50%)');
+// { space: 'hsl', h: 0.333..., s: 1, l: 0.5, alpha: 1 }
+
+parseColor('invalid');
+// null
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|---|---|---|
+| `input` | `string` | CSS color string |
+
+**Returns:** [`ParsedColor`](#parsedcolor) ` | null`
+
+---
+
+### `parseColorDetailed(input)`
+
+Parse a CSS color string with format metadata. Returns both the parsed color and the format it was detected as.
+
+```typescript
+import { parseColorDetailed } from '@siluat/color-contrast';
+
+parseColorDetailed('#ff0000');
+// { parsed: { space: 'srgb', r: 1, g: 0, b: 0, alpha: 1 }, format: 'hex' }
+
+parseColorDetailed('red');
+// { parsed: { space: 'srgb', r: 1, g: 0, b: 0, alpha: 1 }, format: 'named' }
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|---|---|---|
+| `input` | `string` | CSS color string |
+
+**Returns:** `ParseDetail | null` — `{ parsed: ParsedColor, format: ColorFormat }`
+
+---
+
+### `parseHex(input)`
+
+Parse a hex color string into an `SRGBColor`. Supports `#RGB`, `#RRGGBB`, `#RGBA`, and `#RRGGBBAA` formats.
+
+```typescript
+import { parseHex } from '@siluat/color-contrast';
+
+parseHex('#ff0000');
+// { space: 'srgb', r: 1, g: 0, b: 0, alpha: 1 }
+
+parseHex('#f00');
+// { space: 'srgb', r: 1, g: 0, b: 0, alpha: 1 }
+
+parseHex('#ff000080');
+// { space: 'srgb', r: 1, g: 0, b: 0, alpha: 0.5019... }
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|---|---|---|
+| `input` | `string` | Hex color string (case-insensitive) |
+
+**Returns:** [`SRGBColor`](#srgbcolor) ` | null`
+
+---
+
+## Color Conversion
+
+### `srgbToOklch(color)`
+
+Convert a gamma-encoded sRGB color to OkLCH via a 4-stage pipeline: sRGB → linear sRGB → XYZ-D65 → OKLAB → OKLCH.
+
+```typescript
+import { srgbToOklch, parseHex } from '@siluat/color-contrast';
+
+const red = parseHex('#ff0000')!;
+srgbToOklch(red);
+// { space: 'oklch', l: 0.6279..., c: 0.2576..., h: 29.23..., alpha: 1 }
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|---|---|---|
+| `color` | [`SRGBColor`](#srgbcolor) | sRGB color with channels in 0–1 range |
+
+**Returns:** [`OKLCHColor`](#oklchcolor)
+
+---
+
+## Types
+
+### `ContrastResult`
+
+WCAG 2.1 contrast evaluation result.
+
+```typescript
+interface ContrastResult {
+  ratio: number;            // Contrast ratio (1–21), rounded to 2 decimal places
+  normalText: ComplianceLevel;  // Normal text compliance (AA ≥ 4.5, AAA ≥ 7)
+  largeText: ComplianceLevel;   // Large text compliance (AA ≥ 3, AAA ≥ 4.5)
+}
+```
+
+### `ComplianceLevel`
+
+```typescript
+type ComplianceLevel = 'AAA' | 'AA' | 'Fail';
+```
+
+### `SuggestResult`
+
+Result of a foreground color suggestion for improved contrast.
+
+```typescript
+interface SuggestResult {
+  suggested: string | null;      // Suggested hex color, or null
+  result: ContrastResult | null; // Contrast result of the suggestion, or null
+}
+```
+
+### `VerboseResult`
+
+Full verbose result including both colors and pipeline data.
+
+```typescript
+interface VerboseResult {
+  foreground: ColorTrace;
+  background: ColorTrace;
+  alphaComposited: boolean;
+  fgLuminance: number;
+  bgLuminance: number;
+  result: ContrastResult;
+}
+```
+
+### `ColorTrace`
+
+Verbose trace of a single color through the conversion pipeline.
+
+```typescript
+interface ColorTrace {
+  input: string;          // Original input string
+  format: ColorFormat;    // Detected format
+  parsed: ParsedColor;    // Parsed color in its native color space
+  srgb: SRGBColor;        // Final sRGB value after conversion
+}
+```
+
+### `ColorFormat`
+
+CSS color format identifier.
+
+```typescript
+type ColorFormat =
+  | 'hex' | 'named' | 'rgb' | 'hsl' | 'hwb'
+  | 'lab' | 'lch' | 'oklab' | 'oklch';
+```
+
+### `SRGBColor`
+
+```typescript
+interface SRGBColor {
+  space: 'srgb';
+  r: number;     // 0–1
+  g: number;     // 0–1
+  b: number;     // 0–1
+  alpha: number; // 0–1
+}
+```
+
+### `OKLCHColor`
+
+```typescript
+interface OKLCHColor {
+  space: 'oklch';
+  l: number;     // Lightness (0–1)
+  c: number;     // Chroma (≥ 0)
+  h: number;     // Hue (0–360)
+  alpha: number; // 0–1
+}
+```
+
+### `ParsedColor`
+
+Union of all supported color space representations.
+
+```typescript
+type ParsedColor =
+  | SRGBColor | HSLColor | HWBColor
+  | LABColor | LCHColor | OKLABColor | OKLCHColor;
+```
+
+---
+
+## Supported Color Formats
+
+All functions that accept color strings support the following CSS formats:
+
+| Format | Examples |
+|---|---|
+| Hex | `#rgb`, `#rrggbb`, `#rgba`, `#rrggbbaa` |
+| Named colors | `red`, `navy`, `rebeccapurple`, `transparent` |
+| RGB | `rgb(255 0 0)`, `rgb(255, 0, 0)`, `rgba(255 0 0 / 0.5)` |
+| HSL | `hsl(120 100% 50%)`, `hsl(120, 100%, 50%)`, `hsla(120 100% 50% / 0.5)` |
+| HWB | `hwb(0 0% 0%)` |
+| LAB | `lab(50% 40 59.5)` |
+| LCH | `lch(52.2% 72.2 50)` |
+| OKLAB | `oklab(0.6 0.1 0.1)` |
+| OKLCH | `oklch(60% 0.15 50)` |
+
+Non-sRGB inputs (HSL, HWB, LAB, LCH, OKLAB, OKLCH) are automatically converted to sRGB with CSS Color Level 4 gamut mapping when needed.
