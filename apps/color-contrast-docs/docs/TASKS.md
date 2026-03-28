@@ -12,10 +12,11 @@
 
 ## In Progress
 
-- [ ] Color Checker: suggest accessible foreground when contrast fails
+(No items)
 
 ## Done
 
+- [x] Color Checker: suggest accessible foreground when contrast fails
 - [x] Batch Palette Audit tool (React component)
 - [x] Interactive Color Checker (React component)
 - [x] Scaffold Fumadocs (Next.js-based docs framework) app
