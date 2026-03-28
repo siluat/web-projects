@@ -2,7 +2,6 @@
 
 ## Next
 
-- [ ] Batch Palette Audit tool (React component)
 - [ ] Library API docs page
 - [ ] CLI docs page
 - [ ] Skill installation/usage guide page
@@ -17,5 +16,6 @@
 
 ## Done
 
+- [x] Batch Palette Audit tool (React component)
 - [x] Interactive Color Checker (React component)
 - [x] Scaffold Fumadocs (Next.js-based docs framework) app
