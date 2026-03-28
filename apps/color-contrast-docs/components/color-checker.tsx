@@ -3,6 +3,7 @@
 import {
   checkContrast,
   parseColor,
+  suggestForeground,
   validateColors,
 } from '@siluat/color-contrast';
 import { useState } from 'react';
@@ -117,6 +118,58 @@ function ColorInput({
   );
 }
 
+function SuggestionPanel({
+  suggested,
+  suggestedResult,
+  background,
+  onApply,
+}: {
+  suggested: string;
+  suggestedResult: ContrastResult;
+  background: string;
+  onApply: () => void;
+}) {
+  return (
+    <div className="flex flex-col gap-3 rounded-lg border border-fd-border bg-fd-secondary/50 p-4">
+      <p className="text-sm font-medium">Suggested Foreground</p>
+      <div className="flex items-center gap-4">
+        <div
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded border border-fd-border"
+          style={{ backgroundColor: suggested }}
+        />
+        <div className="flex flex-1 flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <code className="text-sm">{suggested}</code>
+            <span className="text-sm text-fd-muted-foreground">
+              {suggestedResult.ratio}:1
+            </span>
+            <ComplianceBadge level={suggestedResult.normalText} />
+          </div>
+          <div
+            className="rounded-md px-3 py-2"
+            style={{ backgroundColor: background }}
+          >
+            <span style={{ color: suggested }} className="text-sm">
+              Preview with suggested color
+            </span>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onApply}
+          className="shrink-0 rounded-md bg-fd-primary px-3 py-1.5 text-xs font-medium text-fd-primary-foreground"
+        >
+          Apply
+        </button>
+      </div>
+      <p className="text-xs text-fd-muted-foreground">
+        Closest color meeting AA contrast (4.5:1), preserving hue and chroma in
+        the OKLCH color space.
+      </p>
+    </div>
+  );
+}
+
 /**
  * Best-effort conversion to 6-digit hex for the native color picker.
  * Falls back to black if the input is not a simple hex value.
@@ -143,8 +196,15 @@ export function ColorChecker() {
   const bgError = bgInvalid ? errors[fgInvalid ? 1 : 0] : undefined;
 
   let result: ContrastResult | null = null;
+  let suggestion: {
+    suggested: string | null;
+    result: ContrastResult | null;
+  } | null = null;
   if (isValid) {
     result = checkContrast(foreground, background);
+    if (result.normalText === 'Fail') {
+      suggestion = suggestForeground(foreground, background, 4.5);
+    }
   }
 
   return (
@@ -172,6 +232,20 @@ export function ColorChecker() {
       />
 
       {result && <ResultDisplay result={result} />}
+
+      {suggestion?.suggested &&
+        suggestion.result &&
+        (() => {
+          const suggestedColor = suggestion.suggested;
+          return (
+            <SuggestionPanel
+              suggested={suggestedColor}
+              suggestedResult={suggestion.result}
+              background={background}
+              onApply={() => setForeground(suggestedColor)}
+            />
+          );
+        })()}
 
       <div className="text-xs text-fd-muted-foreground">
         <p>
