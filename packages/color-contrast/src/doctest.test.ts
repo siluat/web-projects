@@ -43,7 +43,8 @@ function extractTypeScriptBlocks(mdx: string): string[] {
   const blocks: string[] = [];
   const re = /```typescript\n([\s\S]*?)```/g;
   for (const match of mdx.matchAll(re)) {
-    blocks.push(match[1]!.trim());
+    const captured = match[1];
+    if (captured !== undefined) blocks.push(captured.trim());
   }
   return blocks;
 }
@@ -60,13 +61,18 @@ function extractTypeScriptBlocks(mdx: string): string[] {
 function extractDocTests(blocks: string[]): DocTestCase[] {
   const cases: DocTestCase[] = [];
 
-  for (let bi = 0; bi < blocks.length; bi++) {
-    const lines = blocks[bi]!.split('\n');
+  for (const [bi, block] of blocks.entries()) {
+    const lines = block.split('\n');
     const setup: string[] = [];
     let i = 0;
 
     while (i < lines.length) {
-      const trimmed = lines[i]!.trim();
+      const line = lines[i];
+      if (line === undefined) {
+        i++;
+        continue;
+      }
+      const trimmed = line.trim();
 
       if (!trimmed || trimmed.startsWith('import ')) {
         i++;
@@ -81,7 +87,9 @@ function extractDocTests(blocks: string[]): DocTestCase[] {
 
       // Count following comment lines
       let j = i + 1;
-      while (j < lines.length && lines[j]!.trim().startsWith('//')) {
+      while (j < lines.length) {
+        const lineJ = lines[j];
+        if (!lineJ || !lineJ.trim().startsWith('//')) break;
         j++;
       }
 
@@ -161,6 +169,10 @@ function evaluate(setup: string[], expression: string): unknown {
 
 // ── Serialization ───────────────────────────────────────────
 
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v);
+}
+
 /** Serialize a value to the same format used in MDX comment assertions. */
 function serialize(value: unknown): string {
   if (value === null) return 'null';
@@ -178,8 +190,8 @@ function serialize(value: unknown): string {
     if (value.length === 0) return '[]';
     return `[${value.map(serialize).join(', ')}]`;
   }
-  if (typeof value === 'object') {
-    const entries = Object.entries(value as Record<string, unknown>)
+  if (isRecord(value)) {
+    const entries = Object.entries(value)
       .map(([k, v]) => `${k}: ${serialize(v)}`)
       .join(', ');
     return `{ ${entries} }`;
