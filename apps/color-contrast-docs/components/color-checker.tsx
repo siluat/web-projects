@@ -1,6 +1,10 @@
 'use client';
 
-import { checkContrast, validateColors } from '@siluat/color-contrast';
+import {
+  checkContrast,
+  parseColor,
+  validateColors,
+} from '@siluat/color-contrast';
 import { useState } from 'react';
 
 type ComplianceLevel = 'AAA' | 'AA' | 'Fail';
@@ -131,10 +135,12 @@ export function ColorChecker() {
   const [foreground, setForeground] = useState('#1e293b');
   const [background, setBackground] = useState('#ffffff');
 
-  const errors = validateColors(foreground, background);
-  const fgError = errors.find((e) => e.toLowerCase().includes('foreground'));
-  const bgError = errors.find((e) => e.toLowerCase().includes('background'));
-  const isValid = errors.length === 0;
+  const fgInvalid = parseColor(foreground) === null;
+  const bgInvalid = parseColor(background) === null;
+  const isValid = !fgInvalid && !bgInvalid;
+  const errors = isValid ? [] : validateColors(foreground, background);
+  const fgError = fgInvalid ? errors[0] : undefined;
+  const bgError = bgInvalid ? errors[fgInvalid ? 1 : 0] : undefined;
 
   let result: ContrastResult | null = null;
   if (isValid) {
