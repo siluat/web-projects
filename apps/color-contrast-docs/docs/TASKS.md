@@ -2,7 +2,6 @@
 
 ## Next
 
-- [ ] Library API docs page
 - [ ] CLI docs page
 - [ ] Skill installation/usage guide page
   - [ ] What the skill does and supported agent list
@@ -15,6 +14,8 @@
 (No items)
 
 ## Done
+
+- [x] Library API docs page
 
 - [x] Color Checker: suggest accessible foreground when contrast fails
 - [x] Batch Palette Audit tool (React component)
