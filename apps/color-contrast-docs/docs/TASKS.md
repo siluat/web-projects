@@ -2,7 +2,6 @@
 
 ## Next
 
-- [ ] CLI docs page
 - [ ] Skill installation/usage guide page
   - [ ] What the skill does and supported agent list
   - [ ] Installation command (`npx skills add siluat/skills --skill color-contrast`)
@@ -15,6 +14,7 @@
 
 ## Done
 
+- [x] CLI docs page
 - [x] Library API docs page
 
 - [x] Color Checker: suggest accessible foreground when contrast fails
