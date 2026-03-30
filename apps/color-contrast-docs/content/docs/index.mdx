@@ -3,7 +3,8 @@ title: ccr
 description: WCAG color contrast ratio checker for the command line.
 ---
 
-import { Cards, Card } from 'fumadocs-ui/components/card';
+import { FeatureCard, FeatureCards } from '@/components/feature-cards';
+import { Grid3x3, Palette, WandSparkles, Workflow } from 'lucide-react';
 
 A command-line tool for checking WCAG color contrast ratios. Install nothing — just run:
 
@@ -19,20 +20,20 @@ Large text:  AA ✓
 
 ## Why ccr?
 
-<Cards>
-  <Card title="CI/CD Ready">
+<FeatureCards>
+  <FeatureCard icon={Workflow} accent="blue" title="CI/CD Ready">
     Gate your pipeline with `--level AA` exit codes. Pipe `--json` output to other tools for automated reporting.
-  </Card>
-  <Card title="Color Suggestion">
+  </FeatureCard>
+  <FeatureCard icon={WandSparkles} accent="amber" title="Color Suggestion">
     When contrast fails, `--suggest` finds the closest accessible color. Adjusts only OkLCH lightness to preserve the original hue and saturation.
-  </Card>
-  <Card title="Batch Audit">
+  </FeatureCard>
+  <FeatureCard icon={Grid3x3} accent="teal" title="Batch Audit">
     Audit an entire design system palette at once with `--batch`. Supports comments, blank lines, and mixed color formats.
-  </Card>
-  <Card title="10 Color Formats">
+  </FeatureCard>
+  <FeatureCard icon={Palette} accent="violet" title="10 Color Formats">
     `#hex`, `rgb()`, `hsl()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()`, and named colors — broad CSS Color Level 4 coverage.
-  </Card>
-</Cards>
+  </FeatureCard>
+</FeatureCards>
 
 ## Quick Start
 

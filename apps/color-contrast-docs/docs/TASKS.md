@@ -4,7 +4,6 @@
 
 Landing page improvements ([design review](landing-page-review.md)):
 
-- [ ] Redesign feature cards with icons and custom styling
 - [ ] Add CTA buttons (Get Started / Try Online)
 - [ ] Streamline Quick Start and Library sections (remove duplication, improve flow)
 - [ ] Customize typography (monospace display font fitting the CLI tool identity)
@@ -16,6 +15,8 @@ Landing page improvements ([design review](landing-page-review.md)):
 (No items)
 
 ## Done
+
+- [x] Redesign feature cards with icons and custom styling
 
 - [x] Vercel deployment setup
 
