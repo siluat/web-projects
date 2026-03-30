@@ -2,8 +2,6 @@
 
 ## Next
 
-- [ ] Vercel deployment setup
-
 Landing page improvements ([design review](landing-page-review.md)):
 
 - [ ] Add hero section with embedded mini ColorChecker demo
@@ -19,6 +17,8 @@ Landing page improvements ([design review](landing-page-review.md)):
 (No items)
 
 ## Done
+
+- [x] Vercel deployment setup
 
 - [x] Skill installation/usage guide page
   - [x] What the skill does and supported agent list
