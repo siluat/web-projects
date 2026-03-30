@@ -1,5 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd ../.. && npx turbo run build --filter=color-contrast-docs",
-  "ignoreCommand": "cd ../.. && npx turbo-ignore color-contrast-docs"
+  "buildCommand": "cd ../.. && npx turbo run build --filter=color-contrast-docs"
 }
