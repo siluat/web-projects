@@ -1,15 +1,54 @@
 ---
 title: Getting Started
-description: Install and start using @siluat/color-contrast for WCAG contrast ratio computation.
+description: Install and start using ccr for WCAG color contrast checking.
 ---
 
 ## Installation
 
+Run directly with npx (no install required):
+
 ```bash
-npm install @siluat/color-contrast
+npx @siluat/color-contrast-cli '#ffffff' '#000000'
+```
+
+Or install globally:
+
+```bash
+npm install -g @siluat/color-contrast-cli
+```
+
+```bash
+ccr '#ffffff' '#000000'
 ```
 
 ## Quick Example
+
+```bash
+ccr '#333333' '#ffffff'
+# Ratio    12.63:1
+# Normal   AAA ✅
+# Large    AAA ✅
+```
+
+Use `--suggest` to get an accessible alternative when contrast fails:
+
+```bash
+ccr '#999999' '#ffffff' --suggest --level AA
+```
+
+Use `--batch` to audit multiple pairs from a file:
+
+```bash
+ccr --batch < palette.txt
+```
+
+## Library
+
+The computation engine is available as a standalone JavaScript/TypeScript library:
+
+```bash
+npm install @siluat/color-contrast
+```
 
 ```typescript
 import { contrastRatio, checkContrast } from '@siluat/color-contrast';
@@ -21,14 +60,4 @@ const result = checkContrast('#333333', '#ffffff');
 // { ratio: 12.63, normalText: 'AAA', largeText: 'AAA' }
 ```
 
-## CLI
-
-A command-line interface is also available:
-
-```bash
-npm install -g @siluat/color-contrast-cli
-```
-
-```bash
-ccr "#ffffff" "#000000"
-```
+See the [Library API reference](/docs/reference/library-api) for full documentation.
