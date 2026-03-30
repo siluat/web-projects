@@ -2,10 +2,6 @@
 
 ## Next
 
-- [ ] Skill installation/usage guide page
-  - [ ] What the skill does and supported agent list
-  - [ ] Installation command (`npx skills add siluat/skills --skill color-contrast`)
-  - [ ] `/color-contrast` slash command usage examples
 - [ ] Vercel deployment setup
 
 ## In Progress
@@ -14,6 +10,10 @@
 
 ## Done
 
+- [x] Skill installation/usage guide page
+  - [x] What the skill does and supported agent list
+  - [x] Installation command (`npx skills add siluat/skills --skill color-contrast`)
+  - [x] `/color-contrast` slash command usage examples
 - [x] CLI docs page
 - [x] Library API docs page
 

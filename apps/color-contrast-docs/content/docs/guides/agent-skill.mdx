@@ -1,0 +1,101 @@
+---
+title: Agent Skill
+description: Install the color-contrast agent skill to add WCAG contrast checking capabilities to your AI coding agent.
+---
+
+The color-contrast skill gives AI coding agents the ability to check WCAG color contrast ratios, suggest accessible alternatives, and audit design system palettes — all powered by the [`ccr` CLI](/docs/reference/cli).
+
+It follows the [Agent Skills](https://agentskills.io) standard, an open format supported by a wide range of AI agents.
+
+## Supported Agents
+
+The skill works with any agent that supports the Agent Skills standard, including:
+
+- [Claude Code](https://claude.ai/code)
+- [Cursor](https://cursor.com)
+- [VS Code Copilot](https://code.visualstudio.com)
+- [GitHub Copilot](https://github.com)
+- [OpenAI Codex](https://developers.openai.com/codex)
+- [Gemini CLI](https://geminicli.com)
+- [Amp](https://ampcode.com)
+- [Roo Code](https://roocode.com)
+- [Goose](https://block.github.io/goose)
+- [Junie (JetBrains)](https://junie.jetbrains.com)
+
+See the full list at [agentskills.io](https://agentskills.io).
+
+## Installation
+
+Install the skill using the [skills CLI](https://skills.sh):
+
+```bash
+npx skills add siluat/skills --skill color-contrast
+```
+
+This downloads the skill into your project's `.agents/skills/` directory, where compatible agents automatically discover it.
+
+### Prerequisites
+
+The skill requires the `ccr` CLI to run contrast checks. You can either install it globally or let the agent use `npx` on demand:
+
+```bash
+# Install globally for the short `ccr` command
+npm install -g @siluat/color-contrast-cli
+
+# Or run without installing
+npx @siluat/color-contrast-cli '#333' '#fff'
+```
+
+## `/color-contrast` Slash Command
+
+Once the skill is installed, use the `/color-contrast` slash command to invoke it directly. Pass your request as an argument after the command.
+
+### Check a color pair
+
+```text
+/color-contrast Check if #333 on #fff meets WCAG AA
+```
+
+The agent runs `ccr '#333' '#fff' --level AA` and reports the result, including the contrast ratio and pass/fail status.
+
+### Suggest an accessible alternative
+
+```text
+/color-contrast Suggest an accessible foreground for #777 on white at AA level
+```
+
+The agent uses `--suggest --level AA` to find the closest accessible foreground color, preserving hue and saturation by adjusting only lightness.
+
+### Audit a design system palette
+
+```text
+/color-contrast Audit these colors against white for AA compliance:
+#333, #666, #999, #bbb
+```
+
+The agent collects the color pairs and runs a batch check, reporting which pairs pass and suggesting fixes for those that fail.
+
+### Validate colors in code
+
+```text
+/color-contrast Check if the foreground and background colors in this CSS file meet AA
+```
+
+The agent reads the file, extracts foreground/background pairs, and runs contrast checks on each.
+
+## How the Skill Works
+
+When triggered — either by the slash command or automatically when the agent detects a color accessibility task — the skill:
+
+1. **Identifies the task type**: single pair check, suggestion, batch audit, or CI integration
+2. **Loads relevant references on demand**: WCAG criteria details, full CLI reference, or design system audit workflow
+3. **Runs `ccr` commands**: executes the appropriate CLI invocations and parses the output
+4. **Summarizes results**: presents findings in a format appropriate to the task
+
+The skill includes reference documents for deeper topics:
+
+| Reference | Content |
+|---|---|
+| WCAG criteria | Success criteria 1.4.3, 1.4.6, 1.4.11 — edge cases, non-text contrast |
+| CLI usage | Complete flag reference, output formats, batch mode, verbose mode |
+| Design system audit | Step-by-step workflow for auditing color palettes |
