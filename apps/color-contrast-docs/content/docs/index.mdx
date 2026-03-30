@@ -1,6 +1,59 @@
 ---
-title: Color Contrast
-description: WCAG color contrast ratio computation library for JavaScript and TypeScript.
+title: ccr
+description: WCAG color contrast ratio checker for the command line.
 ---
 
-Zero-dependency WCAG color contrast computation for JavaScript and TypeScript.
+import { Cards, Card } from 'fumadocs-ui/components/card';
+
+A command-line tool for checking WCAG color contrast ratios. Install nothing — just run:
+
+```bash
+npx @siluat/color-contrast-cli '#708090' '#ffffff'
+```
+
+```text
+Contrast ratio: 3.94:1
+Normal text: Fail ✗
+Large text:  AA ✓
+```
+
+## Why ccr?
+
+<Cards>
+  <Card title="CI/CD Ready">
+    Gate your pipeline with `--level AA` exit codes. Pipe `--json` output to other tools for automated reporting.
+  </Card>
+  <Card title="Color Suggestion">
+    When contrast fails, `--suggest` finds the closest accessible color. Adjusts only OkLCH lightness to preserve the original hue and saturation.
+  </Card>
+  <Card title="Batch Audit">
+    Audit an entire design system palette at once with `--batch`. Supports comments, blank lines, and mixed color formats.
+  </Card>
+  <Card title="10 Color Formats">
+    `#hex`, `rgb()`, `hsl()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()`, and named colors — broad CSS Color Level 4 coverage.
+  </Card>
+</Cards>
+
+## Quick Start
+
+```bash title="Install globally"
+npm install -g @siluat/color-contrast-cli
+```
+
+```bash title="Check a color pair"
+ccr '#333' '#fff'
+```
+
+```bash title="Get a fix for failing contrast"
+ccr '#999' '#fff' --suggest --level AA
+```
+
+```bash title="Audit a palette file"
+ccr --batch < palette.txt
+```
+
+Read the [Getting Started](/docs/guides/getting-started) guide for more details, or jump to the [CLI Reference](/docs/reference/cli) for the full option list.
+
+## Library
+
+The computation engine is also available as a standalone JavaScript/TypeScript library — [`@siluat/color-contrast`](https://www.npmjs.com/package/@siluat/color-contrast) — for programmatic use.
