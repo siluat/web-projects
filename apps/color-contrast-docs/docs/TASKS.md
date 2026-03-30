@@ -4,7 +4,6 @@
 
 Landing page improvements ([design review](landing-page-review.md)):
 
-- [ ] Add hero section with embedded mini ColorChecker demo
 - [ ] Redesign feature cards with icons and custom styling
 - [ ] Add CTA buttons (Get Started / Try Online)
 - [ ] Streamline Quick Start and Library sections (remove duplication, improve flow)
