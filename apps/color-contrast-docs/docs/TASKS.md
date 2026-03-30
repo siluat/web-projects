@@ -2,13 +2,7 @@
 
 ## Next
 
-Landing page improvements ([design review](landing-page-review.md)):
-
-- [ ] Add CTA buttons (Get Started / Try Online)
-- [ ] Streamline Quick Start and Library sections (remove duplication, improve flow)
-- [ ] Customize typography (monospace display font fitting the CLI tool identity)
-- [ ] Strengthen color identity (domain-relevant accent colors, background gradient/texture)
-- [ ] Add page load and scroll motion/animations
+(No items)
 
 ## In Progress
 
