@@ -3,7 +3,8 @@
 ## Next
 
 - [ ] Vercel deployment setup
-Landing page improvements — see [design review](landing-page-review.md) for context:
+
+Landing page improvements ([design review](landing-page-review.md)):
 
 - [ ] Add hero section with embedded mini ColorChecker demo
 - [ ] Redesign feature cards with icons and custom styling
