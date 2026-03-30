@@ -8,7 +8,7 @@ description: Install and start using ccr for WCAG color contrast checking.
 Run directly with npx (no install required):
 
 ```bash
-npx @siluat/color-contrast-cli ccr '#ffffff' '#000000'
+npx @siluat/color-contrast-cli '#ffffff' '#000000'
 ```
 
 Or install globally:
@@ -33,7 +33,7 @@ ccr '#333333' '#ffffff'
 Use `--suggest` to get an accessible alternative when contrast fails:
 
 ```bash
-ccr '#999999' '#ffffff' --suggest
+ccr '#999999' '#ffffff' --suggest --level AA
 ```
 
 Use `--batch` to audit multiple pairs from a file:
