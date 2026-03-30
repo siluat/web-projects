@@ -3,6 +3,15 @@
 ## Next
 
 - [ ] Vercel deployment setup
+Landing page improvements — see [design review](landing-page-review.md) for context:
+
+- [ ] Add hero section with embedded mini ColorChecker demo
+- [ ] Redesign feature cards with icons and custom styling
+- [ ] Add CTA buttons (Get Started / Try Online)
+- [ ] Streamline Quick Start and Library sections (remove duplication, improve flow)
+- [ ] Customize typography (monospace display font fitting the CLI tool identity)
+- [ ] Strengthen color identity (domain-relevant accent colors, background gradient/texture)
+- [ ] Add page load and scroll motion/animations
 
 ## In Progress
 
