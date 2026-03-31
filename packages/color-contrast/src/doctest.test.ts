@@ -89,7 +89,7 @@ function extractDocTests(blocks: string[]): DocTestCase[] {
       let j = i + 1;
       while (j < lines.length) {
         const lineJ = lines[j];
-        if (!lineJ || !lineJ.trim().startsWith('//')) break;
+        if (!lineJ?.trim().startsWith('//')) break;
         j++;
       }
 

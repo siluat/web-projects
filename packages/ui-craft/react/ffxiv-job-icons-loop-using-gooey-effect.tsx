@@ -100,7 +100,12 @@ function JobIconSvg({
   ...props
 }: React.ComponentProps<'svg'> & { path: string }) {
   return (
-    <svg role="graphics-symbol" viewBox={ffxivJobIconData.viewBox} {...props}>
+    <svg
+      role="graphics-symbol"
+      aria-hidden="true"
+      viewBox={ffxivJobIconData.viewBox}
+      {...props}
+    >
       <g fill="currentColor">
         <path d={path} />
       </g>
