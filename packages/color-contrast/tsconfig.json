@@ -1,4 +1,7 @@
 {
   "extends": "@siluat/typescript-config/library.json",
+  "compilerOptions": {
+    "types": ["bun"]
+  },
   "include": ["src"]
 }

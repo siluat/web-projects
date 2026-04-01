@@ -1,4 +1,7 @@
 {
   "extends": "@siluat/typescript-config/react-library.json",
+  "compilerOptions": {
+    "types": ["bun"]
+  },
   "exclude": ["node_modules"]
 }

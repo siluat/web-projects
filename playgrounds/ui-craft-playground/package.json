@@ -22,7 +22,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "catalog:",
-    "next": "^15.5.7",
+    "next": "^16.2.2",
     "postcss": "^8.5.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -35,6 +35,6 @@
     "@types/node": "^24.10.2",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
-    "typescript": "^5.8.3"
+    "typescript": "catalog:"
   }
 }

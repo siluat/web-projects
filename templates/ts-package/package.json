@@ -4,7 +4,7 @@
   "scripts": {},
   "devDependencies": {
     "@siluat/typescript-config": "workspace:*",
-    "typescript": "^5.8.3"
+    "typescript": "catalog:"
   },
   "private": true
 }
